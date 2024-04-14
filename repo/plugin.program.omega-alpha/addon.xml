@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.omega-alpha" name="[COLOR gold]Omega-alpha[/COLOR]" version="1.0.1" provider-name="[COLOR red]The Hood[/COLOR]">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.six" />
+    </requires>
+    
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    
+    <extension point="xbmc.service" library="startup.py" start="startup" />
+    
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">[COLOR gold]The Omega-Alpha Wizard 21 Omega Edition[/COLOR]</summary>
+        <description lang="en">[COLOR gold]The Omega-Alpha Wizard for installing, updating and maintaining The Omega-Alpha Wizard 21 Omega builds[/COLOR]</description>
+        <platform>all</platform>
+        <reuselanguageinvoker>false</reuselanguageinvoker>
+        <source>https://www.github.com/a4k-openproject/plugin.program.openwizard/</source>
+        <news>[COLOR gold]2024-03-23
+- Improved Contact layout
+- The Omega-Alpha Wizard has a new home! Go to https://kodiwind.net[/COLOR]</news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+		<license>GNU GENERAL PUBLIC LICENSE Version 3</license>
+		<email></email>
+		<website>https://kodiwind.net/</website>
+    </extension>
+</addon>
