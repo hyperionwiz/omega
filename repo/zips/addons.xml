@@ -29,7 +29,7 @@
 		<email />
 		<website>https://kodiwind.net/</website>
     </extension>
-</addon><addon id="plugin.video.injustice" name="Injustice" version="3.4.9a" provider-name="The Hood">
+</addon><addon id="plugin.video.injustice" name="Injustice" version="3.5.0" provider-name="The Hood">
   <requires>
 	
   </requires>
@@ -223,50 +223,7 @@
 			    <icon>icon.png</icon>
 			</assets>
         </extension>
-    </addon><addon id="repository.NarcacistWizard" name="Narcacist's Wizard Repository" version="1.1.9" provider-name="Narcacist">
-        <extension point="xbmc.addon.repository" name="Narcacist's Wizard Repository">
-		<dir>
-            <info compressed="false">https://mylostsoulspace.co.uk/_repo/addons.xml</info>
-            <checksum>https://mylostsoulspace.co.uk/_repo/addons.xml.md5</checksum>
-            <datadir zip="true">https://mylostsoulspace.co.uk/_repo/</datadir>
-		</dir>	
-			
-			<dir>
-			<info compressed="false">https://raw.githubusercontent.com/teamuniversal/scrapers/master/_modules4all/zips/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/teamuniversal/scrapers/master/_modules4all/zips/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/teamuniversal/scrapers/master/_modules4all/zips/</datadir>
-		</dir>
-		
-		<dir>
-        <info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
-        <checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
-        <datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
-        </dir>
-				        
-        <dir>
-            <info compressed="false">https://raw.githubusercontent.com/jenaddon/repository.jenrepo/master/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/jenaddon/repository.jenrepo/master/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/jenaddon/repository.jenrepo/master/zips/</datadir>
-            <hashes>false</hashes>
-        </dir>
-	
-		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/totalrevolution/python-koding/master/zips/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/totalrevolution/python-koding/master/zips/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/totalrevolution/python-koding/master/zips/</datadir>
-		</dir>
-		
-        </extension>
-        <extension point="xbmc.addon.metadata">
-            <summary>Install all the latest Builds</summary>
-            <description>Welcome to the New and Improved Narcacist WIZARD for all your Community Builds.</description>
-            <platform>all</platform>
-			<assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>    
-    </assets>
-    </extension>
-</addon><addon id="repository.cocoscrapers" name="CocoScrapers Repository" version="1.0.0" provider-name="CocoScrapers">
+    </addon><addon id="repository.cocoscrapers" name="CocoScrapers Repository" version="1.0.0" provider-name="CocoScrapers">
     <extension point="xbmc.addon.repository" name="CocoScrapers Repository">
         <dir minversion="19.0">
             <info compressed="false">https://raw.githubusercontent.com/CocoJoe2411/repository.cocoscrapers/master/zips/addons.xml</info>
@@ -279,7 +236,7 @@
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
-</addon><addon id="repository.omega" name="Omega Repo" version="1.0.1" provider-name="The Hood">
+</addon><addon id="repository.omega" name="Omega Repo" version="1.0.2" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>

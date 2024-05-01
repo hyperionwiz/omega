@@ -3731,6 +3731,9 @@ def main_menu(time_data):
     time_data.append(elapsed_time+222)
     all_d=[]
     
+    aa=addDir3('[B][COLOR blue]Julies Favs[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/julie_xml/julie_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Julies Favs',search_db='')
+    all_d.append(aa)
+    
     aa=addDir3('[B][COLOR goldenrod]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/injustice/icon.png','https://kodiwind.com/hw/build_artwork/injustice/fanart.jpg','4K Section',search_db='')
     all_d.append(aa)
    
