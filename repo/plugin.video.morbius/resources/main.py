@@ -3737,10 +3737,8 @@ def main_menu(time_data):
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]1 Click Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Movies',search_db='')
     all_d.append(aa)
-    aa=addDir3('[B][COLOR mediumslateblue]Chill & Flix Movies[/COLOR][/B]', 'https://kodiwind.com/hw/xml/Morbius_xml/techs_trakt_lists_movies.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Flix & Chill Movies',search_db='')
-    all_d.append(aa)
-    aa=addDir3('[B][COLOR mediumslateblue]Chill & Flix TV Shows[/COLOR][/B]', 'https://kodiwind.com/hw/xml/Morbius_xml/techs_trakt_lists_tvshows.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Flix & Chill TV Shows',search_db='')
-    all_d.append(aa)
+    aa=addDir3('[B][COLOR mediumslateblue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
+    all_d.append(aa)    
     aa=addDir3('[B][COLOR mediumslateblue]Intros[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/intro.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Intros',search_db='')
     all_d.append(aa)
    
@@ -13042,7 +13040,9 @@ def imdb_menu(iconimage,fanart):
     user=Addon.getSetting('imdb_user')
     aa=[]
     aa.append(addDir3('My lists','https://www.imdb.com/user/ur%s/lists?sort=mdfd&order=asc',184,iconimage,fanart,' '))
+    aa.append(addDir3('All My lists','https://www.imdb.com/list/ls043808292/?view=detail&sort=alpha,asc&title_type=movie,short,tvMovie,video&start=1',184,iconimage,fanart,' '))
     aa.append(addDir3('My Watched list','https://www.imdb.com/user/ur%s/watchlist?sort=date_added,desc',184,iconimage,fanart,' '))
+    aa.append(addDir3('Hyperion Lists','https://www.imdb.com/user/ur%s/lists?sort=date_added,desc&ref_=nv_usr_lst_3',184,iconimage,fanart,' '))
     xbmcplugin .addDirectoryItems(int(sys.argv[1]),aa,len(aa))
 def get_users_list(url,user):
     global aa_results

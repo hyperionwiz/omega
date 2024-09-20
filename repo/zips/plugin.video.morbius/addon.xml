@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.morbius"                                                                                                                                    
 	   name="Morbius"                                                 
-	   version="3.4.9a"                                                                                                                                        
+	   version="3.4.9b"                                                                                                                                        
 	   provider-name="The Hood">
   <requires>
 	

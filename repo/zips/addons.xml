@@ -51,7 +51,7 @@
     </assets>
   </extension>
   
-</addon><addon id="plugin.video.morbius" name="Morbius" version="3.4.9a" provider-name="The Hood">
+</addon><addon id="plugin.video.morbius" name="Morbius" version="3.4.9b" provider-name="The Hood">
   <requires>
 	
   </requires>
@@ -236,7 +236,7 @@
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
-</addon><addon id="repository.omega" name="Omega Repo" version="1.0.2" provider-name="The Hood">
+</addon><addon id="repository.omega" name="Omega Repo" version="1.0.3" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>
