@@ -44,7 +44,7 @@ import os,sys,glob,webbrowser
 
 ############################################################################
 	#Addon Specific
-from resources.modules import tools
+from . import tools
 
 
 ##########################=VARIABLES=#######################################
@@ -122,7 +122,7 @@ def autoConfigQ():
 		def doWrite(self):
 			buffermode = 2
 			if os.path.exists(ADVANCED):
-				choice = DIALOG.yesno(ADDONTITLE, "[COLOR %s]There is currently an active [COLOR %s]AdvancedSettings.xml[/COLOR], would you like to remove it and continue?[/COLOR]" % (COLOR2, COLOR1), yeslabel="[B][COLOR green]Remove Settings[/COLOR][/B]", nolabel="[B][COLOR red]Cancel Write[/COLOR][/B]")
+				choice = DIALOG.yesno(ADDONTITLE, "[COLOR %s]There is currently an active [COLOR %s]AdvancedSettings.xml[/COLOR], would you like to remove it and continue?[/COLOR]" % (COLOR2, COLOR1), yeslabel="[B][COLOR green]Remove Settings[/COLOR][/B]", nolabel="[B][COLOR teal]Cancel Write[/COLOR][/B]")
 				if choice == 0: return
 				try: os.remove(ADVANCED)
 				except: f = open(ADVANCED, 'w'); f.close()

@@ -38,13 +38,14 @@
 
 #############################=IMPORTS=######################################
 	#Kodi Specific
-import xbmcplugin,xbmcgui, xbmcaddon,xbmcvfs
+import xbmc,xbmcvfs,xbmcplugin,xbmcgui, xbmcaddon
 	#Python Specific
-import os,re,sys,xbmc,json,base64,string,urllib.request,urllib.parse,urllib.error,urllib.parse,shutil,socket
+import os,re,sys,json,base64,shutil,socket
+import urllib.request,urllib.parse,urllib.error,urllib.parse
 from urllib.parse import urlparse
-	#Addon Specific
 from urllib.request import Request, urlopen
-from resources.modules import control
+	#Addon Specific
+from . import control
 
 ##########################=VARIABLES=#######################################
 ADDON = xbmcaddon.Addon()
@@ -149,7 +150,7 @@ def OPEN_URL(url):
 
 def clear_cache():
 	xbmc.log('CLEAR CACHE ACTIVATED')
-	xbmc_cache_path = os.path.join(xbmc.translatePath('special://home'), 'cache')
+	xbmc_cache_path = os.path.join(xbmcvfs.translatePath('special://home'), 'cache')
 	confirm=xbmcgui.Dialog().yesno("Please Confirm","Please Confirm You Wish To Delete Your Kodi Application Cache")
 	if confirm:
 		if os.path.exists(xbmc_cache_path)==True:
@@ -227,7 +228,7 @@ def MonthNumToName(num):
 	return month
 
 def killxbmc():
-	killdialog = xbmcgui.Dialog().yesno('Force Close Kodi', '[COLOR white]You are about to close Kodi', 'Would you like to continue?[/COLOR]', nolabel='[B][COLOR red] No Cancel[/COLOR][/B]',yeslabel='[B][COLOR green]Force Close Kodi[/COLOR][/B]')
+	killdialog = xbmcgui.Dialog().yesno('Force Close Kodi', '[COLOR white]You are about to close Kodi', 'Would you like to continue?[/COLOR]', nolabel='[B][COLOR teal] No Cancel[/COLOR][/B]',yeslabel='[B][COLOR green]Force Close Kodi[/COLOR][/B]')
 	if killdialog:
 		os._exit(1)
 	else:

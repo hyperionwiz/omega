@@ -38,13 +38,13 @@
 
 #############################=IMPORTS=######################################
 	#Kodi Specific
-import xbmc,xbmcaddon,xbmcgui,xbmcplugin,xbmcvfs
+import xbmc,xbmcvfs,xbmcaddon,xbmcgui,xbmcplugin
 	#Python Specific
-import base64,os,re,unicodedata,time,string,sys,urllib.request
-import urllib.parse,urllib.error,json,datetime,zipfile,shutil
+import base64,os,re,time,sys,urllib.request
+import urllib.parse,urllib.error,json,datetime,shutil
 import xml.dom.minidom
 from xml.dom.minidom import Node
-from datetime import date
+from datetime import datetime,timedelta
 	#Addon Specific
 from resources.modules import control,tools,popup,speedtest
 ##########################=VARIABLES=#######################################
@@ -69,20 +69,20 @@ M3U_PATH		  = os.path.join(ADDONDATA,  'm3u.m3u')
 ##########################=ART PATHS=#######################################
 icon			  = os.path.join(PLUGIN,  'icon.png')
 fanart			  = os.path.join(PLUGIN,  'fanart.jpg')
-background		  = os.path.join(MEDIA,	 'background.jpg')
-live			  = os.path.join(MEDIA,	 'live.jpg')
-catch			  = os.path.join(MEDIA,	 'cu.jpg')
-Moviesod		  = os.path.join(MEDIA,	 'movie.jpg')
-Tvseries		  = os.path.join(MEDIA,	 'tv.jpg')
-iconextras		  = os.path.join(MEDIA,	 'iconextras.png')
-iconsettings	  = os.path.join(MEDIA,	 'iconsettings.png')
-iconlive		  = os.path.join(MEDIA,	 'iconlive.png')
-iconcatchup		  = os.path.join(MEDIA,	 'iconcatchup.png')
-iconMoviesod	  = os.path.join(MEDIA,	 'iconmovies.png')
-iconTvseries	  = os.path.join(MEDIA,	 'icontvseries.png')
-iconsearch		  = os.path.join(MEDIA,	 'iconsearch.png')
-iconaccount		  = os.path.join(MEDIA,	 'iconaccount.png')
-icontvguide		  = os.path.join(MEDIA,	 'iconguide.png')
+background		  = os.path.join(MEDIA,   'background.jpg')
+live			  = os.path.join(MEDIA,   'live.jpg')
+catch			  = os.path.join(MEDIA,   'cu.jpg')
+Moviesod		  = os.path.join(MEDIA,   'movie.jpg')
+Tvseries		  = os.path.join(MEDIA,   'tv.jpg')
+iconextras		  = os.path.join(MEDIA,   'iconextras.png')
+iconsettings	  = os.path.join(MEDIA,   'iconsettings.png')
+iconlive		  = os.path.join(MEDIA,   'iconlive.png')
+iconcatchup		  = os.path.join(MEDIA,   'iconcatchup.png')
+iconMoviesod	  = os.path.join(MEDIA,   'iconmovies.png')
+iconTvseries	  = os.path.join(MEDIA,   'icontvseries.png')
+iconsearch		  = os.path.join(MEDIA,   'iconsearch.png')
+iconaccount		  = os.path.join(MEDIA,   'iconaccount.png')
+icontvguide		  = os.path.join(MEDIA,   'iconguide.png')
 
 #########################=XC VARIABLES=#####################################
 dns				  = control.setting('DNS')
@@ -197,21 +197,50 @@ def series_cats(url):
 def serieslist(url):
 	open  = tools.OPEN_URL(url)
 	ser_cat = json.loads(open)
-	for ser in ser_cat:
+	for ser in ser_cat:	
+		name = ser['name']
+		url = player_api+'&action=get_series_info&series_id='+str(ser['series_id'])
+		try:
+			thumb = ser['cover']
+			background = ser['backdrop_path'][0]
+			plot = ser['plot']
+			releaseDate = ser['releaseDate']
+			cast = str(ser['cast']).split()
+			rating_5based = ser['rating_5based']
+			episode_run_time = str(ser['episode_run_time'])
+			genre = ser['genre']
+		except:
+			thumb = icon
+			plot = ''
+			releasedate = ''
+			cast = ('', '')
+			rating_5based = ''
+			episode_run_time = ''
+			genre = ''
 		if xbmcaddon.Addon().getSetting('meta') == 'true':
-			tools.addDirMeta(ser['name'],player_api+'&action=get_series_info&series_id='+str(ser['series_id']),19,ser['cover'],ser['backdrop_path'][0],ser['plot'],ser['releaseDate'],str(ser['cast']).split(),ser['rating_5based'],ser['episode_run_time'],ser['genre'])
+			tools.addDirMeta(name,url,19,thumb,background,plot,releaseDate,cast,rating_5based,episode_run_time,genre)
 		else:
-			#xbmc.log('[FTG]--',2)
-			tools.addDir(ser['name'],player_api+'&action=get_series_info&series_id='+str(ser['series_id']),19,ser['cover'],background,'')
+			#tools.log('[FTG]--')
+			tools.addDir(name,url,19,thumb,background,'')
+		
 
 def series_seasons(url):
 	open  = tools.OPEN_URL(url)
 	ser_cat = json.loads(open)
 	for ser in ser_cat['episodes']:
 		info = ser_cat['info']
-		tools.addDir('Season - '+ser,url+'&season_number='+str(ser),20,info['cover'],info['backdrop_path'][0],'')
+		try:
+			thumb = info['cover']
+		except:
+			thumb = ''
+		try:
+			background = info['backdrop_path'][0]
+		except:
+			background = ''
+		tools.addDir('Season - '+ser,url+'&season_number='+str(ser),20,thumb,background,'')
 
 def season_list(url):
+	tools.log(url)
 	open  = tools.OPEN_URL(url)
 	ser_cat = json.loads(open)
 	info = ser_cat['info']
@@ -220,10 +249,46 @@ def season_list(url):
 	parsed_url = urlparse(url)
 	season_number = str(parse_qs(parsed_url.query)['season_number'][0])
 	for ser in ser_cat[season_number]:
+		url = play_series+str(ser['id'])+'.'+ser['container_extension']
+		try:
+			thumb = ser['info']['movie_image']
+		except:
+			thumb = ''
+		try:
+			background = ser['info']['movie_image']
+		except:
+			background = ''
+		try:
+			plot = ser['info']['plot']
+		except:
+			plot = ''
+		try:
+			releasedate = ser['info']['releasedate']
+		except:
+			releasedate = ''
+		try:
+			cast = str(info['cast']).split()
+		except:
+			cast = ('', '')
+		try:
+			rating_5based = info['rating_5based']
+		except:
+			rating_5based = ''
+		try:
+			duration = str(ser['info']['duration'])
+		except:
+			duration = ''
+		try:
+			genre = info['genre']
+		except:
+			genre = ''
+			
 		if xbmcaddon.Addon().getSetting('meta') == 'true':
-			tools.addDirMeta(ser['title'],play_series+str(ser['id'])+'.'+ser['container_extension'],4,ser['info']['movie_image'],ser['info']['movie_image'],ser['info']['plot'],ser['info']['releasedate'],str(info['cast']).split(),info['rating_5based'],str(ser['info']['duration']),info['genre'])
+			tools.log(cast)
+			tools.addDirMeta(ser['title'],url,4,thumb,background,plot,releasedate,cast,rating_5based,duration,genre)
 		else:
-			tools.addDir(ser['title'],play_series+str(ser['id'])+'.'+ser['container_extension'],4,ser['info']['movie_image'],ser['info']['movie_image'],'')
+			tools.addDir(ser['title'],url,4,thumb,background,'')
+		
 
 def vod(url):
 	if url =="vod":
@@ -249,7 +314,10 @@ def vod(url):
 					url = tools.check_protocol(tools.regex_from_to(a,'<stream_url>','</stream_url>').replace('<![CDATA[','').replace(']]>',''))
 					desc = tools.b64(tools.regex_from_to(a,'<description>','</description>'))
 					plot = tools.regex_from_to(desc,'PLOT:','\n')
-					cast = tools.regex_from_to(desc,'CAST:','\n')
+					try:
+						cast = tools.regex_from_to(desc,'CAST:','\n')
+					except:
+						cast = ('', '')
 					ratin= tools.regex_from_to(desc,'RATING:','\n')
 					year = tools.regex_from_to(desc,'RELEASEDATE:','\n').replace(' ','-')
 					year = re.compile('-.*?-.*?-(.*?)-',re.DOTALL).findall(year)
@@ -303,61 +371,51 @@ def search():
 						tools.addDir(name,play_movies+url+'.'+container_extension,4,thumb,background,'')
 					if 'live' in stream_type:
 						tools.addDir(name,play_live+url,4,thumb,background,'')
-######
-#no account to test
-######
 
 def catchup():
-	listcatchup()
-
-def listcatchup():
-	open = tools.OPEN_URL(panel_api)
-	all	 = tools.regex_get_all(open,'{"num','direct')
-	for a in all:
-		if '"tv_archive":1' in a:
-			name = tools.regex_from_to(a,'"epg_channel_id":"','"').replace('\/','/')
-			thumb= tools.regex_from_to(a,'"stream_icon":"','"').replace('\/','/')
-			sid	 = tools.regex_from_to(a,'stream_id":"','"')
-			if not name=="":
-				tools.addDir(name,'url',13,thumb,background,sid)
+	open = tools.OPEN_URL(panel_api+'&action=get_live_streams')
+	data = json.loads(open)
+	for streams in data:
+		if not streams['tv_archive']:
+			continue
+		try:
+			thumb = streams['stream_icon']
+		except:
+			thumb = iconcatchup
+		name = streams['name']
+		stream_id = str(streams['stream_id'])
+		if not name=="":
+				tools.addDir(name,'url',13,thumb,background,stream_id)
 
 def tvarchive(name,description):
-	days = 7
-	now = str(datetime.datetime.now()).replace('-','').replace(':','').replace(' ','')
-	date3 = datetime.datetime.now() - datetime.timedelta(days)
-	date = str(date3)
-	date = str(date).replace('-','').replace(':','').replace(' ','')
 	APIv2 = "{0}/player_api.php?username={1}&password={2}&action=get_simple_data_table&stream_id={3}".format(dns,username,password,description)
 	link = tools.OPEN_URL(APIv2)
-	match = re.compile('"title":"(.+?)".+?"start":"(.+?)","end":"(.+?)","description":"(.+?)"').findall(link)
-	for ShowTitle,start,end,DesC in match:
-		ShowTitle = tools.b64(ShowTitle)
-		DesC = tools.b64(DesC)
+	data = json.loads(link)
+	for streams in data['epg_listings']:
+		if not streams['has_archive']:
+			continue
+		if not streams['start']:
+			continue
+		name = base64.b64decode(streams['title']).decode('UTF-8')
+		stream_id = streams['id']
+		plot = base64.b64decode(streams['description']).decode('UTF-8')
+		start = streams['start']
+		end = streams['end']
 		format = '%Y-%m-%d %H:%M:%S'
-		try:
-			modend = dtdeep.strptime(end, format)
-			modstart = dtdeep.strptime(start, format)
-		except:
-			modend = datetime.datetime(*(time.strptime(end, format)[0:6]))
-			modstart = datetime.datetime(*(time.strptime(start, format)[0:6]))
-		StreamDuration = modend - modstart
-		modend_ts = time.mktime(modend.timetuple())
-		modstart_ts = time.mktime(modstart.timetuple())
-		FinalDuration = int(modend_ts-modstart_ts) / 60
-		strstart = start
-		Realstart = str(strstart).replace('-','').replace(':','').replace(' ','')
+		start_obj = datetime(*(time.strptime(start, format)[0:6]))
+		end_obj = datetime(*(time.strptime(end, format)[0:6]))
+		start_api_obj = start_obj.strftime('%Y-%m-%d:%H-%M')
+		end_api_obj = end_obj.strftime('%Y-%m-%d:%H-%M')
+		difference = end_obj - start_obj
+		duration = difference.total_seconds()
+		duration = round(duration / 60)
 		start2 = start[:-3]
 		editstart = start2
 		start2 = str(start2).replace(' ',' - ')
-		start = str(editstart).replace(' ',':')
-		Editstart = start[:13] + '-' + start[13:]
-		Finalstart = Editstart.replace('-:','-')
-		if Realstart > date:
-			if Realstart < now:
-				catchupURL = "{0}/streaming/timeshift.php?username={1}&password={2}&stream={3}&start=".format(dns,username,password,description)
-				ResultURL = catchupURL + str(Finalstart) + "&duration={0}".format(FinalDuration)
-				kanalinimi = "[B][COLOR white]{0}[/COLOR][/B] - {1}".format(start2,ShowTitle)
-				tools.addDir(kanalinimi,ResultURL,4,icon,background,DesC)
+		catchupURL = "{0}/streaming/timeshift.php?username={1}&password={2}&stream={3}&start=".format(dns,username,password,description)
+		ResultURL = catchupURL + str(start_api_obj) + "&duration={0}".format(duration)
+		Fname = "[B][COLOR white]{0}[/COLOR][/B] - {1}".format(start2,name)
+		tools.addDir(Fname,ResultURL,4,iconcatchup,background,plot)
 
 #############################
 
@@ -384,11 +442,11 @@ def settingsmenu():
 	if xbmcaddon.Addon().getSetting('meta')=='true':
 		META = '[B][COLOR lime]ON[/COLOR][/B]'
 	else:
-		META = '[B][COLOR red]OFF[/COLOR][/B]'
+		META = '[B][COLOR teal]OFF[/COLOR][/B]'
 	if xbmcaddon.Addon().getSetting('hidexxx')=='true':
 		xxx = '[B][COLOR lime]ON[/COLOR][/B]'
 	else:
-		xxx = '[B][COLOR red]OFF[/COLOR][/B]'
+		xxx = '[B][COLOR teal]OFF[/COLOR][/B]'
 	tools.addDir('Edit Advanced Settings','ADS',10,icon,background,'')
 	tools.addDir('META is %s'%META,'META',10,icon,background,META)
 	tools.addDir('Hide Adult Content is %s'%xxx,'XXX',10,icon,background,xxx)
@@ -531,7 +589,7 @@ def accountinfo():
 	parse = json.loads(response)
 	expiry	   = parse['user_info']['exp_date']
 	if not expiry=="":
-		expiry	   = datetime.datetime.fromtimestamp(int(expiry)).strftime('%d/%m/%Y - %H:%M')
+		expiry	   = datetime.fromtimestamp(int(expiry)).strftime('%d/%m/%Y - %H:%M')
 		expreg	   = re.compile('^(.*?)/(.*?)/(.*?)$',re.DOTALL).findall(expiry)
 		for day,month,year in expreg:
 			month	  = tools.MonthNumToName(month)
@@ -646,13 +704,14 @@ def num2day(num):
 	
 def extras():
 	tools.addDir('Run a Speed Test','ST',10,icon,background,'')
-	if xbmc.getCondVisibility('System.HasAddon(pvr.iptvsimple)'):
-		tools.addDir('Setup PVR Guide','tv',10,icon,background,'')
-	if not xbmc.getCondVisibility('System.HasAddon(pvr.iptvsimple)'):
-		tools.addDir('Install PVR Guide','Itv',10,icon,background,'')
-		xbmc.executebuiltin('Container.Refresh')
-	if os.path.exists(M3U_PATH):
-		tools.addDir('Refresh M3U','RefM3U',10,icon,background,'')
+	try:
+		if xbmc.getCondVisibility('System.HasAddon(pvr.iptvsimple)'):
+			tools.addDir('Setup PVR Guide','tv',10,icon,background,'')
+		if not xbmc.getCondVisibility('System.HasAddon(pvr.iptvsimple)'):
+			tools.addDir('Install PVR Guide','Itv',10,icon,background,'')
+		if os.path.exists(M3U_PATH):
+			tools.addDir('Refresh M3U','RefM3U',10,icon,background,'')
+	except:pass
 	tools.addDir('Clear Cache','clearcache',10,icon,background,'')
 	#tools.addDir('Tester','TEST',10,icon,background,'')
 

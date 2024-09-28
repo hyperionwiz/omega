@@ -161,14 +161,14 @@
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
 </extension>
-</addon><addon id="plugin.video.tvlive" name="[B][COLOR mediumslateblue]TV Live Streams[/B][/COLOR]" version="3.1.2" provider-name="[B][COLOR mediumslateblue]The Hood[/B][/COLOR]">
+</addon><addon id="plugin.video.tvlive" name="[B][COLOR teal]TV Live Streams[/B][/COLOR]" version="3.1.5" provider-name="[B][COLOR teal]The Hood[/B][/COLOR]">
   <extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	<summary lang="en">[COLOR mediumslateblue]An IPTV addon written to work with XC and XCUI for Kodi [/COLOR] </summary>
+	<summary lang="en">[COLOR teal]An IPTV addon written to work with XC and XCUI for Kodi.[/COLOR] </summary>
 	<language>en</language>
-	<description lang="en">[COLOR white]This addon does not supply nor provide any illegal content[/COLOR]</description>
+	<description lang="en">[COLOR teal]This addon does not supply nor provide any illegal content[/COLOR]</description>
 	<platform>all</platform>
 	<assets>
 		<icon>icon.png</icon>
