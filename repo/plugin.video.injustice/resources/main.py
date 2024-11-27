@@ -3798,8 +3798,6 @@ def main_menu(time_data):
     key='zWrite'
     mypass=crypt(mypass,key)
 
-    aa=addDir3('Odin', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://narcacist.com/images/Odin/icon.png','https://narcacist.com/images/Odin/fanart.jpg','Odin',mypass=mypass,search_db='http://tazaddon.com/TazClicks/search.db')
-    all_d.append(aa)
     
     aa=addDir3( 'Search All', 'www',201,BASE_LOGO+'search.png',all_fanarts['32034'],'Search All')
         

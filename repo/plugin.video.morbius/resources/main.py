@@ -3729,13 +3729,13 @@ def main_menu(time_data):
     time_data.append(elapsed_time+222)
     all_d=[]
  
-   aa=addDir3('[B][COLOR mediumslateblue]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','4K Section',search_db='')
+    aa=addDir3('[B][COLOR mediumslateblue]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','4K Section',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Morbius RD 1 Click Movies[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/main1_movies4k.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Morbius RD 1 Click Movies',search_db='')
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]1 Click Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Movies',search_db='')
     all_d.append(aa)  
-    aa=addDir3('[B][COLOR mediumslateblue] Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
+    aa=addDir3('[B][COLOR mediumslateblue]Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
     all_d.append(aa)    
