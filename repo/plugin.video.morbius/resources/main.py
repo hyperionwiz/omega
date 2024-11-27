@@ -49,7 +49,9 @@ global avg_f,stop_cpu,cores_use,all_other_sources_uni,infoDialog_counter_close
 global play_status,break_window
 global play_status_rd_ext,break_window_rd
 global all_results_imdb
-global all_hased_by_type
+global all_hased_by_type,fixed_name,fixed_size
+fixed_size={}
+fixed_name={}
 all_results_imdb=[]
 if Addon.getSetting("full_db")=='true':
     
@@ -3596,14 +3598,14 @@ def tv_show_menu():
     now = datetime.datetime.now()
     aa=addDir3(Addon.getLocalizedString(32023),'tv',145,BASE_LOGO+'tracker.png',all_fanarts['32023'],'History')
     #Popular
-    aa=addDir3(Addon.getLocalizedString(32012),f'https://api.themoviedb.org/3/discover/tv/?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&include_null_first_air_dates=false&with_original_language=en&page=1',14,BASE_LOGO+'popular.png',all_fanarts['32013'],Addon.getLocalizedString(32012))
+    aa=addDir3(Addon.getLocalizedString(32012),f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&include_null_first_air_dates=false&with_original_language=en&page=1',14,BASE_LOGO+'popular.png',all_fanarts['32013'],Addon.getLocalizedString(32012))
     all_d.append(aa)
 
     aa=addDir3(Addon.getLocalizedString(32013),f'https://api.themoviedb.org/3/tv/on_the_air?api_key={tmdb_key}&language=%s&page=1'%lang,14,BASE_LOGO+'on_air.png',all_fanarts['32013'],'TMDB')
     all_d.append(aa)
     
     
-    aa=addDir3(Addon.getLocalizedString(32014),f'https://api.themoviedb.org/3/discover/tv/?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&first_air_date_year='+str(now.year)+'&with_original_language=en&language=he&page=1',14,'special://home/addons/plugin.video.telemedia/tele/Tv_Show/popular_tv.png','special://home/addons/plugin.video.telemedia/tele/tv_fanart.png','New Tv shows')
+    aa=addDir3(Addon.getLocalizedString(32014),f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&first_air_date_year='+str(now.year)+'&with_original_language=en&language=he&page=1',14,'special://home/addons/plugin.video.telemedia/tele/Tv_Show/popular_tv.png','special://home/addons/plugin.video.telemedia/tele/tv_fanart.png','New Tv shows')
     all_d.append(aa)
     #new episodes
     aa=addDir3(Addon.getLocalizedString(32015),'https://api.tvmaze.com/schedule',20,BASE_LOGO+'new_ep.png',all_fanarts['32015'],'New Episodes')
@@ -3684,8 +3686,6 @@ def tv_neworks():
     all_d.append(aa)
     aa=addDir3('[COLOR lightblue]CBS[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=16&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://cdn.freebiesupply.com/logos/large/2x/cbs-logo-png-transparent.png','https://tvseriesfinale.com/wp-content/uploads/2014/10/cbs40-590x221.jpg','HBO')
     all_d.append(aa)
-    aa=addDir3('[COLOR aquamarine]SKY ONE[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=214&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/sky_one/sky_one.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/sky_one/sky_one.jpg','SKY ONE')
-    all_d.append(aa)
     aa=addDir3('[COLOR purple]SyFy[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=77&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://cdn.collider.com/wp-content/uploads/syfy-logo1.jpg','https://imagesvc.timeincapp.com/v3/mm/image?url=https%3A%2F%2Fewedit.files.wordpress.com%2F2017%2F05%2Fdefault.jpg&w=1100&c=sc&poi=face&q=85','SyFy')
     all_d.append(aa)
     aa=addDir3('[COLOR lightgreen]The CW[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=71&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://www.broadcastingcable.com/.image/t_share/MTU0Njg3Mjc5MDY1OTk5MzQy/tv-network-logo-cw-resized-bc.jpg','https://i2.wp.com/nerdbastards.com/wp-content/uploads/2016/02/The-CW-Banner.jpg','The CW')
@@ -3698,8 +3698,6 @@ def tv_neworks():
     all_d.append(aa)
     aa=addDir3('[COLOR green]hulu[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=453&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://i1.wp.com/thetalkinggeek.com/wp-content/uploads/2012/03/hulu_logo_spiced-up.png?resize=300%2C225&ssl=1','https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi677r77IbeAhURNhoKHeXyB-AQjRx6BAgBEAU&url=https%3A%2F%2Fwww.hulu.com%2F&psig=AOvVaw0xW2rhsh4UPsbe8wPjrul1&ust=1539638077261645','hulu')
     all_d.append(aa)
-    aa=addDir3('[COLOR goldenrod]Peacock[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=3353&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/peacock/peacock_icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/peacock/peacock_fanart.jpg','Peacock')
-    all_d.append(aa) 
     aa=addDir3('[COLOR red]Showtime[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=67&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://res.cloudinary.com/wnotw/images/c_limit,w_1536,q_auto:best,f_auto/v1501788508/sci5cdawypsux61i9pyb/showtime-networks-logo','https://www.sho.com/site/image-bin/images/0_0_0/0_0_0_prm-ogseries_1280x640.jpg','showtime')
     all_d.append(aa)
     aa=addDir3('[COLOR red]BBC One[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=4&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://lh3.googleusercontent.com/proxy/LnjjtuGk_PErC5iaReOcy6EEvwjT9wzlyZBKhQHconLsyHWdVn1NHa-Bz3E0_Dev0KV_yJtGyQTlHDwvvm3zW3i0NFSmQVim5_hYOeZ-jWpD1Zs','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/BBC_One_HD.svg/800px-BBC_One_HD.svg.png','BBC')
@@ -3730,22 +3728,24 @@ def main_menu(time_data):
     elapsed_time = time.time() - start_time_start
     time_data.append(elapsed_time+222)
     all_d=[]
-    
-    aa=addDir3('[B][COLOR mediumslateblue]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','4K Section',search_db='')
+ 
+   aa=addDir3('[B][COLOR mediumslateblue]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','4K Section',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Morbius RD 1 Click Movies[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/main1_movies4k.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Morbius RD 1 Click Movies',search_db='')
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]1 Click Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Movies',search_db='')
+    all_d.append(aa)  
+    aa=addDir3('[B][COLOR mediumslateblue] Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
     all_d.append(aa)    
     aa=addDir3('[B][COLOR mediumslateblue]Intros[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/intro.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Intros',search_db='')
-    all_d.append(aa)
+    all_d.append(aa) 
    
-    if Addon.getSetting('movie_section')=='true':
+    if Addon.getSetting('movie_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32024),'www',2,BASE_LOGO+'movies.png',all_fanarts['32024'],'Movies')
         all_d.append(aa)
-    if Addon.getSetting('tv_section')=='true':
+    if Addon.getSetting('tv_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32025),'www',3,BASE_LOGO+'tv.png',all_fanarts['32025'],'TV')
         all_d.append(aa)
     #aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
@@ -3799,7 +3799,7 @@ def main_menu(time_data):
     key='zWrite'
     mypass=crypt(mypass,key)
 
-  
+    
     aa=addDir3( 'Search All', 'www',201,BASE_LOGO+'search.png',all_fanarts['32034'],'Search All')
         
     all_d.append(aa)
@@ -3836,7 +3836,7 @@ def main_menu(time_data):
     elapsed_time = time.time() - start_time_start
     time_data.append(elapsed_time+444)
     return time_data
-def movie_section():
+def movie_world():
     all_d=[]
     try:
         from sqlite3 import dbapi2 as database
@@ -4124,7 +4124,9 @@ if Addon.getSetting("full_db")=='true':
     else:
         dp_full.update(0, 'Please wait','Level 11...', '' )
 def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_n,episode_n,page_no,start_time,dp):
-            global all_hased,all_s_in,all_hased_by_type
+            global all_hased,all_s_in,all_hased_by_type,fixed_name,fixed_size
+            fixed_name={}
+            fixed_size={}
             #hashCheck = rd.checkHash(all_mag[items])
             log.warning('page_no check:'+str(page_no))
             
@@ -4140,7 +4142,8 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                             dp.update(0, Addon.getLocalizedString(32070)+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)),Addon.getLocalizedString(32070),'Sending:'+',Page:'+str(page_no))
                
                    try:
-                    hashCheck = rd.checkHash(all_mag[items])
+                    #hashCheck = rd.checkHash(all_mag[items])
+                    hashCheck=all_mag[items]
                    except:
                     time.sleep(0.3)
                     hashCheck = rd.checkHash(all_mag[items])
@@ -4156,12 +4159,12 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                     hashCheck=hashCheck['transcoded']
                 else:
                     hashCheck=ad.check_hash(all_mag[items])
+                    log.warning(f'hashCheck:{hashCheck},items:{all_mag[items]}')
                     hashCheck=hashCheck['data']['magnets']
                
                 
                 z=0
-                log.warning('hashCheck:')
-                log.warning(hashCheck)
+
                 all_rej=[]
                 if isinstance(hashCheck, dict) or isinstance(hashCheck, list):
                  for hash in hashCheck:
@@ -4181,6 +4184,10 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                                                 
                                                 break
                     if hash_type=='rd':
+                        all_hased.append(all_mag[items][count_hash])
+                        count_hash+=1
+                        all_hased_by_type[hash_type].append(hash)
+                        '''
                         ok=False
                         try:
                             if 'rd' in hashCheck[hash]:
@@ -4273,7 +4280,7 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                            else:
                               
                               statistics['non_rd']+=1
-                        
+                        '''
                     elif hash_type=='pm':
                         if hash==True:
                             all_hased.append(all_mag[items][count_hash])
@@ -4282,9 +4289,57 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                     else:
                         
                         if 'instant' in hash:
+                        
                          if hash['instant']==True:
-                           all_hased.append(hash['hash'])
-                           all_hased_by_type[hash_type].append(hash['hash'])
+                            if tv_movie=='tv' :
+                                found_c_h=False
+                                break_now=False
+                                for items_t in hash['files']:
+                                    
+                                    test_name=str(items_t['n']).lower()
+                                   
+                                    if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or  str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
+                                        if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
+                                            found_c_h=True
+                                            fixed_size[hash['magnet']]=round((items_t['s']/(1024*1024*1024)),2)
+                                            fixed_name[hash['magnet']]=test_name
+                                            break
+                                    if 'e' in items_t:
+                                        for items in items_t['e']:
+                                            test_name=str(items['n']).lower()
+                                            
+                                            if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
+                                    
+                                                if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
+                                                    found_c_h=True
+                                                    fixed_size[hash['magnet']]=round((items['s']/(1024*1024*1024)),2)
+                                                    fixed_name[hash['magnet']]=test_name
+                                                    break_now=True
+                                                    break
+                                            if break_now:
+                                                break
+                                            if 'e' in items:
+                                                for items2 in items['e']:
+                                                    test_name=str(items2['n']).lower()
+                                                    
+                                                    if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
+                                            
+                                                        if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
+                                                            found_c_h=True
+                                                            fixed_size[hash['magnet']]=round((items2['s']/(1024*1024*1024)),2)
+                                                        
+                                                            fixed_name[hash['magnet']]=test_name
+                                                            break_now=True
+                                                            break
+                                    if break_now:
+                                        break
+                                if found_c_h  :
+                                    all_hased.append(hash['hash'])
+                                    all_hased_by_type[hash_type].append(hash['hash'])
+                                
+                            else:
+                                all_hased.append(hash['hash'])
+                                all_hased_by_type[hash_type].append(hash['hash'])
                 else:
                     try:
                         regex='<title>(.+?)</title>'
@@ -5509,7 +5564,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
     l_po_watching=po_watching
     l_full_stats=full_stats
    
-    return f_result,all_ok,once,tv_movie,l_po_watching,l_full_stats,statistics,server_check,all_hased_by_type
+    return f_result,all_ok,once,tv_movie,l_po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size
    
    except Exception as e:
     import linecache
@@ -6157,10 +6212,12 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
             dp.update(0, Addon.getLocalizedString(32072)+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)),Addon.getLocalizedString(32081),Addon.getLocalizedString(32082))
     if one_click:
     
-        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,False,'',tvdb_id)
+        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,False,'',tvdb_id)
     else:
         #match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name)
-        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= cache.get(c_get_sources, time_to_save, original_title,data,original_title,id,season,episode,show_original_year,heb_name,False,'',tvdb_id,table='sources')
+        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= cache.get(c_get_sources, time_to_save, original_title,data,original_title,id,season,episode,show_original_year,heb_name,False,'',tvdb_id,table='sources')
+    log.warning(f'fixed_name:{fixed_name}')
+    log.warning(f'fixed_size:{fixed_size}')
     dd=[]
     dd.append((name,data,original_title,id,season,episode,show_original_year,tvdb_id))
     
@@ -6346,6 +6403,31 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         z=0
         all_rejected_orginged=[]
         for name,lk,data,fix,quality,source in all_rejected:
+            hash=None
+            try:
+                #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
+                hash=lk.split('btih:')[1]
+                if '&' in hash:
+                    hash=hash.split('&')[0]
+            except:
+                try:
+                    hash =lk.split('btih:')[1]
+                except:
+                    pass
+            
+            if hash:
+                try:
+                    
+                    name=fixed_name[hash.lower()]
+                    
+                except:
+                        pass
+                try:
+                    data=fixed_size[hash.lower()]
+                    
+                except  :
+                        
+                        pass
             all_s_in=({},int((z*100.0)/(len(all_rejected))),'Ordering links',2,name)
             z+=1
             if source in all_fav:
@@ -6403,6 +6485,31 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         all_rest=[]
         z=0
         for name,lk,data,fix,quality,source in all_data:
+            hash=None
+            try:
+                #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
+                hash=lk.split('btih:')[1]
+                if '&' in hash:
+                    hash=hash.split('&')[0]
+            except:
+                try:
+                    hash =lk.split('btih:')[1]
+                except:
+                    pass
+            
+            if hash:
+                try:
+                    
+                    name=fixed_name[hash.lower()]
+                    
+                except:
+                        pass
+                try:
+                    data=fixed_size[hash.lower()]
+                    
+                except  :
+                        
+                        pass
             all_s_in=({},int((z*100.0)/(len(all_data))),'Ordering links',2,name)
             z+=1
             if source in all_fav:
@@ -6476,6 +6583,31 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         all_s_in=( {},100 ,'',4,'')
         
         for name,lk,data,fix,quality,source in all_data:
+                hash=None
+                try:
+                    #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
+                    hash=lk.split('btih:')[1]
+                    if '&' in hash:
+                        hash=hash.split('&')[0]
+                except:
+                    try:
+                        hash =lk.split('btih:')[1]
+                    except:
+                        pass
+                
+                if hash:
+                    try:
+                        
+                        name=fixed_name[hash.lower()]
+                        
+                    except:
+                            pass
+                    try:
+                        data=fixed_size[hash.lower()]
+                        
+                    except :
+                            
+                            pass
                 elapsed_time = time.time() - start_time
                 if Addon.getSetting("dp")=='true':
                     if KODI_VERSION>18:
@@ -6649,6 +6781,7 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
                         sys.exit(1)
                     else:
                         return 0
+                
                 play_link(f_name,url,iconimage,fanart,description,data,original_title,id,season,episode,show_original_year,dd,heb_name,nextup='true',video_data_exp=video_data_exp,all_dd=all_dd,start_index=ret,all_w=all_w,source=f_source,tvdb_id=tvdb_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
             else:
@@ -7045,7 +7178,7 @@ def search_next(dd,tv_movie,id,heb_name,playlist,iconimage,enable_playlist):
         
             
         if 'Jen_link' not in tvdb_id:
-            match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= cache.get(c_get_sources, time_to_save,str(original_title),str(data),str(original_title),str(id),str(season),str(episode),str(show_original_year),str(heb_name),False,'',tvdb_id ,table='sources')
+            match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= cache.get(c_get_sources, time_to_save,str(original_title),str(data),str(original_title),str(id),str(season),str(episode),str(show_original_year),str(heb_name),False,'',tvdb_id ,table='sources')
         #susb_data_next=check_next_last_tv_subs('green',original_title,heb_name,season,episode,show_original_year,id)
         susb_data_next=[]
         logging.warning('Subs nextep:')
@@ -9208,38 +9341,31 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
            rd = real_debrid.RealDebrid()
            play_status_rd_ext=real_debrid
            break_window_rd=real_debrid.break_window_rd
-           if tv_movie=='tv' and 's%se'%season_n not in url.lower():
+           if 1:#tv_movie=='tv' and 's%se'%season_n not in url.lower():
                log.warning('get_sources_nextup::'+str(get_sources_nextup))
-               if get_sources_nextup=='true':
-                    try:
-                        from sqlite3 import dbapi2 as database
-                    except:
-                        from pysqlite2 import dbapi2 as database
-                    cacheFile=os.path.join(user_dataDir,'database.db')
-                    dbcon = database.connect(cacheFile)
-                    dbcur = dbcon.cursor()
-                    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""data TEXT);" % 'nextup_all_d')
-                    dbcur.execute("SELECT * from nextup_all_d")
+               if 1:#get_sources_nextup=='true':
                     
-                    
-                    all_dd_pre = dbcur.fetchone()
-                    
-                    dbcur.close()
-                    dbcon.close()
-                    if all_dd_pre!=None:
-                        import ast
-                        all_dd=ast.literal_eval(base64.b64decode(all_dd_pre[0]).decode('utf-8'))
                     start_index=0
+                    log.warning('Check_start_index')
                     for name,n_url,iconimage,fanart,description,data,id,season,episode,original_title,show_original_year,dd in all_dd:
+                        log.warning(n_url)
+                        if 'btih:' not in n_url:
+                            continue
                         hash_url=url.split('btih:')[1]
+                        
                         if '&' in hash_url:
                             hash_url=hash_url.split('&')[0]
                         hash_n_url=n_url.split('btih:')[1]
+                        
                         if '&' in hash_n_url:
                             hash_n_url=hash_n_url.split('&')[0]
+                        log.warning(f'hash_url:{hash_url}')
+                        log.warning(f'hash_n_url:{hash_n_url}')
                         if hash_url==hash_n_url:
+                            log.warning(f'Found:{hash_n_url}')
                             break
                         start_index+=1
+                   
                if len(all_dd)>0:
                 log.warning('LEN ALLDD:'+str(len(all_dd)))
                 counter_index=0
@@ -9262,9 +9388,10 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
                 log.warning('counter_index::'+str(counter_index))
                 for name,url,iconimage,fanart,description,data,id,season,episode,original_title,show_original_year,dd in all_dd:
                     url=url.replace('-RD-','')
-                    log.warning('url::'+str(url))
+                    
                     if url=='open_rejected' or url=='open_filtered':
                         continue
+                    log.warning(counter_index)
                     if counter_index>=start_index:
                         log.warning('Trying22:')
                         
@@ -9272,7 +9399,8 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
                             link=rd.singleMagnetToLink_season(url,tv_movie,season_n,episode_n,dp=dp)
                         else:
                             link=rd.singleMagnetToLink(url)
-                        
+                        if link==None:
+                            continue
                         o_name=name
                         log.warning('Trying:'+str(link))
                         if Addon.getSetting('new_play_window')=='false':
@@ -9890,7 +10018,7 @@ def re_enable_all_d():
     from resources.modules import all_debrid
     clear_all_d()
     alld = all_debrid.AllDebrid()
-
+    alld.auth()
     xbmc.executebuiltin(u'Notification(%s,%s)' % ((Addon.getAddonInfo('name'), ('OK'))))
 def add_remove_trakt(name,original_title,id,season,episode):
     from resources.modules.general import post_trakt
@@ -12147,10 +12275,10 @@ def server_test():
     if Addon.getSetting('one_by_one')=='true':
         for items in onlyfiles:
             log.warning('Checking:'+items)
-            match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,items.replace('.py',''),server_test=True)
+            match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,items.replace('.py',''),server_test=True)
             log.warning('Done Checking:'+items)
     else:
-        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,selected_scrapers,server_test=True)
+        match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,selected_scrapers,server_test=True)
 
 
     for items in server_check:
@@ -12182,7 +12310,7 @@ def server_test():
     season='6'
     episode='1'
     show_original_year='2014'
-    match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,selected_scrapers,server_test=True)
+    match_a,all_ok,once,tv_movie,po_watching,l_full_stats,statistics,server_check,all_hased_by_type,fixed_name,fixed_size= c_get_sources( original_title,data,original_title,id,season,episode,show_original_year,heb_name,True,selected_scrapers,server_test=True)
     for items in server_check:
         if items not in all_t_sources:
             continue
@@ -13040,9 +13168,7 @@ def imdb_menu(iconimage,fanart):
     user=Addon.getSetting('imdb_user')
     aa=[]
     aa.append(addDir3('My lists','https://www.imdb.com/user/ur%s/lists?sort=mdfd&order=asc',184,iconimage,fanart,' '))
-    aa.append(addDir3('All My lists','https://www.imdb.com/list/ls043808292/?view=detail&sort=alpha,asc&title_type=movie,short,tvMovie,video&start=1',184,iconimage,fanart,' '))
     aa.append(addDir3('My Watched list','https://www.imdb.com/user/ur%s/watchlist?sort=date_added,desc',184,iconimage,fanart,' '))
-    aa.append(addDir3('Hyperion Lists','https://www.imdb.com/user/ur%s/lists?sort=date_added,desc&ref_=nv_usr_lst_3',184,iconimage,fanart,' '))
     xbmcplugin .addDirectoryItems(int(sys.argv[1]),aa,len(aa))
 def get_users_list(url,user):
     global aa_results
@@ -15497,8 +15623,8 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
 
     elif mode==2:
         import logging
-        logging.warning('Start Morbius4')
-        movie_section()
+        logging.warning('Start Shadow4')
+        movie_world()
     elif mode==3:
         tv_show_menu()
     elif mode==5:

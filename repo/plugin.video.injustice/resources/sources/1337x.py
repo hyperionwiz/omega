@@ -97,14 +97,16 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
     for search_url_1 in search_url:
       
         
-            
+        if stop_all==1:
+            break
         x=get_html('https://www.1337xxx.to/search/%s/1/'%(search_url_1),headers=base_header,timeout=10,verify=False).content()
         log.warning('https://www.1337xxx.to/search/%s/1/'%(search_url_1))
         regex='<tr>(.+?)</tr'
         m_pre=re.compile(regex,re.DOTALL).findall(x)
       
         for item in m_pre:
-            
+            if stop_all==1:
+                break
             regex='flaticon-.+?a href="(.+?)">(.+?)<.+?"coll-4 size.+?">(.+?)<'
             m=re.compile(regex,re.DOTALL).findall(item)
 

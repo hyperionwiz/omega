@@ -162,16 +162,24 @@
 		<setting id="bitcq" label="bitcq" type="bool"  default="true" />
 		<setting id="bitlord" label="bitlord" type="bool"  default="true" />
 		<setting id="bitsearch" label="bitsearch" type="bool"  default="true" />
-		<setting id="dl" label="dl" type="bool"  default="true" />
+		<setting id="commet" label="commet" type="bool"  default="true" />
 		<setting id="ezio" label="ezio" type="bool"  default="true" />
+		<setting id="fmood" label="fmood" type="bool"  default="true" />
 		<setting id="glorls" label="glorls" type="bool"  default="true" />
 		<setting id="kass" label="kass" type="bool"  default="true" />
+		<setting id="kban" label="kban" type="bool"  default="true" />
+		<setting id="kick4" label="kick4" type="bool"  default="true" />
+		<setting id="m_fus" label="m_fus" type="bool"  default="true" />
 		<setting id="pirp" label="pirp" type="bool"  default="true" />
 		<setting id="shrss" label="shrss" type="bool"  default="true" />
 		<setting id="snow" label="snow" type="bool"  default="true" />
 		<setting id="sol" label="sol" type="bool"  default="true" />
 		<setting id="tech" label="tech" type="bool"  default="true" />
+		<setting id="tele" label="tele [COLOR lightblue](Free)[/COLOR]" type="bool"  default="true" />
+		<setting id="tfunk" label="tfunk" type="bool"  default="true" />
+		<setting id="tkitty" label="tkitty" type="bool"  default="true" />
 		<setting id="torio" label="torio" type="bool"  default="true" />
+		<setting id="torio_elf" label="torio_elf" type="bool"  default="true" />
 		<setting id="tsdl" label="tsdl" type="bool"  default="true" />
 		<setting id="yts" label="yts" type="bool"  default="true" />
 
@@ -191,16 +199,24 @@
 		<setting id="bitcq_tv" label="bitcq" type="bool"  default="true" />
 		<setting id="bitlord_tv" label="bitlord" type="bool"  default="true" />
 		<setting id="bitsearch_tv" label="bitsearch" type="bool"  default="true" />
-		<setting id="dl_tv" label="dl" type="bool"  default="true" />
+		<setting id="commet_tv" label="commet" type="bool"  default="true" />
 		<setting id="ezio_tv" label="ezio" type="bool"  default="true" />
+		<setting id="fmood_tv" label="fmood" type="bool"  default="true" />
 		<setting id="glorls_tv" label="glorls" type="bool"  default="true" />
 		<setting id="kass_tv" label="kass" type="bool"  default="true" />
+		<setting id="kban_tv" label="kban" type="bool"  default="true" />
+		<setting id="kick4_tv" label="kick4" type="bool"  default="true" />
+		<setting id="m_fus_tv" label="m_fus" type="bool"  default="true" />
 		<setting id="pirp_tv" label="pirp" type="bool"  default="true" />
 		<setting id="shrss_tv" label="shrss" type="bool"  default="true" />
 		<setting id="snow_tv" label="snow" type="bool"  default="true" />
 		<setting id="sol_tv" label="sol" type="bool"  default="true" />
 		<setting id="tech_tv" label="tech" type="bool"  default="true" />
+		<setting id="tele_tv" label="tele [COLOR lightblue](Free)[/COLOR]" type="bool"  default="true" />
+		<setting id="tfunk_tv" label="tfunk" type="bool"  default="true" />
+		<setting id="tkitty_tv" label="tkitty" type="bool"  default="true" />
 		<setting id="torio_tv" label="torio" type="bool"  default="true" />
+		<setting id="torio_elf_tv" label="torio_elf" type="bool"  default="true" />
 		<setting id="tsdl_tv" label="tsdl" type="bool"  default="true" />
 		<setting id="yts_tv" label="yts" type="bool"  default="true" />
 
@@ -273,8 +289,8 @@
 	</category>
 	<category label="32269">
 		<setting id="s_traker" label="32023" type="bool"  default="true" />
-		<setting id="movie_section" label="32024" type="bool"  default="true" />
-		<setting id="tv_section" label="32025" type="bool"  default="true" />
+		<setting id="movie_world" label="32024" type="bool"  default="true" />
+		<setting id="tv_world" label="32025" type="bool"  default="true" />
 		<setting id="trakt_world" label="32026" type="bool"  default="true" />
 		<setting id="trakt" label="32027" type="bool"  default="true" />
 		<setting id="search" label="32020" type="bool"  default="true" />
@@ -320,7 +336,7 @@
     </category>
 	<category label="IMDB">
 		<setting type="lsep" label="Enter Userid without the ur" />
-		<setting id="imdb_user_0" type="text" label="User 1" default="84970133" />
+		<setting id="imdb_user_0" type="text" label="User 1" default="" />
 		<setting id="imdb_user_1" type="text" label="User 2" default="" />
 		<setting id="imdb_user_2" type="text" label="User 3" default="" />
 		<setting id="imdb_user_3" type="text" label="User 4" default="" />

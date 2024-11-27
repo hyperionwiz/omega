@@ -1,35 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import time,xbmc,logging,xbmcaddon
+import time,xbmc,logging
 
 from  resources.modules.client import get_html
 from resources.modules import log
-try:
-    resuaddon=xbmcaddon.Addon('script.module.resolveurl')
-except Exception as e:
-    resuaddon=None
-    pass
-    
 class AllDebrid:
     
     def __init__(self):
         from  resources.modules import tools
         self.tools=tools
         self.agent_identifier = self.tools.addonName
-        try:
-            self.token = resuaddon.getSetting('AllDebridResolver_token') 
-        except:
-            self.token = self.tools.getSetting('alldebrid.token')
-            
-        
-        
+        self.token = self.tools.getSetting('alldebrid.token')
         self.base_url = 'https://api.alldebrid.com/v4/'
         if self.token=='':
             self.auth()
         
 
     def get_url(self, url, token_req=False):
-
+        log.warning(f'url:{url},token:{self.token}')
         if  self.token == '':
             return
 
@@ -107,10 +95,7 @@ class AllDebrid:
 
         resp = get_html(poll_url).json()['data']
         if resp['activated']:
-            try:
-                resuaddon.setSetting('AllDebridResolver_token', resp['apikey']) 
-            except:
-                pass
+           
             self.tools.setSetting('alldebrid.token', resp['apikey'])
             self.token = resp['apikey']
             return True, 0
@@ -167,7 +152,7 @@ class AllDebrid:
     def magnet_status(self, magnet_id):
         return self.get_url('magnet/status?id={}'.format(magnet_id), token_req=True)
 
-    def movie_magnet_to_stream(self, magnet):
+    def movie_magnet_to_stream(self, magnet,season,episode,tv_movie):
         selectedFile = None
 
         magnet_id = self.upload_magnet(magnet)
@@ -184,11 +169,23 @@ class AllDebrid:
        
         for items in folder_details:
             
-            if 'mkv' in items['filename'] or 'avi' in items['filename'] or 'mp4' in items['filename']:
-                
-                selectedFile = items['link']
-          
+            if (tv_movie=='movie'):
+                test_name=items['filename'].lower()
+                if 'mkv' in test_name or 'avi' in test_name or 'mp4' in test_name:
+                    
+                    selectedFile = items['link']
+            else:
+                test_name=items['filename'].lower()
+             
+                if ('s%se%s.'%(season,str(int(episode))) in test_name or 's%se%s '%(season,episode) in test_name or 's%se%s.'%(season,episode) in test_name or 'ep '+episode in test_name or  str(int(season))+episode in test_name or  str(int(season))+"x"+episode in test_name):
+                                
+                                
+                    if 'mkv' in test_name or 'avi' in test_name or 'mp4' in test_name:
+                        
+                        selectedFile = items['link']
+                        
         self.delete_magnet(magnet_id)
+
         return self.resolve_hoster(selectedFile)
 
     def resolve_magnet(self, magnet, args, torrent, pack_select=False):

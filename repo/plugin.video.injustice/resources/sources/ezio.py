@@ -42,7 +42,7 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
                     size=(float(items['size_bytes'])/dev_num)
                     
                
-                    log.warning(size)
+                    
                     if int(size)<max_size:
                        if '2160' in title:
                               res='2160'
@@ -58,7 +58,7 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
                               res='HD'
 
                      
-                       log.warning(title)
+                       
                        all_links.append((title,lk,str(size),res))
                    
                        global_var=all_links
