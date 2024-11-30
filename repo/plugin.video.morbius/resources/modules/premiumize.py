@@ -66,6 +66,7 @@ class Premiumize:
             token=resuaddon.getSetting('PremiumizeMeResolver_token')
         except:
             token=Addon.getSetting('premiumize.token')
+        log.warning(f'token:{token}')
         if token=='':
             self.auth()
         self.headers = {

@@ -3,7 +3,7 @@
 	<category label="General">
 		
 		
-		<setting id="theme" type="enum" label="32205" values="Injustice|"  default="0" />
+		<setting id="theme" type="enum" label="32205" values="Injustice"  default="0" />
 		
 		<setting id="num_p"  type="number"  label="32206" visible="true" default="1"/>
 		<setting id="order_networks" type="enum" label="32207" lvalues="32208|32209|32210"  default="0" />
@@ -81,7 +81,7 @@
 	
 	<category label="32231">
 		<setting id="debrid_use" label="32232" type="bool"  default="true" />
-		<setting id="debrid_use_rd" label="Real-Debrid" type="bool"  default="true" />
+		<setting id="debrid_use_rd" label="Real-Debrid" type="bool"  default="false" />
 		
 		<setting label="32234" option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=137&url=www)" visible="eq(-1,true)"/>
 		<setting label="32235" option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=138&url=www)" visible="eq(-2,true)"/>
@@ -97,7 +97,10 @@
 		<setting id="debrid_use_ad" label="ALL-Debrid" type="bool"  default="false" />
 		<setting label="32239" option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=141&url=www)" visible="eq(-1,true)"/>
 		<setting label="32240" option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=142&url=www)" visible="eq(-2,true)"/>
-		
+
+		<setting id="debrid_use_tr" label="TorBox" type="bool"  default="true" />
+		<setting label="Auth Torbox." option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=208&url=www)" visible="eq(-1,true)"/>
+		<setting label="Revoke Auth" option="close" type="action" action="RunPlugin(plugin://plugin.video.injustice?mode=209&url=www)" visible="eq(-2,true)"/>
 	</category>
 	
 	

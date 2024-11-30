@@ -105,7 +105,7 @@ all_hased_by_type={}
 all_hased_by_type['rd']=[]
 all_hased_by_type['pm']=[]
 all_hased_by_type['ad']=[]
-
+all_hased_by_type['tr']=[]
 if KODI_VERSION<=18:#kodi18
     if Addon.getSetting('debug')=='false':
         reload (sys )#line:61
@@ -3728,19 +3728,19 @@ def main_menu(time_data):
     elapsed_time = time.time() - start_time_start
     time_data.append(elapsed_time+222)
     all_d=[]
- 
+    
     aa=addDir3('[B][COLOR mediumslateblue]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','4K Section',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Morbius RD 1 Click Movies[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/main1_movies4k.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Morbius RD 1 Click Movies',search_db='')
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]1 Click Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Movies',search_db='')
-    all_d.append(aa)  
+    all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
     all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
     all_d.append(aa)    
     aa=addDir3('[B][COLOR mediumslateblue]Intros[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/intro.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Intros',search_db='')
-    all_d.append(aa) 
+    all_d.append(aa)
    
     if Addon.getSetting('movie_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32024),'www',2,BASE_LOGO+'movies.png',all_fanarts['32024'],'Movies')
@@ -3798,7 +3798,6 @@ def main_menu(time_data):
     mypass=""
     key='zWrite'
     mypass=crypt(mypass,key)
-
     
     aa=addDir3( 'Search All', 'www',201,BASE_LOGO+'search.png',all_fanarts['32034'],'Search All')
         
@@ -4049,7 +4048,7 @@ def main_trakt():
    
    xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
 
-def check_cached(magnet,rd,pr,ad):
+def check_cached(magnet,rd,pr,ad,tr):
     
     premium_type=''
     check=False
@@ -4087,6 +4086,13 @@ def check_cached(magnet,rd,pr,ad):
         if hashCheck['magnets'][0]['instant']==True:
             check=True
             premium_type='-AD-'
+    if Addon.getSetting('debrid_use_tr')=='true' and not check:
+        hash = [str(re.findall(r'btih:(.*?)&', magnet)[0].lower())]
+        hashCheck=tr.check_hash(hash)['data']
+        
+        if len(hashCheck)>0:
+            check=True
+            premium_type='-TR-'
     log.warning('Check Hash3:'+str(check))
     log.warning('Check Hash4:'+premium_type)
     return check,premium_type
@@ -4125,6 +4131,7 @@ if Addon.getSetting("full_db")=='true':
         dp_full.update(0, 'Please wait','Level 11...', '' )
 def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_n,episode_n,page_no,start_time,dp):
             global all_hased,all_s_in,all_hased_by_type,fixed_name,fixed_size
+            from resources.modules.torbox_api import TorBoxAPI
             fixed_name={}
             fixed_size={}
             #hashCheck = rd.checkHash(all_mag[items])
@@ -4157,11 +4164,17 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                     hashCheck=pr.hash_check(all_mag[items])
                     log.warning(hashCheck)
                     hashCheck=hashCheck['transcoded']
-                else:
+                elif hash_type=='ad':
                     hashCheck=ad.check_hash(all_mag[items])
                     log.warning(f'hashCheck:{hashCheck},items:{all_mag[items]}')
                     hashCheck=hashCheck['data']['magnets']
-               
+                elif hash_type=='tr':
+                    try:
+                        hashCheck=TorBoxAPI().check_cache(all_mag[items])['data']
+                        
+                    except:
+                        time.sleep(0.3)
+                        hashCheck=TorBoxAPI().check_cache(all_mag[items])['data']
                 
                 z=0
 
@@ -4286,60 +4299,34 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                             all_hased.append(all_mag[items][count_hash])
                             all_hased_by_type[hash_type].append(all_mag[items][count_hash])
                         count_hash+=1
-                    else:
-                        
-                        if 'instant' in hash:
-                        
-                         if hash['instant']==True:
-                            if tv_movie=='tv' :
-                                found_c_h=False
-                                break_now=False
-                                for items_t in hash['files']:
-                                    
-                                    test_name=str(items_t['n']).lower()
-                                   
-                                    if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or  str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
-                                        if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
-                                            found_c_h=True
-                                            fixed_size[hash['magnet']]=round((items_t['s']/(1024*1024*1024)),2)
-                                            fixed_name[hash['magnet']]=test_name
-                                            break
-                                    if 'e' in items_t:
-                                        for items in items_t['e']:
-                                            test_name=str(items['n']).lower()
-                                            
-                                            if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
-                                    
-                                                if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
-                                                    found_c_h=True
-                                                    fixed_size[hash['magnet']]=round((items['s']/(1024*1024*1024)),2)
-                                                    fixed_name[hash['magnet']]=test_name
-                                                    break_now=True
-                                                    break
-                                            if break_now:
-                                                break
-                                            if 'e' in items:
-                                                for items2 in items['e']:
-                                                    test_name=str(items2['n']).lower()
-                                                    
-                                                    if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
-                                            
-                                                        if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
-                                                            found_c_h=True
-                                                            fixed_size[hash['magnet']]=round((items2['s']/(1024*1024*1024)),2)
-                                                        
-                                                            fixed_name[hash['magnet']]=test_name
-                                                            break_now=True
-                                                            break
-                                    if break_now:
-                                        break
-                                if found_c_h  :
-                                    all_hased.append(hash['hash'])
-                                    all_hased_by_type[hash_type].append(hash['hash'])
+                    elif hash_type=='ad':
+                        all_hased.append(hash['hash'])
+                        all_hased_by_type[hash_type].append(hash['hash'])
+                    elif hash_type=='tr':
+                        if tv_movie=='tv' :
+                            found_c_h=False
+                            break_now=False
+                            for items_t in hash['files']:
                                 
-                            else:
+                                test_name=str(items_t['name']).lower()
+                                if '/' in test_name:
+                                    test_name=test_name.split("/")[-1]
+                                if ('s%se%s.'%(season_n,episode_n) in test_name or 's%se%s '%(season_n,episode_n) in test_name or 'ep '+episode_n in test_name or  str(int(season_n))+episode_n in test_name or  str(int(season_n))+"x"+episode_n in test_name):
+                                    if ('.mkv' in test_name or '.avi' in test_name  or '.mp4' in test_name  or '.m4v' in test_name):
+                                        found_c_h=True
+                                        fixed_size[hash['hash']]=round((items_t['size']/(1024*1024*1024)),2)
+                                        fixed_name[hash['hash']]=test_name
+                                        break
+                                
+                                if break_now:
+                                    break
+                            if found_c_h  :
                                 all_hased.append(hash['hash'])
                                 all_hased_by_type[hash_type].append(hash['hash'])
+                            
+                        else:
+                            all_hased.append(hash['hash'])
+                            all_hased_by_type[hash_type].append(hash['hash'])
                 else:
                     try:
                         regex='<title>(.+?)</title>'
@@ -4708,6 +4695,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
    from resources.modules import real_debrid
    from resources.modules import premiumize
    from resources.modules import all_debrid
+   from resources.modules import torbox_api
    stop_window=False
    try:
     tmdbKey='{tmdb_key}'
@@ -4732,6 +4720,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
     rd=[]
     pr=[]
     ad=[]
+    tr=[]
     if use_debrid:
         if Addon.getSetting('debrid_use_rd')=='true':
            rd = real_debrid.RealDebrid()
@@ -4739,7 +4728,8 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
             pr= premiumize.Premiumize()
         if Addon.getSetting('debrid_use_ad')=='true':
             ad=all_debrid.AllDebrid()
-    
+        if Addon.getSetting('debrid_use_tr')=='true':
+            tr=torbox_api.TorBoxAPI()
     if Addon.getSetting("fancy_scrape")=='true' and server_test==False:
         if not silent:
             
@@ -5254,7 +5244,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
                                 else:
                                     dp.update(int(((num_live* 100.0)/(len(thread))) ), Addon.getLocalizedString(32072)+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)),'Checking hash',str(res_c)+','+ name1)
                                 
-                                run_lk,premium_type=check_cached(links,rd,pr,ad)
+                                run_lk,premium_type=check_cached(links,rd,pr,ad,tr)
                                 
                             
                             if run_lk:
@@ -5466,7 +5456,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
         all_hased_by_type['rd']=[]
         all_hased_by_type['pm']=[]
         all_hased_by_type['ad']=[]
-        
+        all_hased_by_type['tr']=[]
         for thread in threading.enumerate():
               all_s_in=({},0,'Closing threads:'+thread.getName(),2,name)
               if (trd_alive(thread)):
@@ -5494,7 +5484,10 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
                         thread.append(Thread(check_mass_hash,'ad',all_mag,items,rd,pr,ad,statistics,tv_movie,season_n,episode_n,page_no,start_time,dp))
                         thread[len(thread)-1].setName('AD hash '+str(page_no))
                         thread[len(thread)-1].start()
-                    
+                    if Addon.getSetting("debrid_use_tr")=='true':
+                        thread.append(Thread(check_mass_hash,'tr',all_mag,items,rd,pr,ad,statistics,tv_movie,season_n,episode_n,page_no,start_time,dp))
+                        thread[len(thread)-1].setName('TR hash '+str(page_no))
+                        thread[len(thread)-1].start()
                     
                     
 
@@ -6650,6 +6643,9 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
                     lk_type='-PM-'
                 elif (lk_hash) in all_hased_by_type['ad']:
                     lk_type='-AD-'
+                elif (lk_hash) in all_hased_by_type['tr']:
+                    lk_type='-TR-'
+             
                 menu.append([source, source,sound,quality,nm,lk_type+','+data+'GB',lk_type+lk,''])
                 all_c_name.append(name)
                 all_f_sources.append(source)
@@ -6847,7 +6843,7 @@ def post_trk(id,season,episode,progress=False,len_progress='',type_progress='',t
                 i = (post_trakt('/sync/history',data= {"movies": [{"ids": {"tmdb": id}}]}))
          log.warning('Watched Resoponce:')
          log.warning(i)
-def jump_seek(name,id,season,episode,jump_time,precentage,subs,tvdb_id):
+def jump_seek(name,id,season,episode,jump_time,precentage,subs,tvdb_id,torrent_id):
     global break_jump,str_next,break_window
     global from_seek
     time_to_save_trk=int(Addon.getSetting("time_to_save"))
@@ -6967,7 +6963,7 @@ def jump_seek(name,id,season,episode,jump_time,precentage,subs,tvdb_id):
     
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
-    
+    log.warning('Save to db')
     if name+'$$$'+id+'$$$'+season+'$$$'+episode not in all_d_nm and g_timer>10 and g_item_total_time>300:
         dbcon = database.connect(cacheFile)
         dbcur = dbcon.cursor()
@@ -6981,6 +6977,11 @@ def jump_seek(name,id,season,episode,jump_time,precentage,subs,tvdb_id):
     dbcon.close()
     log.warning('Waiting for Vid3:'+str(xbmc.Player().isPlaying()))
     log.warning('from_seek22:'+str(from_seek))
+    if torrent_id!="":
+        from resources.modules import torbox_api
+       
+        result=torbox_api.TorBoxAPI().delete_torrent(torrent_id)
+        log.warning(f'TR delete:{result}')
     if not from_seek:
         log.warning('from_seek22 Refresh:'+str(from_seek))
         cache.clear(['last_view'])
@@ -7210,6 +7211,8 @@ def search_next(dd,tv_movie,id,heb_name,playlist,iconimage,enable_playlist):
                                 lk_type='-PM-'
                             elif (lk_hash) in all_hased_by_type['ad']:
                                 lk_type='-AD-'
+                            elif (lk_hash) in all_hased_by_type['tr']:
+                                lk_type='-TR-'
                             all_data.append((name,lk_type+lk,data,fix_q(quality),quality,items.replace('magnet_','').replace('.py',''),))
         else:
             for items in match_a:
@@ -9331,10 +9334,11 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
         except:
           tvdb_id=''
     start_index=0
+    torrent_id=""
     if direct==False and use_debrid:
         
                     
-        log.warning('debrid_select')
+        log.warning(f'debrid_select:{url}')
         if '-RD-' in url:
            url=url.replace('-RD-','')
            log.warning('Play RD')
@@ -9458,6 +9462,17 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
             log.warning('Play AD')
             ad=all_debrid.AllDebrid()
             link=ad.movie_magnet_to_stream(url)
+        elif '-TR-' in url:
+            
+            url=url.replace('-TR-','')
+            log.warning(f'Tr link:{url}')
+            hash=url.split('btih:')[1]
+            if '&' in hash:
+                hash=hash.split('&')[0]
+            from resources.modules import torbox_api
+            play_status_rd_ext=torbox_api
+            link,torrent_id=torbox_api.TorBoxAPI().resolve_magnet( url, hash.lower(), False, name, season_n, episode_n)
+            log.warning(f'Tr link:{link}')
         else:
             log.warning('Resolve_url_jen:'+url)
             load_resolveurl_libs()
@@ -9920,7 +9935,7 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
         if str(id)!='0' and str(id)!='+':
             thread=[]
             
-            thread.append(Thread(jump_seek,original_title,id,season,episode,jump_time,precentage,subs,tvdb_id))
+            thread.append(Thread(jump_seek,original_title,id,season,episode,jump_time,precentage,subs,tvdb_id,torrent_id))
                 
             
             thread[0].start()
@@ -15990,6 +16005,12 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
             tmdb('get_movies',url.replace(' ','%20'))
     elif mode==207:
         populate_json_playlist(url,iconimage,fanart,search_db,mypass=mypass,search=True)
+    elif mode==208:
+        from resources.modules.torbox_api import TorBoxAPI
+        TorBoxAPI().auth()
+    elif mode==209:
+        from resources.modules.torbox_api import TorBoxAPI
+        TorBoxAPI().revoke_auth()
     match=[]
     elapsed_time = time.time() - start_time_start
     time_data.append(elapsed_time)

@@ -1,4 +1,7 @@
-[COLOR yellow][B]v3.5.0[/B]
+
+[COLOR yellow][B]v3.5.1[/B]
+* added support for TorBox, hopfully a good replacement for Rd.
+[COLOR lightblue][B]v3.5.0[/B]
 * fixed as much as possiable RD, it will try one by one until it plays.
 
 [COLOR lightblue][B]v3.4.9[/B]

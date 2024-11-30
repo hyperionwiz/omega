@@ -13,6 +13,8 @@ domain_s='https://'
 Addon = xbmcaddon.Addon()
 time_to_save=1
 global trd_response
+global all_w_global
+all_w_global={}
 trd_response={}
 from  resources.modules.client import get_html
 tmdb_key=Addon.getSetting("tmdb_api")
@@ -1067,6 +1069,8 @@ def get_tmdb_data(ur_f,with_auth,html_g_tv,html_g_m,items_pre=None):
                 break
             xbmc.sleep(100)
         return trd_response
+
+            
 def get_trk_data(url):
         
         if 'calendars' in url:
@@ -1101,40 +1105,25 @@ def get_trk_data(url):
         #html_g_tv=get_html(url_g_tv).json()
         #html_g_m=get_html(url_g_m).json()
         #html_g_tv=html_g_tv
-        all_movie_w=[]
+        all_movie_w={}
         all_w_tv_data={}
         if Addon.getSetting("trakt_access_token")!='':
-               
-               if 1:
-                   try:
-                       i = (call_trakt('/users/me/watched/movies'))
-                       
-                       for ids in i:
-                          all_movie_w.append(str(ids['movie']['ids']['tmdb']))
-                   except:
-                    pass
-               
-               all_tv_w={}
-               
-              
-               if 1:#try:
-                   i = (call_trakt('/users/me/watched/shows?extended=full'))
-                   
-                   for ids in i:
-                     aired_episodes=ids['show']['aired_episodes']
-                     all_tv_w[str(ids['show']['ids']['tmdb'])]='no'
-                     count_episodes=0
-                     for seasons in ids['seasons']:
-                     
-                      for ep in seasons['episodes']:
-                       
-                        count_episodes+=1
-                     
-                     
-                     if count_episodes>=int(aired_episodes):
-                            all_w_tv_data[str(ids['show']['ids']['tmdb'])]='yes'
-                  #except:
-                  #  pass
+
+                    result=call_trakt('sync/playback/movies')
+                    
+                    for items in result:
+
+                        all_movie_w[str(items['movie']['ids']['tmdb'])]=items.get('progress','0')                        
+                        
+                
+                    
+                    result=call_trakt('sync/playback/episodes')
+                    for items in result:
+                        
+                        
+                        all_w_tv_data[str(items['show']['ids']['tmdb'])]=items.get('progress','0')      
+                        
+                
         
         html_g_m=html_g_movie
         start_time = time.time()
@@ -1367,6 +1356,8 @@ def get_trk_data(url):
                  if season+'x'+episode in all_tv_w[id]:
                   watched='yes'
               '''
+              #log.warning(f'all_w_tv_data:{all_w_tv_data}')
+              #log.warning(f'id:{id},slug:{slug}')
               if slug=='movies':
                     if id in all_movie_w:
                         watched='yes'
@@ -1380,7 +1371,7 @@ def get_trk_data(url):
                     heb_server=Addon.getSetting("heb_server")
               else:
                     if id in all_w_tv_data:
-                        watched=all_w_tv_data[id]
+                        watched='yes'
                     fav_search_f=Addon.getSetting("fav_search_f_tv")
                     fav_servers_en=Addon.getSetting("fav_servers_en_tv")
                     fav_servers=Addon.getSetting("fav_servers_tv")
@@ -1389,7 +1380,7 @@ def get_trk_data(url):
                     direct_server=Addon.getSetting("direct_server_tv")
                     heb_server=Addon.getSetting("heb_server_tv")
         
-   
+              #log.warning(f'watched:{watched}')
               if  fav_search_f=='true' and fav_servers_en=='true' and (len(fav_servers)>0 or heb_server=='true' or google_server=='true' or rapid_server=='true' or direct_server=='true'):
                     fav_status='true'
               else:

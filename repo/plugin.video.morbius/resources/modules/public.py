@@ -446,6 +446,11 @@ def addDir3(name,url,mode,iconimage,fanart,description,premired=' ',image_master
         if watched=='yes':
           video_data['playcount']=1
           video_data['overlay']=7
+        try:
+            progress=float(watched)
+            log.warning(x)
+        except:
+            pass
         if ee in all_w:
             
             #video_data['playcount']=0
