@@ -4,6 +4,7 @@ import time,xbmc,logging
 
 from  resources.modules.client import get_html
 from resources.modules import log
+
 class AllDebrid:
     
     def __init__(self):
@@ -17,7 +18,7 @@ class AllDebrid:
         
 
     def get_url(self, url, token_req=False):
-        log.warning(f'url:{url},token:{self.token}')
+     
         if  self.token == '':
             return
 
@@ -31,7 +32,7 @@ class AllDebrid:
 
         if token_req:
             url += '&apikey={}'.format(self.token)
-
+  
         return get_html(url).json()
 
     def post_url(self, url, post_data=None, token_req=False):
@@ -49,9 +50,9 @@ class AllDebrid:
 
         if token_req:
             url += '&apikey={}'.format(self.token)
-        log.warning('AD test:'+url)
+        
         a=get_html(url, data=post_data).json()
-        log.warning(a)
+        
         return a
 
     def auth(self):
@@ -151,16 +152,16 @@ class AllDebrid:
 
     def magnet_status(self, magnet_id):
         return self.get_url('magnet/status?id={}'.format(magnet_id), token_req=True)
-
+    
     def movie_magnet_to_stream(self, magnet,season,episode,tv_movie):
         selectedFile = None
 
         magnet_id = self.upload_magnet(magnet)
 
-        log.warning(magnet_id)
+    
         if 'error' in magnet_id:
             xbmc.executebuiltin(u'Notification(%s,%s)' % (self.tools.addonName+' Error', magnet_id['error']['message']))
-            return 0
+            return None
         magnet_id =magnet_id ['data']['magnets'][0]['id']
         all_lk=(self.magnet_status(magnet_id))
         
@@ -185,7 +186,8 @@ class AllDebrid:
                         selectedFile = items['link']
                         
         self.delete_magnet(magnet_id)
-
+        if selectedFile == None:
+            return None
         return self.resolve_hoster(selectedFile)
 
     def resolve_magnet(self, magnet, args, torrent, pack_select=False):

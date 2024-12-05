@@ -29,11 +29,11 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
     except:
         que=urllib.parse.quote_plus
 
-   
+    
     if tv_movie=='movie':
-     ur='https://torrentio.strem.fun/stream/movie/%s.json'%imdb_id
+     ur='https://torrentio.strem.fun/realdebrid=xxxxxxxxxxxxxxxxxxxxxxxxxxxx/stream/movie/%s.json'%imdb_id
     elif tv_movie=='tv':
-     ur='https://torrentio.strem.fun/stream/movie/{0}%3A{1}%3A{2}.json'.format(imdb_id,season,episode)
+     ur='https://torrentio.strem.fun/realdebrid=xxxxxxxxxxxxxxxxxxxxxxxxxxxx/stream/movie/{0}%3A{1}%3A{2}.json'.format(imdb_id,season,episode)
     
     headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0',
@@ -43,16 +43,17 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
     'Upgrade-Insecure-Requests': '1',
     }
     if 1:
-        
+        log.warning(ur)
         y=get_html(ur,headers=headers,timeout=10).json()
-        
+        log.warning(y)
         for results in y['streams']:            
       
               
             if stop_all==1:
                 break
             nam=results['title']
-            
+            if '[RD+]' in results['name']:
+                nam="[I][Cached][/I] "+nam
             regex='💾(.+?)⚙️'
             #log.warning('nam:'+str(nam))
             s=re.compile(regex).findall(nam)
@@ -62,7 +63,8 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
                 if 'MB' in str(s[0]):
                    size=size/1000
             
-            links=results['infoHash']
+            regex='https://torrentio.strem.fun/realdebrid/xxxxxxxxxxxxxxxxxxxxxxxxxxxx/(.+?)/'
+            links=re.compile(regex).findall(results['url'])[0]
             try:
                 lk='magnet:?xt=urn:btih:%s&dn=%s'%(links,que(original_title))
             except:

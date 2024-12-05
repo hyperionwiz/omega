@@ -14,7 +14,7 @@ start_time_start=time.time()
 time_data=[]
 import xbmcaddon,os,xbmc,urllib,re,xbmcplugin,sys,logging
 elapsed_time = time.time() - start_time_start
-time_data.append(elapsed_time)
+
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 if Addon.getSetting("full_db")=='true':
     dp_full = xbmcgui . DialogProgress ( )
@@ -28,6 +28,7 @@ if Addon.getSetting("full_db")=='true':
         dp_full.update(0, 'Please wait','Got your input...', '' )
 __USERAGENT__ = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11'
 from resources.modules import log
+from .menus import *
 if KODI_VERSION<=18:
     xbmc_tranlate_path=xbmc.translatePath
 else:
@@ -35,8 +36,9 @@ else:
     xbmc_tranlate_path=xbmcvfs.translatePath
 __cwd__ = xbmc_tranlate_path(__addon__.getAddonInfo('path'))
 addon_name=str(__addon__.getAddonInfo('name'))
+
 addon_id=__addon__.getAddonInfo('id')
-log.warning('Addon name:'+addon_name)
+log.warning(f'Addon name:{addon_name},__cwd__:{addon_id}')
 from os import listdir
 import string
 from os.path import isfile, join
@@ -49,7 +51,10 @@ global avg_f,stop_cpu,cores_use,all_other_sources_uni,infoDialog_counter_close
 global play_status,break_window
 global play_status_rd_ext,break_window_rd
 global all_results_imdb
-global all_hased_by_type,fixed_name,fixed_size
+global all_hased_by_type,fixed_name,fixed_size,ready_to_close_playwindow
+global done_trailers
+done_trailers=False
+ready_to_close_playwindow=True
 fixed_size={}
 fixed_name={}
 all_results_imdb=[]
@@ -618,10 +623,12 @@ class player_window(xbmcgui.WindowXMLDialog):
         actionId = action.getId()
 
         if actionId in [ACTION_CONTEXT_MENU, ACTION_C_KEY]:
+            
             self.close_now=True
             return self.close()
 
         if actionId in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, ACTION_BACK]:
+            
             self.close_now=True
             return self.close()
     def get_img_ch(self,tv_movie,id):
@@ -688,7 +695,7 @@ class player_window(xbmcgui.WindowXMLDialog):
         except Exception as e:
             log.warning('Fanart Err:'+str(e))
     def onInit(self):
-        global play_status,play_status_rd_ext,break_window
+        global play_status,play_status_rd_ext,break_window,ready_to_close_playwindow
         
         thread=[]
         thread.append(Thread(self.get_img))
@@ -701,30 +708,31 @@ class player_window(xbmcgui.WindowXMLDialog):
         timeout=0
         start_time=time.time()
         while timeout<2000:
-            timeout+=1
-            if self.close_now:
-                break
-            elapsed_time = time.time() - start_time
-            try:
-               ext=play_status_rd_ext.play_status_rd
-            except :
-               ext=''
-            self.getControl(self.label).setLabel('Please wait'+': '+time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+', '+play_status+ext)
-            
-            #self.getControl(self.playbutton).setVisible(True)
-            
-            if xbmc.Player().isPlaying():
-                    
+            if ready_to_close_playwindow:
+                timeout+=1
+                if self.close_now:
+                    break
+                elapsed_time = time.time() - start_time
                 try:
-                    vidtime = xbmc.Player().getTime()
-                    if vidtime>0:
-                        break
-                except:
-                    pass
-           
+                   ext=play_status_rd_ext.play_status_rd
+                except :
+                   ext=''
+                self.getControl(self.label).setLabel('Please wait'+': '+time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+', '+play_status+ext)
                 
-            if break_window:
-                break
+                #self.getControl(self.playbutton).setVisible(True)
+                
+                if xbmc.Player().isPlaying():
+                        
+                    try:
+                        vidtime = xbmc.Player().getTime()
+                        if vidtime>0:
+                            break
+                    except:
+                        pass
+               
+                    
+                if break_window:
+                    break
             xbmc.sleep(100)
         
         return self.close()
@@ -3570,483 +3578,10 @@ def read_site_html(url_link):
     '''
     html=get_html(url_link)
     return html
-def tv_show_menu():
-    all_d=[]
-    try:
-        from sqlite3 import dbapi2 as database
-    except:
-        from pysqlite2 import dbapi2 as database
-    cacheFile=os.path.join(user_dataDir,'database.db')
-    dbcon = database.connect(cacheFile)
-    dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT, ""url TEXT, ""tv_movie TEXT);" % 'add_cat')
-    
-   
-    dbcon.commit()
-    dbcur.execute("SELECT * FROM add_cat")
-    match = dbcur.fetchall()
-    dbcur.close()
-    dbcon.close()
-    
-    all_s_strings=[]
-    for name,url,tv_movie in match:
-        
-        if (tv_movie=='tv'):
-           aa=addDir3('[COLOR lightblue][B]'+name+'[/B][/COLOR]',url,14,BASE_LOGO+'int.png',all_fanarts['32295'],'Tmdb_custom')
-           all_d.append(aa)
-    import datetime
-    now = datetime.datetime.now()
-    aa=addDir3(Addon.getLocalizedString(32023),'tv',145,BASE_LOGO+'tracker.png',all_fanarts['32023'],'History')
-    #Popular
-    aa=addDir3(Addon.getLocalizedString(32012),f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&include_null_first_air_dates=false&with_original_language=en&page=1',14,BASE_LOGO+'popular.png',all_fanarts['32013'],Addon.getLocalizedString(32012))
-    all_d.append(aa)
-
-    aa=addDir3(Addon.getLocalizedString(32013),f'https://api.themoviedb.org/3/tv/on_the_air?api_key={tmdb_key}&language=%s&page=1'%lang,14,BASE_LOGO+'on_air.png',all_fanarts['32013'],'TMDB')
-    all_d.append(aa)
-    
-    
-    aa=addDir3(Addon.getLocalizedString(32014),f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&language={lang}&sort_by=popularity.desc&first_air_date_year='+str(now.year)+'&with_original_language=en&language=he&page=1',14,'special://home/addons/plugin.video.telemedia/tele/Tv_Show/popular_tv.png','special://home/addons/plugin.video.telemedia/tele/tv_fanart.png','New Tv shows')
-    all_d.append(aa)
-    #new episodes
-    aa=addDir3(Addon.getLocalizedString(32015),'https://api.tvmaze.com/schedule',20,BASE_LOGO+'new_ep.png',all_fanarts['32015'],'New Episodes')
-    all_d.append(aa)
-    #Genre
-    aa=addDir3(Addon.getLocalizedString(32016),f'https://api.themoviedb.org/3/genre/tv/list?api_key={tmdb_key}&language=%s&page=1'%lang,18,BASE_LOGO+'genre.png',all_fanarts['32016'],'TMDB')
-    all_d.append(aa)
-    #Years
-    aa=addDir3(Addon.getLocalizedString(32017),'tv_years&page=1',14,BASE_LOGO+'years.png',all_fanarts['32017'],'TMDB')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32018),'tv_years&page=1',101,BASE_LOGO+'networks.png',all_fanarts['32018'],'TMDB')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32019),'advance_tv',14,BASE_LOGO+'content_s.png',all_fanarts['32019'],'Advance Content selection')
-    
-    all_d.append(aa)
-    #Search tv
-    aa=addDir3(Addon.getLocalizedString(32020),f'https://api.themoviedb.org/3/search/tv?api_key={tmdb_key}&query=%s&language={lang}&page=1'.format(lang),14,BASE_LOGO+'search.png',all_fanarts['32020'],'TMDB')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32021),'tv',143,BASE_LOGO+'search.png',all_fanarts['32021'],'TMDB')
-    all_d.append(aa)
-    
-    try:
-        from sqlite3 import dbapi2 as database
-    except:
-        from pysqlite2 import dbapi2 as database
-    cacheFile=os.path.join(user_dataDir,'database.db')
-    dbcon = database.connect(cacheFile)
-    dbcur = dbcon.cursor()
-    
-    table_name='lastlinktv'
-    
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""o_name TEXT,""name TEXT, ""url TEXT, ""iconimage TEXT, ""fanart TEXT,""description TEXT,""data TEXT,""season TEXT,""episode TEXT,""original_title TEXT,""saved_name TEXT,""heb_name TEXT,""show_original_year TEXT,""eng_name TEXT,""isr TEXT,""prev_name TEXT,""id TEXT);"%table_name)
-    
-    dbcur.execute("SELECT * FROM lastlinktv WHERE o_name='f_name'")
-
-    match = dbcur.fetchone()
-    dbcon.commit()
-    
-    dbcur.close()
-    dbcon.close()
-    
-    if match!=None:
-       f_name,name,url,iconimage,fanart,description,data,season,episode,original_title,saved_name,heb_name,show_original_year,eng_name,isr,prev_name,id=match
-       try:
-           if url!=' ':
-             if 'http' not  in url:
-           
-               url=base64.b64decode(url)
-              
-             aa=addLink('[I]%s[/I]'%Addon.getLocalizedString(32022), url,6,False,iconimage,fanart,description,data=show_original_year,original_title=original_title,season=season,episode=episode,tmdb=id,year=show_original_year,place_control=True)
-             all_d.append(aa)
-       except  Exception as e:
-         log.warning(e)
-         pass
-         
-    
-    
-    
-    aa=addDir3(Addon.getLocalizedString(32023),'tv',145,BASE_LOGO+'tracker.png',all_fanarts['32023'],'History')
-    all_d.append(aa)
-    
-    xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
-def tv_neworks():
-    all_d=[]
-    if Addon.getSetting("order_networks")=='0':
-        order_by='popularity.desc'
-    elif Addon.getSetting("order_networks")=='2':
-        order_by='vote_average.desc'
-    elif Addon.getSetting("order_networks")=='1':
-        order_by='first_air_date.desc'
-    aa=addDir3('[COLOR lightblue]Disney+[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=2739&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://lumiere-a.akamaihd.net/v1/images/image_308e48ed.png','https://allears.net/wp-content/uploads/2018/11/wonderful-world-of-animation-disneys-hollywood-studios.jpg','Disney')
-    all_d.append(aa)
-    aa=addDir3('[COLOR blue]Apple TV+[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=2552&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://ksassets.timeincuk.net/wp/uploads/sites/55/2019/03/Apple-TV-screengrab-920x584.png','https://www.apple.com/newsroom/videos/apple-tv-plus-/posters/Apple-TV-app_571x321.jpg.large.jpg','Apple')
-    all_d.append(aa)
-    aa=addDir3('[COLOR red]NetFlix[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=213&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://art.pixilart.com/705ba833f935409.png','https://i.ytimg.com/vi/fJ8WffxB2Pg/maxresdefault.jpg','NetFlix')
-    all_d.append(aa)
-    aa=addDir3('[COLOR gray]HBO[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=49&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://filmschoolrejects.com/wp-content/uploads/2018/01/hbo-logo.jpg','https://www.hbo.com/content/dam/hbodata/brand/hbo-static-1920.jpg','HBO')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightblue]CBS[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=16&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://cdn.freebiesupply.com/logos/large/2x/cbs-logo-png-transparent.png','https://tvseriesfinale.com/wp-content/uploads/2014/10/cbs40-590x221.jpg','HBO')
-    all_d.append(aa)
-    aa=addDir3('[COLOR purple]SyFy[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=77&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://cdn.collider.com/wp-content/uploads/syfy-logo1.jpg','https://imagesvc.timeincapp.com/v3/mm/image?url=https%3A%2F%2Fewedit.files.wordpress.com%2F2017%2F05%2Fdefault.jpg&w=1100&c=sc&poi=face&q=85','SyFy')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightgreen]The CW[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=71&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://www.broadcastingcable.com/.image/t_share/MTU0Njg3Mjc5MDY1OTk5MzQy/tv-network-logo-cw-resized-bc.jpg','https://i2.wp.com/nerdbastards.com/wp-content/uploads/2016/02/The-CW-Banner.jpg','The CW')
-    all_d.append(aa)
-    aa=addDir3('[COLOR silver]ABC[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=2&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://logok.org/wp-content/uploads/2014/03/abc-gold-logo-880x660.png','https://i.ytimg.com/vi/xSOp4HJTxH4/maxresdefault.jpg','ABC')
-    all_d.append(aa)
-    aa=addDir3('[COLOR yellow]NBC[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=6&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://designobserver.com/media/images/mondrian/39684-NBC_logo_m.jpg','https://www.nbcstore.com/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/n/b/nbc_logo_black_totebagrollover.jpg','NBC')
-    all_d.append(aa)
-    aa=addDir3('[COLOR gold]AMAZON[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=1024&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://g-ec2.images-amazon.com/images/G/01/social/api-share/amazon_logo_500500._V323939215_.png','https://cdn.images.express.co.uk/img/dynamic/59/590x/Amazon-Fire-TV-Amazon-Fire-TV-users-Amazon-Fire-TV-stream-Amazon-Fire-TV-Free-Dive-TV-channel-Amazon-Fire-TV-news-Amazon-1010042.jpg?r=1535541629130','AMAZON')
-    all_d.append(aa)
-    aa=addDir3('[COLOR green]hulu[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=453&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://i1.wp.com/thetalkinggeek.com/wp-content/uploads/2012/03/hulu_logo_spiced-up.png?resize=300%2C225&ssl=1','https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi677r77IbeAhURNhoKHeXyB-AQjRx6BAgBEAU&url=https%3A%2F%2Fwww.hulu.com%2F&psig=AOvVaw0xW2rhsh4UPsbe8wPjrul1&ust=1539638077261645','hulu')
-    all_d.append(aa)
-    aa=addDir3('[COLOR red]Showtime[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=67&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://res.cloudinary.com/wnotw/images/c_limit,w_1536,q_auto:best,f_auto/v1501788508/sci5cdawypsux61i9pyb/showtime-networks-logo','https://www.sho.com/site/image-bin/images/0_0_0/0_0_0_prm-ogseries_1280x640.jpg','showtime')
-    all_d.append(aa)
-    aa=addDir3('[COLOR red]BBC One[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=4&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://lh3.googleusercontent.com/proxy/LnjjtuGk_PErC5iaReOcy6EEvwjT9wzlyZBKhQHconLsyHWdVn1NHa-Bz3E0_Dev0KV_yJtGyQTlHDwvvm3zW3i0NFSmQVim5_hYOeZ-jWpD1Zs','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/BBC_One_HD.svg/800px-BBC_One_HD.svg.png','BBC')
-    all_d.append(aa)
-    aa=addDir3('[COLOR teal]BBC Two[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=332&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://pbs.twimg.com/profile_images/1057914504321908736/06hkWvx__400x400.jpg','http://amirsaidani.co.uk/wp-content/uploads/2019/06/BBC_TWO_LOGO_ANIMATION.gif','BBC')
-    all_d.append(aa)
-    aa=addDir3('[COLOR pink]BBC Three[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=3&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BBC_Three_%282020%29.svg/1200px-BBC_Three_%282020%29.svg.png','https://ichef.bbci.co.uk/news/1024/media/images/81061000/jpg/_81061920_bbcthreelogo.jpg','BBC')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightblue]ITV[/COLOR]',f'https://api.themoviedb.org/3/discover/tv?api_key={tmdb_key}&with_networks=9&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://sm.imgix.net/20/31/itv.jpg?w=1200&h=1200&auto=compress,format&fit=clip','https://www.imediaethics.org/wp-content/uploads/2018/11/SCfaQb9l_400x400-350x350.jpg','BBC')
-    all_d.append(aa)
-    
-    xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
-def crypt(source,key):
-    from itertools import cycle
-    result=''
-    temp=cycle(key)
-    for ch in source:
-        result=result+chr(ord(ch)^ord(next(temp)))
-    return result
-def main_menu(time_data):
 
 
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time+111)
-    #show_updates()
-    
-            
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time+222)
-    all_d=[]
-    
-    aa=addDir3('[B][COLOR blue]Julies Favs[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/julie_xml/julie_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Julies Favs',search_db='')
-    all_d.append(aa)
-    
-    aa=addDir3('[B][COLOR goldenrod]4K Section[/COLOR][/B]', 'https://mylostsoulspace.co.uk/Addon-1/Addon/text/rd/4ksection.xml',189,'https://kodiwind.com/hw/build_artwork/injustice/icon.png','https://kodiwind.com/hw/build_artwork/injustice/fanart.jpg','4K Section',search_db='')
-    all_d.append(aa)
-    
-    aa=addDir3('[B][COLOR blue] Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
-    all_d.append(aa)
-    
-    aa=addDir3('[B][COLOR blue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
-    all_d.append(aa)
-   
-    if Addon.getSetting('movie_world')=='true':
-        aa=addDir3(Addon.getLocalizedString(32024),'www',2,BASE_LOGO+'movies.png',all_fanarts['32024'],'Movies')
-        all_d.append(aa)
-    if Addon.getSetting('tv_world')=='true':
-        aa=addDir3(Addon.getLocalizedString(32025),'www',3,BASE_LOGO+'tv.png',all_fanarts['32025'],'TV')
-        all_d.append(aa)
-    #aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
-    #all_d.append(aa)
-    if Addon.getSetting('trakt_world')=='true':
-        aa=addDir3(Addon.getLocalizedString(32026),'www',21,BASE_LOGO+'trakt.png',all_fanarts['32026'],'No account needed)')
-        all_d.append(aa)
-    if Addon.getSetting('trakt')=='true':
-        aa=addDir3(Addon.getLocalizedString(32027),'www',114,BASE_LOGO+'trakt.png',all_fanarts['32027'],'TV')
-        all_d.append(aa)
-    if Addon.getSetting('search')=='true':
-        aa=addDir3(Addon.getLocalizedString(32020),'www',5,BASE_LOGO+'search.png',all_fanarts['32020'],'Search')
-        all_d.append(aa)
-    if Addon.getSetting('search_history')=='true':
-        aa=addDir3(Addon.getLocalizedString(32021),'both',143,BASE_LOGO+'search.png',all_fanarts['32021'],'TMDB')
-        all_d.append(aa)
-    if Addon.getSetting('last_link_played')=='true':
-        aa=addDir3(Addon.getLocalizedString(32022),'www',144,BASE_LOGO+'last.png',all_fanarts['32022'],'Last Played') 
-        all_d.append(aa)
-    if Addon.getSetting('whats_new')=='true':
-        aa=addNolink(Addon.getLocalizedString(32028) , 'www',149,False,fanart=all_fanarts['32028'], iconimage=BASE_LOGO+'news.png',plot='',dont_place=True)
-        all_d.append(aa)
-    if Addon.getSetting('settings')=='true':
-        aa=addNolink( Addon.getLocalizedString(32029), 'www',151,False,fanart=all_fanarts['32029'], iconimage=BASE_LOGO+'setting.png',plot='',dont_place=True)
-        all_d.append(aa)
-    if Addon.getSetting('resume_watching')=='true':		
-        aa=addDir3(Addon.getLocalizedString(32030),'both',158,BASE_LOGO+'resume.png',all_fanarts['32030'],'TMDB')
-        all_d.append(aa)
-    if Addon.getSetting('debrid_use_rd')=='true':
-        if Addon.getSetting('my_rd_history')=='true':
-            aa=addDir3(Addon.getLocalizedString(32031),'1',168,BASE_LOGO+'rd_history.png',all_fanarts['32031'],'TMDB')
-            all_d.append(aa)
-        if Addon.getSetting('rd_Torrents')=='true':
-            aa=addDir3(Addon.getLocalizedString(32032),'1',169,BASE_LOGO+'rd_Torrents.png',all_fanarts['32032'],'TMDB')
-            all_d.append(aa)
-    if Addon.getSetting('actor')=='true':
-        aa=addDir3(Addon.getLocalizedString(32033),'www',72,BASE_LOGO+'actor.png',all_fanarts['32033'],'Actor')
-        all_d.append(aa)
-    if Addon.getSetting('scraper_check')=='true':
-        aa=addDir3( Addon.getLocalizedString(32034), 'www',172,BASE_LOGO+'basic.png',all_fanarts['32034'],'Test')
-        
-        all_d.append(aa)
-    
-    #Ghost
-    #place your Jen playlist here:
-    #dulpicate this line with your address
-    #aa=addDir3('Name', 'Your Jen Address',189,'Iconimage','fanart','Description',search_db='Your Search db Address')
-    #all_d.append(aa)
-    #'https://narcacist.com/Jen4k/4ksection.json'
-    mypass=""
-    key='zWrite'
-    mypass=crypt(mypass,key)
 
-        
-    aa=addDir3( 'Search All', 'www',201,BASE_LOGO+'search.png',all_fanarts['32034'],'Search All')
-        
-    all_d.append(aa)
-        
-    #place your MicroJen playlist here:
-    #dulpicate this line with your address
-    #aa=addDir3('Name', 'Your Jen Address',189,'Iconimage','fanart','Description',search_db='Your Search db Address')
-    #all_d.append(aa)
-    #aa=addDir3('MicroJen', "https://bitbucket.org/Mad-Eric/textfiles/raw/master/NewMav/MavHome.json",189,'https://www.nylas.com/wp-content/uploads/JSON_Blog_Hero.png','https://i.ytimg.com/vi/9N6a-VLBa2I/maxresdefault.jpg','MicroJen')
-    #all_d.append(aa)
-    
-    if Addon.getSetting('debug')=='true':
-        aa=addDir3( 'Unit tests', 'www',181,'https://lh3.googleusercontent.com/proxy/Ia9aOfcgtzofMb0urCAs8NV-4RRhcIVST-Gqx9GI9RLsx7IJe_5jBqjfdsJcOO3QIV3TT-uiF2nKmyYCX0vj5UPR4iW1iHXgZylE8N8wyNgRLw','https://i.ytimg.com/vi/3wLqsRLvV-c/maxresdefault.jpg','Test')
-        
-        all_d.append(aa)
-    if Addon.getSetting('doodstream')=='true':
-        aa=addDir3( "My Doodsteam Files", '1',202,BASE_LOGO+'basic.png',all_fanarts['32034'],'Test',id="")
-        
-        all_d.append(aa)
-    found=False
-    for i in range(0,10):
-        if Addon.getSetting('imdb_user_'+str(i))!='':
-            found=True
-            break
-    if found:
-        aa=addDir3(Addon.getLocalizedString(32309),'www',183,BASE_LOGO+'basic.png',all_fanarts['32309'],'Imdb')
-        all_d.append(aa)
-    
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time+333)
-    if Addon.getSetting("stop_where")=='0':
-            xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
-    
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time+444)
-    return time_data
-def movie_world():
-    all_d=[]
-    try:
-        from sqlite3 import dbapi2 as database
-    except:
-        from pysqlite2 import dbapi2 as database
-    cacheFile=os.path.join(user_dataDir,'database.db')
-    dbcon = database.connect(cacheFile)
-    dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT, ""url TEXT, ""tv_movie TEXT);" % 'add_cat')
-    
-   
-    dbcon.commit()
-    dbcur.execute("SELECT * FROM add_cat")
-    match = dbcur.fetchall()
-    dbcur.close()
-    dbcon.close()
-    
-    all_s_strings=[]
-    for name,url,tv_movie in match:
-        
-        if (tv_movie=='movie'):
-           aa=addDir3('[COLOR lightblue][B]'+name+'[/B][/COLOR]',url,14,BASE_LOGO+'int.png',all_fanarts['32295'],'Tmdb_custom')
-           all_d.append(aa)
-    
-    aa=addDir3(Addon.getLocalizedString(32295),f'https://api.themoviedb.org/3/movie/now_playing?api_key={tmdb_key}&language=%s&page=1'%lang,14,BASE_LOGO+'int.png',all_fanarts['32295'],'Tmdb')
-    all_d.append(aa)
-    'Popular Movies'
-    aa=addDir3(Addon.getLocalizedString(32036),f'https://api.themoviedb.org/3/movie/popular?api_key={tmdb_key}&language=%s&page=1'%lang,14,BASE_LOGO+'popular.png',all_fanarts['32036'],'Tmdb')
-    all_d.append(aa)
-    'Released Movies'
-    aa=addDir3('Released Movies',f'https://api.themoviedb.org/3/movie/popular?api_key={tmdb_key}&language=%s&with_release_type=4&page=1'%lang,14,BASE_LOGO+'popular.png',all_fanarts['32036'],'Tmdb')
-    all_d.append(aa)
-    
-    aa=addDir3(Addon.getLocalizedString(32037),f'https://api.themoviedb.org/3/search/movie?api_key={tmdb_key}&query=3d&language=%s&append_to_response=origin_country&page=1'%lang,14,BASE_LOGO+'3d.png',all_fanarts['32037'],'Tmdb')
-    all_d.append(aa)
-    
-    #Genre
-    aa=addDir3(Addon.getLocalizedString(32038),f'https://api.themoviedb.org/3/genre/movie/list?api_key={tmdb_key}&language=%s&page=1'%lang,18,BASE_LOGO+'genre.png',all_fanarts['32038'],'Tmdb')
-    all_d.append(aa)
-    #Years
-    aa=addDir3(Addon.getLocalizedString(32039),'movie_years&page=1',14,BASE_LOGO+'years.png',all_fanarts['32039'],'Tmdb')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32040),'movie_years&page=1',112,BASE_LOGO+'studio.png',all_fanarts['32040'],'Tmdb')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32041),'advance_movie',14,BASE_LOGO+'content_s.png',all_fanarts['32041'],'Advance Content selection')
-    all_d.append(aa)
-    #Search movie
-    aa=addDir3(Addon.getLocalizedString(32042),f'https://api.themoviedb.org/3/search/movie?api_key={tmdb_key}&query=%s&language={lang}&append_to_response=origin_country&page=1'.format(lang),14,BASE_LOGO+'search_m.png',all_fanarts['32042'],'Tmdb')
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32043),'movie',143,BASE_LOGO+'search.png',all_fanarts['32043'],'TMDB')
-    all_d.append(aa)
-    try:
-        from sqlite3 import dbapi2 as database
-    except:
-        from pysqlite2 import dbapi2 as database
-    cacheFile=os.path.join(user_dataDir,'database.db')
-    dbcon = database.connect(cacheFile)
-    dbcur = dbcon.cursor()
-    
-    table_name='lastlinkmovie'
-    
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""o_name TEXT,""name TEXT, ""url TEXT, ""iconimage TEXT, ""fanart TEXT,""description TEXT,""data TEXT,""season TEXT,""episode TEXT,""original_title TEXT,""saved_name TEXT,""heb_name TEXT,""show_original_year TEXT,""eng_name TEXT,""isr TEXT,""prev_name TEXT,""id TEXT);"%table_name)
-    
-    dbcur.execute("SELECT * FROM lastlinkmovie WHERE o_name='f_name'")
 
-    match = dbcur.fetchone()
-    dbcon.commit()
-    
-    dbcur.close()
-    dbcon.close()
-    
-    if match!=None:
-       f_name,name,url,iconimage,fanart,description,data,season,episode,original_title,saved_name,heb_name,show_original_year,eng_name,isr,prev_name,id=match
-       try:
-           if url!=' ':
-             if 'http' not  in url:
-           
-               url=base64.b64decode(url)
-              
-             aa=addLink('[I]%s[/I]'%Addon.getLocalizedString(32022), url,6,False,iconimage,fanart,description,data=show_original_year,prev_name=name,original_title=original_title,season=season,episode=episode,tmdb=id,year=show_original_year,place_control=True)
-             all_d.append(aa)
-       except  Exception as e:
-         log.warning(e)
-         pass
-    aa=addDir3(Addon.getLocalizedString(32044),'movie',145,BASE_LOGO+'history.png',all_fanarts['32044'],'History')
-    
-    all_d.append(aa)
-    aa=addDir3(Addon.getLocalizedString(32045),'0',174,BASE_LOGO+'classic.png',all_fanarts['32045'],'classic')
-    
-    all_d.append(aa)
-    
-    aa=addDir3(Addon.getLocalizedString(32046),'0',176,BASE_LOGO+'westren.png',all_fanarts['32046'],'classic')
-    
-    all_d.append(aa)
-    
-    aa=addDir3(Addon.getLocalizedString(32047),'0',178,BASE_LOGO+'3d_free.png',all_fanarts['32047'],'3D')
-    
-    all_d.append(aa)
-    
-    aa=addDir3(Addon.getLocalizedString(32313),'0',187,BASE_LOGO+'keywords.png',all_fanarts['32313'],'keywords')
-    
-    all_d.append(aa)
-    #place your Jen playlist here:
-    #dulpicate this line with your address
-    #aa=addDir3('Name', 'Your Jen Address',189,'Iconimage','fanart','Description',search_db='Your Search db Address')
-    #all_d.append(aa)
-    
-    xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
-
-def movie_prodiction():
-    all_d=[]
-    if Addon.getSetting("order_networks")=='0':
-        order_by='popularity.desc'
-    elif Addon.getSetting("order_networks")=='2':
-        order_by='vote_average.desc'
-    elif Addon.getSetting("order_networks")=='1':
-        order_by='first_air_date.desc'
-    
-    
-    aa=addDir3('[COLOR red]Marvel[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=7505&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://yt3.ggpht.com/a-/AN66SAwQlZAow0EBMi2-tFht-HvmozkqAXlkejVc4A=s900-mo-c-c0xffffffff-rj-k-no','https://images-na.ssl-images-amazon.com/images/I/91YWN2-mI6L._SL1500_.jpg','Marvel')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightblue]DC Studios[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=9993&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://pmcvariety.files.wordpress.com/2013/09/dc-comics-logo.jpg?w=1000&h=563&crop=1','http://www.goldenspiralmedia.com/wp-content/uploads/2016/03/DC_Comics.jpg','DC Studios')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightgreen]Lucasfilm[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=1&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://fontmeme.com/images/lucasfilm-logo.png','https://i.ytimg.com/vi/wdYaG3o3bgE/maxresdefault.jpg','Lucasfilm')
-    all_d.append(aa)
-    aa=addDir3('[COLOR yellow]Warner Bros.[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=174&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://looking.la/wp-content/uploads/2017/10/warner-bros.png','https://cdn.arstechnica.net/wp-content/uploads/2016/09/warner.jpg','SyFy')
-    all_d.append(aa)
-    aa=addDir3('[COLOR blue]Walt Disney Pictures[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=2&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://i.ytimg.com/vi/9wDrIrdMh6o/hqdefault.jpg','https://vignette.wikia.nocookie.net/logopedia/images/7/78/Walt_Disney_Pictures_2008_logo.jpg/revision/latest?cb=20160720144950','Walt Disney Pictures')
-    all_d.append(aa)
-    aa=addDir3('[COLOR skyblue]Pixar[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=3&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://elestoque.org/wp-content/uploads/2017/12/Pixar-lamp.png','https://wallpapercave.com/wp/GysuwJ2.jpg','Pixar')
-    all_d.append(aa)
-    aa=addDir3('[COLOR deepskyblue]Paramount[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=4&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Paramount_Pictures_2010.svg/1200px-Paramount_Pictures_2010.svg.png','https://vignette.wikia.nocookie.net/logopedia/images/a/a1/Paramount_Pictures_logo_with_new_Viacom_byline.jpg/revision/latest?cb=20120311200405&format=original','Paramount')
-    all_d.append(aa)
-    aa=addDir3('[COLOR burlywood]Columbia Pictures[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=5&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://static.tvtropes.org/pmwiki/pub/images/lady_columbia.jpg','https://vignette.wikia.nocookie.net/marveldatabase/images/1/1c/Columbia_Pictures_%28logo%29.jpg/revision/latest/scale-to-width-down/1000?cb=20141130063022','Columbia Pictures')
-    all_d.append(aa)
-    aa=addDir3('[COLOR powderblue]DreamWorks[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=7&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://www.dreamworksanimation.com/share.jpg','https://www.verdict.co.uk/wp-content/uploads/2017/11/DA-hero-final-final.jpg','DreamWorks')
-    all_d.append(aa)
-    aa=addDir3('[COLOR lightsaltegray]Miramax[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=14&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://vignette.wikia.nocookie.net/disney/images/8/8b/1000px-Miramax_1987_Print_Logo.png/revision/latest?cb=20140902041428','https://i.ytimg.com/vi/4keXxB94PJ0/maxresdefault.jpg','Miramax')
-    all_d.append(aa)
-    aa=addDir3('[COLOR gold]20th Century Fox[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=25&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://pmcdeadline2.files.wordpress.com/2017/03/20th-century-fox-cinemacon1.jpg?w=446&h=299&crop=1','https://vignette.wikia.nocookie.net/simpsons/images/8/80/TCFTV_logo_%282013-%3F%29.jpg/revision/latest?cb=20140730182820','20th Century Fox')
-    all_d.append(aa)
-    aa=addDir3('[COLOR bisque]Sony Pictures[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=34&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Sony_Pictures_Television_logo.svg/1200px-Sony_Pictures_Television_logo.svg.png','https://vignette.wikia.nocookie.net/logopedia/images/2/20/Sony_Pictures_Digital.png/revision/latest?cb=20140813002921','Sony Pictures')
-    all_d.append(aa)
-    aa=addDir3('[COLOR navy]Lions Gate Films[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=35&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'http://image.wikifoundry.com/image/1/QXHyOWmjvPRXhjC98B9Lpw53003/GW217H162','https://vignette.wikia.nocookie.net/fanon/images/f/fe/Lionsgate.jpg/revision/latest?cb=20141102103150','Lions Gate Films')
-    all_d.append(aa)
-    aa=addDir3('[COLOR beige]Orion Pictures[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=41&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://i.ytimg.com/vi/43OehM_rz8o/hqdefault.jpg','https://i.ytimg.com/vi/g58B0aSIB2Y/maxresdefault.jpg','Lions Gate Films')
-    all_d.append(aa)
-    aa=addDir3('[COLOR yellow]MGM[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=21&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://pbs.twimg.com/profile_images/958755066789294080/L9BklGz__400x400.jpg','https://assets.entrepreneur.com/content/3x2/2000/20150818171949-metro-goldwun-mayer-trade-mark.jpeg','MGM')
-    all_d.append(aa)
-    aa=addDir3('[COLOR gray]New Line Cinema[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=12&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://upload.wikimedia.org/wikipedia/en/thumb/0/04/New_Line_Cinema.svg/1200px-New_Line_Cinema.svg.png','https://vignette.wikia.nocookie.net/theideas/images/a/aa/New_Line_Cinema_logo.png/revision/latest?cb=20180210122847','New Line Cinema')
-    all_d.append(aa)
-    aa=addDir3('[COLOR darkblue]Gracie Films[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=18&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://i.ytimg.com/vi/q_slAJmZBeQ/hqdefault.jpg','https://i.ytimg.com/vi/yGofbuJTb4g/maxresdefault.jpg','Gracie Films')
-    all_d.append(aa)
-    aa=addDir3('[COLOR goldenrod]Imagine Entertainment[/COLOR]',f'https://api.themoviedb.org/3/discover/movie?api_key={tmdb_key}&with_companies=23&language={lang}&sort_by={order_by}&timezone=America%2FNew_York&include_null_first_air_dates=false&page=1',14,'https://s3.amazonaws.com/fs.goanimate.com/files/thumbnails/movie/2813/1661813/9297975L.jpg','https://www.24spoilers.com/wp-content/uploads/2004/06/Imagine-Entertainment-logo.jpg','Imagine Entertainment')
-    all_d.append(aa)
-    xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
-def adjusted_datetime(string=False, dt=False):
-    from datetime import datetime, timedelta
-    d = datetime.utcnow() + timedelta(hours=int(72))
-    if dt: return d
-    d = datetime.date(d)
-    if string:
-        try: d = d.strftime('%Y-%m-%d')
-        except ValueError: d = d.strftime('%Y-%m-%d')
-    else: return d
-def main_trakt():
-   all_d=[]
-   aa=addDir3(Addon.getLocalizedString(32048),'movie?limit=40&page=1',116,BASE_LOGO+'lists.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Lists')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32049),'tv?limit=40&page=1',116,BASE_LOGO+'lists.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Lists')
-   all_d.append(aa)
-   import datetime
-   current_date = adjusted_datetime()
-   start = (current_date - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
-   finish = 14
-        
-   aa=addDir3(Addon.getLocalizedString(32050),'calendars/my/shows/%s/%s?limit=40&page=1'%(start,finish),117,BASE_LOGO+'lists.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Lists')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32051),'users/me/watched/shows?extended=full&limit=40&page=1',115,BASE_LOGO+'progress.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Progress')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32052),'sync/watchlist/episodes?extended=full&limit=40&page=1',115,BASE_LOGO+'ep_watch.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Episodes')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32053),'users/me/watchlist/episodes?extended=full&limit=40&page=1',117,BASE_LOGO+'series_w.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Series')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32054),'users/me/collection/shows?limit=40&page=1',117,BASE_LOGO+'tv_col.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','TV')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32055),'users/me/watchlist/shows?limit=40&page=1',117,BASE_LOGO+'show_w.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Shows')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32056),'recommendations/shows?limit=40&ignore_collected=true&page=1',166,BASE_LOGO+'trakt.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Movies')
-   all_d.append(aa)
-   
-   aa=addDir3(Addon.getLocalizedString(32057),'users/me/watchlist/movies?limit=40&page=1',117,BASE_LOGO+'movie_wl.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Movies')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32058),'recommendations/movies?limit=40&ignore_collected=true&page=1',166,BASE_LOGO+'trakt.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Movies')
-   all_d.append(aa)
-   
-   aa=addDir3(Addon.getLocalizedString(32059),'users/me/watched/movies?limit=40&page=1',117,BASE_LOGO+'movie_w.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Watched')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32060),'users/me/watched/shows?limit=40&page=1',117,BASE_LOGO+'series_wa.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Watched shows')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32061),'users/me/collection/movies?limit=40&page=1',117,BASE_LOGO+'movie_c.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','collection')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32062),'users/likes/lists?limit=40&page=1',118,BASE_LOGO+'liked_l.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Liked lists')
-   all_d.append(aa)
-   aa=addDir3(Addon.getLocalizedString(32063),'sync/playback/movies?limit=40&page=1',117,BASE_LOGO+'liked_l.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Liked lists')
-   all_d.append(aa)
-   
-   aa=addDir3(Addon.getLocalizedString(32064),'sync/playback/episodes?limit=40&page=1',164,BASE_LOGO+'liked_l.png','https://seo-michael.co.uk/content/images/2016/08/trakt.jpg','Liked lists')
-   all_d.append(aa)
-   
-   xbmcplugin .addDirectoryItems(int(sys.argv[1]),all_d,len(all_d))
 
 def check_cached(magnet,rd,pr,ad,tr):
     
@@ -4165,9 +3700,10 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                     log.warning(hashCheck)
                     hashCheck=hashCheck['transcoded']
                 elif hash_type=='ad':
-                    hashCheck=ad.check_hash(all_mag[items])
-                    log.warning(f'hashCheck:{hashCheck},items:{all_mag[items]}')
-                    hashCheck=hashCheck['data']['magnets']
+                    #hashCheck=ad.check_hash(all_mag[items])
+                    #log.warning(f'hashCheck:{hashCheck},items:{all_mag[items]}')
+                    #hashCheck=hashCheck['data']['magnets']
+                    hashCheck=all_mag[items]
                 elif hash_type=='tr':
                     try:
                         hashCheck=TorBoxAPI().check_cache(all_mag[items])['data']
@@ -4300,8 +3836,8 @@ def check_mass_hash(hash_type,all_mag,items,rd,pr,ad,statistics,tv_movie,season_
                             all_hased_by_type[hash_type].append(all_mag[items][count_hash])
                         count_hash+=1
                     elif hash_type=='ad':
-                        all_hased.append(hash['hash'])
-                        all_hased_by_type[hash_type].append(hash['hash'])
+                        all_hased.append(hash)
+                        all_hased_by_type[hash_type].append(hash)
                     elif hash_type=='tr':
                         if tv_movie=='tv' :
                             found_c_h=False
@@ -5537,7 +5073,7 @@ def c_get_sources(name,data,original_title,id,season,episode,show_original_year,
         for items in all_hased:
             
             all_s_in=({},0,'All Hashed:',2,name)
-            all_ok.append(hash_index[items.lower()])
+            all_ok.append(items.lower())
     while(1):
         still_alive=0
         for yy in range(0,len(thread2)):
@@ -6023,7 +5559,7 @@ def start_window2(id,tv_movie,name,selected_option,season,episode):
         send_type='find_similar'
       else:
         send_type=''
-      menu = sources_search2('plugin.video.injustice', id,tv_movie,send_type,season,episode)
+      menu = sources_search2(addon_id, id,tv_movie,send_type,season,episode)
       menu.doModal()
      
       del menu
@@ -6284,8 +5820,98 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         all_dup=0
         all_cached=0
         all_unc=0
+        
+        if 'torio.py' in match_a:
+            for name,lk,data,quality in match_a['torio.py']['links']:
+               items='torio.py'
+               
+               all_s_in=({},0,' Check Rejected  ',2,name)
+               elapsed_time = time.time() - start_time
+               if Addon.getSetting("dp")=='true':
+                if KODI_VERSION>18:
+                    dp.update(0, Addon.getLocalizedString(32072)+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+'\n'+Addon.getLocalizedString(32084)+'\n'+ name)
+                else:
+                    dp.update(0, Addon.getLocalizedString(32072)+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)),Addon.getLocalizedString(32084), name)
+               
+               continue_next=False
+               
+               try:
+                   int_q=int(quality)
+                   if int_q<min_q or int_q>max_q:
+                    continue_next=True
+               except:
+                   if min_q>0:
+                      continue_next=True
+                   pass
+               
+               if encoding_filter:
+                   data_name=getInfo(name)
+                 
+                   if 'CAM' in data_name and disable_low:
+                     continue_next=True
+                   if 'HEVC' in data_name and disable_hdvc:
+                     continue_next=True
+                   if '3D' in data_name and disable_3d:
+                     continue_next=True
+                     
+               
+               
+               al_lk_count+=1
+               
+               reverse_lookup = {x:i for i, x in enumerate(all_lk)}
+               test = reverse_lookup.get(lk, -1)
+               
+               if test!=-1:
+                    all_dup+=1
+                    
+                    continue
+               
+               
+               
+               all_lk.append(lk)
+               hash=None
+               try:
+                    #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
+                    hash=lk.split('btih:')[1]
+                    if '&' in hash:
+                        hash=hash.split('&')[0]
+               except:
+                    try:
+                        hash =lk.split('btih:')[1]
+                    except:
+                        pass
+                    
+               if hash.lower() in all_ok:
+                
+                all_cached+=1
+                
+                if check_rejected(name,show_original_year,season,episode,original_title,tv_movie,heb_name,filter_lang):
+                    if 0:
+                        log.warning(clean_name(original_title,1).lower())
+                        log.warning(info['title'].lower())
+                       
+                        if 'year' in info:
+                            log.warning(info['year'])
+                            log.warning(show_original_year)
+                    if continue_next:
+                        all_filted_rejected.append(('[COLOR pink][I]'+name+'[/I][/COLOR]',lk,data,fix_q(quality),quality,items.replace('magnet_','').replace('.py',''),))
+                        continue
+           
+                    all_rejected.append(('[COLOR pink][I]'+name+'[/I][/COLOR]',lk,data,fix_q(quality),quality,items.replace('magnet_','').replace('.py',''),))
+                else:
+                    if continue_next:
+                        all_filted.append((name,lk,data,fix_q(quality),quality,items.replace('magnet_','').replace('.py',''),))
+                        continue
+               
+                    all_data.append((name,lk,data,fix_q(quality),quality,items.replace('magnet_','').replace('.py',''),))
+               else:
+             
+                all_unc+=1
         for items in match_a:
+            
             for name,lk,data,quality in match_a[items]['links']:
+               if items=='torio.py':
+                   continue
                all_s_in=({},0,' Check Rejected  ',2,name)
                elapsed_time = time.time() - start_time
                if Addon.getSetting("dp")=='true':
@@ -6329,7 +5955,19 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
                
                all_lk.append(lk)
                
-               if lk in all_ok:
+               hash=None
+               try:
+                    #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
+                    hash=lk.split('btih:')[1]
+                    if '&' in hash:
+                        hash=hash.split('&')[0]
+               except:
+                    try:
+                        hash =lk.split('btih:')[1]
+                    except:
+                        pass
+                    
+               if hash.lower() in all_ok:
                 
                 all_cached+=1
                 
@@ -6358,7 +5996,7 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         links_data['duplicated']=all_dup
         links_data['un_cached']=all_unc
         log.warning('all_data::')
-        log.warning(all_data)
+   
         
         if len(all_data)==0:
             xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), Addon.getLocalizedString(32085))))
@@ -6574,7 +6212,23 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
         all_c_name=[]
         
         all_s_in=( {},100 ,'',4,'')
-        
+        collected_cached=[]
+        non_collected_cached=[]
+        for name,lk,data,fix,quality,source in all_data:
+            lk_hash=get_hash(lk).lower()
+                
+            lk_type=""
+            if (lk_hash) in all_hased_by_type['pm']:
+                lk_type='-PM-'
+            elif (lk_hash) in all_hased_by_type['tr']:
+                lk_type='-TR-'
+
+            if lk_type=='-PM-' or ("[I][Cached][/I] " in name and lk_hash in all_hased_by_type['rd'])  or lk_type=='-TR-':
+                name=name.replace("[I][Cached][/I] ","")
+                collected_cached.append(("[I][Cached][/I] "+name,lk,data,fix,quality,source))
+            else:
+                non_collected_cached.append((name,lk,data,fix,quality,source))
+        all_data=collected_cached+non_collected_cached
         for name,lk,data,fix,quality,source in all_data:
                 hash=None
                 try:
@@ -6636,16 +6290,16 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
                 lk_hash=get_hash(lk).lower()
                 
                 lk_type=""
-               
-                if (lk_hash) in all_hased_by_type['rd']:
-                    lk_type='-RD-'
-                elif (lk_hash) in all_hased_by_type['pm']:
+                if (lk_hash) in all_hased_by_type['pm']:
                     lk_type='-PM-'
-                elif (lk_hash) in all_hased_by_type['ad']:
-                    lk_type='-AD-'
                 elif (lk_hash) in all_hased_by_type['tr']:
                     lk_type='-TR-'
-             
+                elif (lk_hash) in all_hased_by_type['rd']:
+                    lk_type='-RD-'
+                
+                elif (lk_hash) in all_hased_by_type['ad']:
+                    lk_type='-AD-'
+                
                 menu.append([source, source,sound,quality,nm,lk_type+','+data+'GB',lk_type+lk,''])
                 all_c_name.append(name)
                 all_f_sources.append(source)
@@ -7449,7 +7103,7 @@ def search_next(dd,tv_movie,id,heb_name,playlist,iconimage,enable_playlist):
         if enable_playlist:
             playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
             playlist.clear()
-        next_up_page = UpNext("script-shadow-upnext.xml",Addon.getAddonInfo('path'), "DefaultSkin", "1080i")
+        next_up_page = UpNext("script-injustice-upnext.xml",Addon.getAddonInfo('path'), "DefaultSkin", "1080i")
         
         ep=load_test_data(name_n,image_n,image_n,plot_n,name_n,season,episode,list)
         
@@ -8577,7 +8231,7 @@ def resolve_vidsrc(url_n):
         return True,f_link
 def show_new_window(tv_movie,id,season,episode):
     global break_window,break_window_rd
-    menu = player_window('plugin.video.injustice', id,tv_movie,season,episode)
+    menu = player_window(addon_id, id,tv_movie,season,episode)
     menu.doModal()
 
     del menu
@@ -8712,18 +8366,142 @@ def solve_m4u(url,name,year):
         url=all_links[ret].split('?')[0]+"|"+head
     '''
     return 'resolveurlhttps://goplayer.top/watch/7e92259a8825d00ee171a77bb75a1151/tt9376612',id,mtitle
+def check_and_play_trailers(id):
+    global done_trailers
+    url=f'https://api.themoviedb.org/3/movie/{id}/recommendations?api_key={tmdb_key}&append_to_response=videos'
+    x=get_html(url,headers=base_header).json()['results']
+    
+    if len(x)==0:
+        return None
+
+    all_video_ids=[]
+    count_trailers=0
+    all_playable_trails=[]
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+    playlist.clear()
+    for i in range (0,len(x)):
+        random_tmdb=random.randint(0,len(x)-1)
+        
+        iconimage='https://image.tmdb.org/t/p/original/'+x[random_tmdb].get('poster_path','')
+
+        if 'release_date' in x[random_tmdb]:
+            year=str(x[random_tmdb]['release_date'].split("-")[0])
+        else:
+            year='0'
+        plot=x[random_tmdb].get('overview','')
+      
+        url_t=f"https://api.themoviedb.org/3/movie/{x[random_tmdb]['id']}/videos?api_key={tmdb_key}"
+        html=get_html(url_t,headers=base_header).json()
+        if len(html['results'])==0:
+            continue
+        result_trailer=random.randint(0,len(html['results'])-1)
+        
+        if  html['results'][result_trailer]['type']!='Trailer':
+            continue
+        
+        
+
+        video_id=html['results'][result_trailer]['key']
+        if video_id in all_video_ids:
+            
+            continue
+        count_trailers+=1
+        
+        all_video_ids.append(video_id)
+        playback_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % video_id
+        item = xbmcgui.ListItem(path=playback_url)
+        info_tag = item.getVideoInfoTag()
+        info_tag.setTitle(x[random_tmdb]['title']+ f' ({year})')
+        info_tag.setYear(int(year))
+        info_tag.setPlot(plot)
+        art = {}
+        art.update({'poster': iconimage,'icon': iconimage,'thumb': iconimage})
+        item.setArt(art)
+            
+        url2=f"https://api.themoviedb.org/3/movie/{x[random_tmdb]['id']}?api_key={tmdb_key}&append_to_response=external_ids"
+        
+        try:
+            imdb_id=get_html(url2,timeout=10).json()['external_ids']['imdb_id']
+        except:
+            imdb_id=""
+        
+        all_playable_trails.append((playback_url, item))
+        info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb':str(x[random_tmdb]['id'])})
+        playlist.add(url=playback_url, listitem=item)
+   
+    lk,it = all_playable_trails[0]
+    ok=xbmc.Player().play(playlist,listitem=it,windowed=False)
+    count_trailer=0
+    num_trailers=int(Addon.getSetting('trailer_before_amovie'))
+    
+    xbmc.sleep(2000)
+    vidtime=0
+    log.warning('Waiting for first trailer to end')
+    while xbmc.Player().isPlaying():
+        try:
+            vidtime = xbmc.Player().getTime()
+        except Exception as e:
+            
+            pass
+        
+            
+        xbmc.sleep(100)
+    if (vidtime>0.1):
+        count_trailer+=1
+    for lk,it in all_playable_trails:
+        
+        
+        xbmc.sleep(2000)
+        vidtime=0
+        while xbmc.Player().isPlaying():
+            try:
+                vidtime = xbmc.Player().getTime()
+            except Exception as e:
+                
+                pass
+            
+            
+            
+            xbmc.sleep(100)
+        if (vidtime>0.1):
+            count_trailer+=1
+        if (count_trailer>=num_trailers):
+            
+            xbmc.Player().stop()
+            playlist.clear()
+            break
+                    
+    done_trailers=True
+    return all_playable_trails
 def play_link(name,url,iconimage,fanart,description,data,original_title,id,season,episode,show_original_year,dd,heb_name,prev_name='',has_alldd='false',nextup='false',video_data_exp={},all_dd=[],start_index=0,get_sources_nextup='false',all_w={},source='',tvdb_id=''):
-   global play_status,break_window,play_status_rd_ext,break_window_rd
-
-   if 'Solve%20m4u' in url:
-        url,id,name=solve_m4u(url,name,show_original_year)
-
+   global play_status,break_window,play_status_rd_ext,break_window_rd,ready_to_close_playwindow
+   global done_trailers
+   done_trailers=False
+   play_trailer=False
+   name=name.replace("[I][Cached][/I]" ,"")
+   original_title=original_title.replace("[I][Cached][/I]" ,"")
+   prev_name=prev_name.replace("[I][Cached][/I]" ,"")
+   
    try:
         s=int(season)
         tv_movie='tv'
         
    except:
         tv_movie='movie'
+   Addon = xbmcaddon.Addon()
+   if (tv_movie=='movie') and ((int(Addon.getSetting('trailer_before_amovie')))>0):
+        play_trailer=True
+        ready_to_close_playwindow=False
+        
+        thread=[]
+
+        thread.append(Thread(check_and_play_trailers,id))
+
+        thread[0].start()
+   if 'Solve%20m4u' in url:
+        url,id,name=solve_m4u(url,name,show_original_year)
+
+   
         
    if tv_movie=='tv':#'last play link' in description:
         dd=[]
@@ -8974,7 +8752,7 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
             url=resolve_youtube(url)
             log.warning(url)
             
-   if Addon.getSetting('new_play_window')=='true' and 'youtube' not in url:
+   if Addon.getSetting('new_play_window')=='true' and 'youtube' not in url and not play_trailer:
         thread=[]
 
         thread.append(Thread(show_new_window,tv_movie, id, season, episode))
@@ -9392,6 +9170,7 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
                 log.warning('counter_index::'+str(counter_index))
                 for name,url,iconimage,fanart,description,data,id,season,episode,original_title,show_original_year,dd in all_dd:
                     url=url.replace('-RD-','')
+                    name=name.replace("[I][Cached][/I]" ,"")
                     
                     if url=='open_rejected' or url=='open_filtered':
                         continue
@@ -9458,10 +9237,45 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
             pr= premiumize.Premiumize()
             link=pr._single_magnet_resolve(url)
         elif '-AD-' in url:
-            url=url.replace('-AD-','')
-            log.warning('Play AD')
-            ad=all_debrid.AllDebrid()
-            link=ad.movie_magnet_to_stream(url)
+            start_index=0
+            log.warning('Check_start_index')
+            for name,n_url,iconimage,fanart,description,data,id,season,episode,original_title,show_original_year,dd in all_dd:
+                log.warning(n_url)
+                if 'btih:' not in n_url:
+                    continue
+                hash_url=url.split('btih:')[1]
+                
+                if '&' in hash_url:
+                    hash_url=hash_url.split('&')[0]
+                hash_n_url=n_url.split('btih:')[1]
+                
+                if '&' in hash_n_url:
+                    hash_n_url=hash_n_url.split('&')[0]
+                log.warning(f'hash_url:{hash_url}')
+                log.warning(f'hash_n_url:{hash_n_url}')
+                if hash_url==hash_n_url:
+                    log.warning(f'Found:{hash_n_url}')
+                    break
+                start_index+=1
+            log.warning(f'start_index:{start_index},all_dd:{len(all_dd)}')
+            counter_index=0
+            for name,url,iconimage,fanart,description,data,id,season,episode,original_title,show_original_year,dd in all_dd:
+                    url=url.replace('-AD-','')
+                    
+                    if url=='open_rejected' or url=='open_filtered' or url=='open_collection':
+                        continue
+                        
+                    
+                    log.warning('Play AD')
+                    ad=all_debrid.AllDebrid()
+                    link=ad.movie_magnet_to_stream(que(url),season_n,episode_n,tv_movie)
+                    play_status=Addon.getLocalizedString(32077)+','+ str(counter_index)+'/'+str(len(all_dd)-start_index)
+                    counter_index+=1
+                    log.warning(f'counter_index:{counter_index},break_window:{break_window}')
+                    if break_window:
+                                break
+                    if link!=None:
+                        break
         elif '-TR-' in url:
             
             url=url.replace('-TR-','')
@@ -9576,7 +9390,7 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
     if Addon.getSetting('subtitles_master')=='false' and master_addon:
         video_data['mpaa']='heb'
     
-    
+    log.warning(f'Final_link:{link}')
     if link:
         
         
@@ -9708,6 +9522,53 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
         precentage=False
         log.warning('res::'+str(res))
         resume_time=0
+        
+        if (play_trailer==True):
+            '''
+            count_trailer=0
+            num_trailers=int(Addon.getSetting('trailer_before_amovie'))
+            xbmc.sleep(1000)
+            vidtime=0
+            log.warning('Waiting for first trailer to end')
+            while xbmc.Player().isPlaying():
+                    try:
+                        vidtime = xbmc.Player().getTime()
+                    except Exception as e:
+                        vidtime=0
+                        pass
+                    if (vidtime>0.1):
+                        count_trailer+=1
+                        
+                    xbmc.sleep(100)
+            for lk,it in all_playable_trails:
+                log.warning(f'next:{count_trailer}')
+                ok=xbmc.Player().play(lk,listitem=it,windowed=False)
+                xbmc.sleep(2000)
+                while xbmc.Player().isPlaying():
+                    try:
+                        vidtime = xbmc.Player().getTime()
+                    except Exception as e:
+                        vidtime=0
+                        pass
+                    if (vidtime>0.1):
+                        count_trailer+=1
+                    
+                    
+                    xbmc.sleep(100)
+                if (count_trailer>num_trailers):
+                    break
+            '''
+            while(done_trailers==False):
+                xbmc.sleep(1000)
+                
+            if Addon.getSetting('new_play_window')=='true' and 'youtube' not in url:
+                thread=[]
+
+                thread.append(Thread(show_new_window,tv_movie, id, season, episode))
+
+                thread[0].start()
+            playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            playlist.clear()
         if res and 'precentage' not in all_w:
             
             if float(res['resumetime'])>10 and (100*(float(res['resumetime'])/float(res['totaltime'])))<95:
@@ -9781,6 +9642,8 @@ def play_link(name,url,iconimage,fanart,description,data,original_title,id,seaso
         
         ids = json.dumps({u'tmdb': id, u'imdb': imdb_id, u'slug': original_title})
         xbmcgui.Window(10000).setProperty('script.trakt.ids', ids)
+        
+        ready_to_close_playwindow=True
         if enable_playlist:
             playlist.add(url=link, listitem=listItem)
         else:
@@ -15447,8 +15310,7 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
     global elapsed_time,time_data,sys_arg_1,Addon,use_debrid
     params=get_params(user_params=user_params)
 
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time)
+    
     if Addon.getSetting("full_db")=='true':
         
         if KODI_VERSION>18:
@@ -15615,14 +15477,11 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
 
           
 
-    #html=cache.get(cfscrape_version,24, table='posters')
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time)
+    
 
     public.pre_mode=mode
     log.warning('public.pre_mode:'+str(public.pre_mode))
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time+777)
+    
     if Addon.getSetting("full_db")=='true':
         
         if KODI_VERSION>18:
@@ -15631,14 +15490,13 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
             dp_full.update(0, 'Please wait','Level 17...', '' )
         dp_full.close()
     if mode==None :
-           elapsed_time = time.time() - start_time_start
-           time_data.append(elapsed_time+555)
-           time_data= main_menu(time_data)
+           
+           main_menu()
             
 
     elif mode==2:
-        import logging
-        logging.warning('Start Shadow4')
+        
+        
         movie_world()
     elif mode==3:
         tv_show_menu()
@@ -16012,8 +15870,7 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
         from resources.modules.torbox_api import TorBoxAPI
         TorBoxAPI().revoke_auth()
     match=[]
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time)
+    
     if Addon.getSetting("display_lock")=='true':
         try:
             from sqlite3 import dbapi2 as database
@@ -16061,14 +15918,8 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
             xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 
     
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time)
-    str_time_data=[]
-    for i in time_data:
-        str_time_data.append(str(i))
-    if Addon.getSetting("debug")=='true' and Addon.getSetting("check_time")=='true':
-
-        showText('Times', '\n'.join (str_time_data))
+  
+    
         
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     log.warning('pre_mode:'+str(pre_mode))
@@ -16084,8 +15935,6 @@ def refresh_list(user_params,sys_arg_1_data,Addon_id=""):
 
     log.warning('Done')
 
-    elapsed_time = time.time() - start_time_start
-    time_data.append(elapsed_time)
     if mode==None:
         thread=[]
         thread.append(Thread(show_updates))

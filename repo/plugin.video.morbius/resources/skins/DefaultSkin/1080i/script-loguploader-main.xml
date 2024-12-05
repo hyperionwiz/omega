@@ -43,10 +43,10 @@
             <width>915</width>
             <height>70</height>
             <font>font20_title</font>
-            <label>[B]$ADDON[plugin.video.morbius 32160][/B]</label>
+            <label>[B]Log uploader[/B]</label>
             <align>center</align>
             <aligny>center</aligny>
-            <shadowcolor>FF000000</shadowcolor>
+            <morbiuscolor>FF000000</morbiuscolor>
         </control>
         <control type="image" id="501">
             <left>30</left>
@@ -63,7 +63,7 @@
             <font>font12_title</font>
             <align>left</align>
             <aligny>top</aligny>
-            <shadowcolor>FF000000</shadowcolor>
+            <morbiuscolor>FF000000</morbiuscolor>
         </control>
         <control type="button" id="503">
             <left>600</left>

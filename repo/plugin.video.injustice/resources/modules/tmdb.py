@@ -31,6 +31,8 @@ else:
 global all_release_dates
 all_release_dates={}
 tmdb_key=Addon.getSetting("tmdb_api")
+
+
 def adv_gen_window(url):
     from  resources.modules import pyxbmct
     class adv_gen_window(pyxbmct.AddonDialogWindow):

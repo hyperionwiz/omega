@@ -3,6 +3,7 @@ import logging,re,time,os
 from resources.modules import cache
 global local
 from resources.modules import log
+from resources.menus import CLIENT_ID,CLIENT_SECRET
 local=False
 try:
     import urllib3
@@ -181,8 +182,7 @@ BASE_URL = 'http://api.trakt.tv'
 SETTING_TRAKT_EXPIRES_AT = "trakt_expires_at"
 SETTING_TRAKT_ACCESS_TOKEN = "trakt_access_token"
 SETTING_TRAKT_REFRESH_TOKEN = "trakt_refresh_token"
-CLIENT_ID = "8ed545c0b7f92cc26d1ecd6326995c6cf0053bd7596a98e962a472bee63274e6"
-CLIENT_SECRET = "1ec4f37e5743e3086abace0c83444c25d9b655d1d77b793806b2c8205a510426"
+
 
 def reset_trakt():
     ret =xbmcgui.Dialog().yesno(("Authenticate Trakt"), ("Clear Trakt Auth.?"))

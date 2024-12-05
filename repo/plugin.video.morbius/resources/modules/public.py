@@ -1,15 +1,19 @@
  # -*- coding: utf-8 -*-
-import sys,urllib,logging,json,os
+import sys,urllib,logging,json,os,base64
 from resources.modules import cache
 import xbmcgui,xbmcplugin,xbmc,xbmcaddon,xbmcvfs
 global pre_mode
-
+global Addon,user_dataDir
 from resources.modules import log
+import xbmcvfs,urllib,urllib.parse
+xbmc_tranlate_path=xbmcvfs.translatePath
 pre_mode=''
 lang=xbmc.getLanguage(0)
 Addon = xbmcaddon.Addon()
 
-
+user_dataDir = xbmc_tranlate_path(Addon.getAddonInfo("profile"))
+if not os.path.exists(user_dataDir):
+     os.makedirs(user_dataDir)
 
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 if KODI_VERSION>18:
@@ -26,6 +30,22 @@ else:
     que=urllib.parse.quote_plus
     url_encode=urllib.parse.urlencode
 tmdb_key=Addon.getSetting("tmdb_api")
+def adjusted_datetime(string=False, dt=False):
+    from datetime import datetime, timedelta
+    d = datetime.utcnow() + timedelta(hours=int(72))
+    if dt: return d
+    d = datetime.date(d)
+    if string:
+        try: d = d.strftime('%Y-%m-%d')
+        except ValueError: d = d.strftime('%Y-%m-%d')
+    else: return d
+def crypt(source,key):
+    from itertools import cycle
+    result=''
+    temp=cycle(key)
+    for ch in source:
+        result=result+chr(ord(ch)^ord(next(temp)))
+    return result
 def get_html_g():
     from  resources.modules.client import get_html
     headers = {

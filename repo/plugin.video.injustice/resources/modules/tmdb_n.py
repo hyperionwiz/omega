@@ -27,6 +27,8 @@ window=xbmcgui.Window(10000)
 backup_resolutions, writer_credits = {'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'}, ('Author', 'Writer', 'Screenplay', 'Characters')
 tmdb_key=Addon.getSetting("tmdb_api")
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
+addon_id="plugin://"+addon_id
+
 def meta_get(video_data,item):
     if item=='year' or item=='rating' or item=='votes' or item=='duration' or item=='playcount':
         return video_data.get(item,'0')
@@ -54,6 +56,8 @@ class tmdb:
         self.all_w_tv_data={}
         self.all_tv_w_ep={}
         self.all_movie_w=[]
+        self.season_watched={}
+        self.season_watched_marked={}
         if Addon.getSetting("trakt_access_token")!='' and Addon.getSetting("trakt_info")=='true':
             
             self.get_trakt_data(url)
@@ -91,8 +95,7 @@ class tmdb:
                except Exception as e:
                 log.warning(e)
                 pass
-        log.warning(self.all_movie_w)
-        log.warning(url)
+      
         self.all_tv_w={}
         self.all_w_tv_data={}
         self.all_tv_w_ep={}
@@ -104,8 +107,9 @@ class tmdb:
              aired_episodes=ids['show']['aired_episodes']
              self.all_tv_w[str(ids['show']['ids']['tmdb'])]='no'
              count_episodes=0
+             self.all_tv_w_ep[str(ids['show']['ids']['tmdb'])]=[]
              for seasons in ids['seasons']:
-              self.all_tv_w_ep[str(ids['show']['ids']['tmdb'])]=[]
+              
               for ep in seasons['episodes']:
                
                 count_episodes+=1
@@ -349,8 +353,8 @@ class tmdb:
         try:genere = u' / '.join([genres_list[x] for x in data['genre_ids']])
         except:genere=''
          
-        trailer = "plugin://%s?mode=25&id=%s&url=%s" % (addon_id,id,tv_movie)
-        
+        trailer = "%s?mode=25&id=%s&url=%s" % (addon_id,id,tv_movie)
+     
         if 'first_air_date' in data:
            year=str(data['first_air_date'].split("-")[0])
         elif 'release_date' in data:
@@ -581,7 +585,7 @@ class tmdb:
         params['eng_name']=video_data['title']
         params['show_original_year']=video_data['year']
         params['data']=video_data['year']
-        url_params = 'plugin://plugin.video.injustice/?' + urlencode(params) 
+        url_params = f'{addon_id}/?' + urlencode(params) 
         self.all_d[id]={}
         self.all_d[id]['url_params']=url_params
         self.all_d[id]['video_data']=video_data
@@ -669,22 +673,22 @@ class tmdb:
         episode='%20'
         
         if Addon.getSetting("cast")=='true':
-                menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32248), 'ActivateWindow(10025,"%s?mode=177&url=%s&id=%s&season=%s&episode=%s",return)'  % ( "plugin://%s/"%addon_id ,self.tv_movie,id,'%20','%20')))
+                menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32248), 'ActivateWindow(10025,"%s?mode=177&url=%s&id=%s&season=%s&episode=%s",return)'  % ( "%s/"%addon_id ,self.tv_movie,id,'%20','%20')))
         menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32166), 'Action(Info)'))
         if Addon.getSetting("play_trailer")=='true':
             menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32167), 'PlayMedia(%s)' % video_data['trailer']))
         if Addon.getSetting("settings_content")=='true':
-            menu_items.append(('%s'%Addon.getLocalizedString(32168), 'RunPlugin(%s?mode=151&url=www)' % "plugin://%s/"%addon_id ))
+            menu_items.append(('%s'%Addon.getLocalizedString(32168), 'RunPlugin(%s?mode=151&url=www)' % "%s/"%addon_id ))
         if Addon.getSetting("queue_item")=='true':
             menu_items.append(('%s'%Addon.getLocalizedString(32169), 'Action(Queue)' ))
         if Addon.getSetting("trakt_manager")=='true':
-            menu_items.append((Addon.getLocalizedString(32170), 'RunPlugin(%s)' % ('%s?url=%s&mode=150&name=%s&data=%s')%("plugin://%s/"%addon_id,id,video_data['OriginalTitle'],tv_movie) ))
+            menu_items.append((Addon.getLocalizedString(32170), 'RunPlugin(%s)' % ('%s?url=%s&mode=150&name=%s&data=%s')%("%s/"%addon_id,id,video_data['OriginalTitle'],tv_movie) ))
         if Addon.getSetting("trakt_watched")=='true':
-            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32171), 'RunPlugin(%s)' % ('%s?url=www&original_title=add&mode=65&name=%s&id=%s&season=%s&episode=%s')%("plugin://%s/"%addon_id,tv_show,id,season,episode))) 
+            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32171), 'RunPlugin(%s)' % ('%s?url=www&original_title=add&mode=65&name=%s&id=%s&season=%s&episode=%s')%("%s/"%addon_id,tv_show,id,season,episode))) 
         if Addon.getSetting("trakt_unwatched")=='true':
-            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32172), 'RunPlugin(%s)' % ('%s?url=www&original_title=remove&mode=65&name=%s&id=%s&season=%s&episode=%s')%("plugin://%s/"%addon_id,tv_show,id,season,episode))) 
+            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32172), 'RunPlugin(%s)' % ('%s?url=www&original_title=remove&mode=65&name=%s&id=%s&season=%s&episode=%s')%("%s/"%addon_id,tv_show,id,season,episode))) 
         if Addon.getSetting("clear_Cache")=='true':
-            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32176), 'RunPlugin(%s)' % ('%s?url=www&mode=35')%("plugin://%s/"%addon_id)))
+            menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32176), 'RunPlugin(%s)' % ('%s?url=www&mode=35')%("%s/"%addon_id)))
         if Addon.getSetting("set_view_type")=='true' :
             menu_items.append(('[I]%s[/I]'%Addon.getLocalizedString(32177), 'RunPlugin(%s)' % ('%s?url=%s&mode=167')%(sys.argv[0],str(pre_mode))))
         
@@ -750,9 +754,16 @@ class tmdb:
             if tmdb_id in self.all_tv_w_ep:
                 
                 if str(video_data.get('Season',0))+'x'+str(video_data.get('Episode',0)) in self.all_tv_w_ep[tmdb_id]:
-                    
+                    watched='yes'
                     video_data['playcount']=1
                     video_data['overlay']=7
+            
+            if int(ids) in self.season_watched_marked:
+                watched=self.season_watched_marked[int(ids)]
+                if watched=='yes':
+                    video_data['playcount']=1
+                    video_data['overlay']=7
+                
             listitem.setArt(data_pre.get('art',[]))
             if KODI_VERSION>19:
                 info_tag = listitem.getVideoInfoTag()
@@ -840,7 +851,7 @@ class tmdb:
             params['eng_name']='[COLOR aqua][I]Choose page[/I][/COLOR]'
          
 
-            url_params = 'plugin://plugin.video.injustice/?' + urlencode(params) 
+            url_params = f'{addon_id}/?' + urlencode(params) 
             
             self.all_lists.append((url_params, listitem, True))
             
@@ -878,7 +889,7 @@ class tmdb:
             params['eng_name']='[COLOR aqua][I]Next Page[/I][/COLOR]'
          
 
-            url_params = 'plugin://plugin.video.injustice/?' + urlencode(params) 
+            url_params = f'{addon_id}/?' + urlencode(params) 
             
             self.all_lists.append((url_params, listitem, True))
         
@@ -896,8 +907,30 @@ class tmdb:
            
         #xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
         log.warning(time.time()-start)
-    def fix_data_season(self,data,html,order):
+    def get_trakt_seasons(self,id):
+        from  resources.modules.general import call_trakt
+        self.all_tv_w={}
+        self.all_w_tv_data={}
+        self.all_tv_w_ep={}
+        self.season_watched={}
+        log.warning('trakt season')
+        i = (call_trakt('/users/me/watched/shows?extended=full'))
+  
+        for ids in i:
+            if str(ids['show']['ids']['tmdb'])==str(id):
+                
+             
+             for seasons in ids['seasons']:
+              count_episodes=0
+              for ep in seasons['episodes']:
+                
+                count_episodes+=1
+                
+              self.season_watched[str(seasons['number'])]=count_episodes
+        
+    def fix_data_season(self,data,html,order,seasons,id):
              html_get=html.get
+             
              
              
              data_get=data.get
@@ -966,7 +999,12 @@ class tmdb:
              stop_data=False
              if str(data['season_number'])=='0' or str(data['season_number'])=='-1':
                 stop_data=True
-             
+             watched='no'
+             self.season_watched_marked[data.get('season_number',0)]='no'
+             if str(data['season_number']) in str(self.season_watched):
+                if int(self.season_watched[str(data.get('season_number',0))])>=int(seasons.get(data['season_number'],0)):
+                    watched='yes'
+                    self.season_watched_marked[data.get('season_number',0)]='yes'
              if not stop_data:
                  
                  url=f'https://api.themoviedb.org/3/tv/%s/season/%s?api_key={tmdb_key}&language=%s&append_to_response=external_ids'%(id,season,lang)
@@ -989,7 +1027,7 @@ class tmdb:
                  params['tmdbid']=tmdbid
                  params['eng_name']=original_title
                  params['show_original_year']=show_original_year
-                 url_params = 'plugin://plugin.video.injustice/?' + urlencode(params)
+                 url_params = f'{addon_id}/?' + urlencode(params)
                  
                  
                  
@@ -1004,7 +1042,7 @@ class tmdb:
                  
                  data_pre={}
                  data_pre['art']=art
-                 trailer = "plugin://%s?mode=25&id=%s&url=%s" % (addon_id,id,self.tv_movie)
+                 trailer = "%s?mode=25&id=%s&url=%s" % (addon_id,id,self.tv_movie)
                  
                  video_data={}
                  video_data['title']=new_name
@@ -1027,21 +1065,30 @@ class tmdb:
                 
                  
                  
-    def get_trd_season(self,html):
+    def get_trd_season(self,html,seasons):
+        
+        id=html['id']
+        if Addon.getSetting("trakt_access_token")!='' and Addon.getSetting("trakt_info")=='true':
+            self.get_trakt_seasons(id)
+        self.season_watched_marked={}
         with concurrent.futures.ThreadPoolExecutor() as executor:
                 futures = []
                 i=0
                 for data in html['seasons']:
                     
-                    futures.append(executor.submit(self.fix_data_season, data=data,html=html,order=i))
+                    futures.append(executor.submit(self.fix_data_season, data=data,html=html,order=i,seasons=seasons,id=id))
                     i+=1
                 wait(futures)
         return self.all_d
     def get_seasons(self):
         html=cache.get(self.get_response,24,self.url, table='posters')
+        seasons={}
+        for data in html['seasons']:
+            seasons[data['season_number']]=data['episode_count']
+        #self.fix_data_season(data,html,1,seasons,html['id'])
         #self.all_d=self.get_trd_season(html)
-        
-        self.all_d=cache.get(self.get_trd_season,24,html, table='posters')
+        #self.fix_data_season(html['seasons'][0],html,1)
+        self.all_d=cache.get(self.get_trd_season,24,html,seasons, table='posters')
         self.simple_data=True
         self.data_type='seasons'
         self.add_dir()
@@ -1142,7 +1189,7 @@ class tmdb:
          params['tmdbid']=id
          params['eng_name']=original_title
          params['show_original_year']=year
-         url_params = 'plugin://plugin.video.injustice/?' + urlencode(params)
+         url_params = f'{addon_id}/?' + urlencode(params)
          
          
          
@@ -1157,7 +1204,7 @@ class tmdb:
          
          data_pre={}
          data_pre['art']=art
-         trailer = "plugin://%s?mode=25&id=%s&url=%s" % (addon_id,id,self.tv_movie)
+         trailer = "%s?mode=25&id=%s&url=%s" % (addon_id,id,self.tv_movie)
          
          video_data={}
          video_data['title']=new_name

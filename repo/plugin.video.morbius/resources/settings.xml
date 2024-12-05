@@ -2,8 +2,9 @@
 <settings>
 	<category label="General">
 		
+		<setting id="trailer_before_amovie"  type="number"  label="Play trailers before a movie"  default="0"/>
 		
-		<setting id="theme" type="enum" label="32205" values="Morbius"  default="0" />
+		<setting id="theme" type="enum" label="32205" values="Morbius|"  default="0" />
 		
 		<setting id="num_p"  type="number"  label="32206" visible="true" default="1"/>
 		<setting id="order_networks" type="enum" label="32207" lvalues="32208|32209|32210"  default="0" />
@@ -178,7 +179,6 @@
 		<setting id="snow" label="snow" type="bool"  default="true" />
 		<setting id="sol" label="sol" type="bool"  default="true" />
 		<setting id="tech" label="tech" type="bool"  default="true" />
-		<setting id="tele" label="tele [COLOR lightblue](Free)[/COLOR]" type="bool"  default="true" />
 		<setting id="tfunk" label="tfunk" type="bool"  default="true" />
 		<setting id="tkitty" label="tkitty" type="bool"  default="true" />
 		<setting id="torio" label="torio" type="bool"  default="true" />
@@ -215,7 +215,6 @@
 		<setting id="snow_tv" label="snow" type="bool"  default="true" />
 		<setting id="sol_tv" label="sol" type="bool"  default="true" />
 		<setting id="tech_tv" label="tech" type="bool"  default="true" />
-		<setting id="tele_tv" label="tele [COLOR lightblue](Free)[/COLOR]" type="bool"  default="true" />
 		<setting id="tfunk_tv" label="tfunk" type="bool"  default="true" />
 		<setting id="tkitty_tv" label="tkitty" type="bool"  default="true" />
 		<setting id="torio_tv" label="torio" type="bool"  default="true" />

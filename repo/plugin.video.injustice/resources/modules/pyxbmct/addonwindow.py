@@ -188,7 +188,7 @@ class CompareMixin(object):
 
 class Button(CompareMixin, xbmcgui.ControlButton):
     """
-    Button(label, focusTexture=None, noFocusTexture=None, textOffsetX=CONTROL_TEXT_OFFSET_X, textOffsetY=CONTROL_TEXT_OFFSET_Y, alignment=4, font=None, textColor=None, disabledColor=None, angle=0, shadowColor=None, focusedColor=None)
+    Button(label, focusTexture=None, noFocusTexture=None, textOffsetX=CONTROL_TEXT_OFFSET_X, textOffsetY=CONTROL_TEXT_OFFSET_Y, alignment=4, font=None, textColor=None, disabledColor=None, angle=0, injusticeColor=None, focusedColor=None)
     
     ControlButton class.
     
@@ -214,8 +214,8 @@ class Button(CompareMixin, xbmcgui.ControlButton):
     :type disabledColor: str
     :param angle: angle of control. (``+`` rotates CCW, ``-`` rotates CW)
     :type angle: int
-    :param shadowColor: hex color code of button's label's shadow. (e.g. ``'0xFF000000'``)
-    :type shadowColor: str
+    :param injusticeColor: hex color code of button's label's injustice. (e.g. ``'0xFF000000'``)
+    :type injusticeColor: str
     :param focusedColor: hex color code of focused button's label. (e.g. ``'0xFF00FFFF'``)
     :type focusedColor: str
     
@@ -236,7 +236,7 @@ class Button(CompareMixin, xbmcgui.ControlButton):
 
 class RadioButton(CompareMixin, xbmcgui.ControlRadioButton):
     """
-    RadioButton(label, focusTexture=None, noFocusTexture=None, textOffsetX=None, textOffsetY=None, _alignment=None, font=None, textColor=None, disabledColor=None, angle=None, shadowColor=None, focusedColor=None, focusOnTexture=None, noFocusOnTexture=None, focusOffTexture=None, noFocusOffTexture=None)
+    RadioButton(label, focusTexture=None, noFocusTexture=None, textOffsetX=None, textOffsetY=None, _alignment=None, font=None, textColor=None, disabledColor=None, angle=None, injusticeColor=None, focusedColor=None, focusOnTexture=None, noFocusOnTexture=None, focusOffTexture=None, noFocusOffTexture=None)
     
     ControlRadioButton class.
     
@@ -262,8 +262,8 @@ class RadioButton(CompareMixin, xbmcgui.ControlRadioButton):
     :type disabledColor: str
     :param angle: angle of control. (+ rotates CCW, - rotates CW)
     :type angle: int
-    :param shadowColor: hexstring -- color of radio button's label's shadow. (e.g. '0xFF000000')
-    :type shadowColor: str
+    :param injusticeColor: hexstring -- color of radio button's label's injustice. (e.g. '0xFF000000')
+    :type injusticeColor: str
     :param focusedColor: hexstring -- color of focused radio button's label. (e.g. '0xFF00FFFF')
     :type focusedColor: str
     :param focusOnTexture: filename for radio focused/checked texture.
