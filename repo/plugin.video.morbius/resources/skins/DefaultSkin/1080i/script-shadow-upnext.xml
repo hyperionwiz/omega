@@ -35,7 +35,7 @@
 						<left>-2</left>
 						<width>254</width>
 						<height>144</height>
-						<texture>morbius.png</texture>
+						<texture>shadow.png</texture>
 					</control>
 					<control type="image">
 						<width>250</width>
@@ -50,7 +50,7 @@
 						<height>110</height>
 						<font>font12</font>
 						<textcolor>ffffffff</textcolor>
-						<morbiuscolor>00000000</morbiuscolor>
+						<shadowcolor>00000000</shadowcolor>
 						<align>right</align>
 						<autoscroll delay="3000" time="3000" repeat="10000">!Control.HasFocus(13)</autoscroll>
 						<label>$INFO[Window.Property(plot)]</label>
@@ -107,7 +107,7 @@
 							<textcolor>ddffffff</textcolor>
 							<focusedcolor>eeffffff</focusedcolor>
 							<selectedcolor>ddffffff</selectedcolor>
-							<morbiuscolor>22000000</morbiuscolor>
+							<shadowcolor>22000000</shadowcolor>
 							<aligny>center</aligny>
 							<align>center</align>
 							<texturefocus border="10" colordiffuse="FF172A91">button.png</texturefocus>
@@ -130,7 +130,7 @@
 							<textcolor>ddffffff</textcolor>
 							<focusedcolor>eeffffff</focusedcolor>
 							<selectedcolor>ddffffff</selectedcolor>
-							<morbiuscolor>22000000</morbiuscolor>
+							<shadowcolor>22000000</shadowcolor>
 							<aligny>center</aligny>
 							<align>center</align>
 							<texturefocus border="10" colordiffuse="FF172A91">button.png</texturefocus>
@@ -217,7 +217,7 @@
 						<aligny>center</aligny>
 						<font>font25_title</font>
 						<textcolor>eeffffff</textcolor>
-						<morbiuscolor>00000000</morbiuscolor>
+						<shadowcolor>00000000</shadowcolor>
 						
 						
 					</control>
@@ -229,7 +229,7 @@
 						<aligny>center</aligny>
 						<font>font25_title</font>
 						<textcolor>eeffffff</textcolor>
-						<morbiuscolor>00000000</morbiuscolor>
+						<shadowcolor>00000000</shadowcolor>
 						<label>Episode Ends in [COLOR FFFF4081]$INFO[Player.TimeRemaining,,][/COLOR]</label>
 						
 					</control>
@@ -246,7 +246,7 @@
 							<aligny>center</aligny>
 							<font>font12</font>
 							<textcolor>eeffffff</textcolor>
-							<morbiuscolor>00000000</morbiuscolor>
+							<shadowcolor>00000000</shadowcolor>
 							<label>$INFO[Window.Property(tvshowtitle),, - ]  </label>
 							<visible>true</visible>
 						</control>
@@ -256,7 +256,7 @@
 							<aligny>center</aligny>
 							<font>font12</font>
 							<textcolor>eeffffff</textcolor>
-							<morbiuscolor>00000000</morbiuscolor>
+							<shadowcolor>00000000</shadowcolor>
 							<label>$INFO[Window.Property(year),,   ]</label>
 							<visible>!String.IsEmpty(Window.Property(year))</visible>
 						</control>
@@ -275,7 +275,7 @@
 							<label>$INFO[Window.Property(rating), ,   ]</label>
 							<font>font12</font>
 							<textcolor>eeffffff</textcolor>
-							<morbiuscolor>00000000</morbiuscolor>
+							<shadowcolor>00000000</shadowcolor>
 							<visible>!String.IsEmpty(Window.Property(rating))</visible>
 						</control>
 					</control>

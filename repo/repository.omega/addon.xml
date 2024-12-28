@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.omega" name="Omega Repo" version="1.0.8" provider-name="The Hood">
+<addon id="repository.omega" name="Omega Repo" version="1.0.9" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>

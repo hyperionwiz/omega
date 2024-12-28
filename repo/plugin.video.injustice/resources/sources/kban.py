@@ -61,7 +61,8 @@ def get_links(tv_movie,original_title,season_n,episode_n,season,episode,show_ori
             m=re.compile(regx,re.DOTALL).findall(items)
         
             for title,link,size in m:
-                             
+                             if 'magnet' not in link:
+                                 continue
                              
                              if stop_all==1:
                                 break

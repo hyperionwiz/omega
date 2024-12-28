@@ -72,7 +72,7 @@
 				<haspath>false</haspath>
 				<font>font-40</font>
 				<textcolor>FFB2D4F5</textcolor>
-				<morbiuscolor>ff000000</morbiuscolor>
+				<shadowcolor>ff000000</shadowcolor>
 				<wrapmultiline>false</wrapmultiline>
 				<scrollspeed>50</scrollspeed>
 				<scrollsuffix> - </scrollsuffix>

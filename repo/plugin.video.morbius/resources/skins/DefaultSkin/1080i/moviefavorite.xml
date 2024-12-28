@@ -85,7 +85,7 @@
 				<aligny>center</aligny>
 				<font>font-20</font>
 				<textcolor>eeffffff</textcolor>
-				<morbiuscolor>00000000</morbiuscolor>
+				<shadowcolor>00000000</shadowcolor>
 				
 				
 			</control>
@@ -97,7 +97,7 @@
 				<aligny>center</aligny>
 				<font>font-20</font>
 				<textcolor>eeffffff</textcolor>
-				<morbiuscolor>00000000</morbiuscolor>
+				<shadowcolor>00000000</shadowcolor>
 				
 				
 			</control>

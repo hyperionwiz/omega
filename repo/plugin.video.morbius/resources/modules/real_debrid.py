@@ -1,21 +1,25 @@
  # -*- coding: utf-8 -*-
-import  json, re, time,logging,sys,xbmcgui,xbmc,os
+import  json, re, time,logging,sys,xbmcgui,xbmc,os,xbmcvfs
 from  resources.modules.client import get_html
 global play_status_rd,break_window_rd
 from resources.modules import log
 play_status_rd=''
 break_window_rd=False
-base_header={
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
 
-            'Pragma': 'no-cache',
-            
-           
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
-            }
+base_header = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+    # 'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Pragma': 'no-cache',
+    'Cache-Control': 'no-cache',
+}
 
 import xbmcaddon
 Addon = xbmcaddon.Addon()
@@ -24,7 +28,7 @@ try:
 except Exception as e:
     resuaddon=None
     pass
-log.warning('resuaddon:'+str(resuaddon))
+
 def copy2clip(txt):
     import subprocess
     platform = sys.platform
@@ -50,7 +54,7 @@ def copy2clip(txt):
 def colorString(text, color=None):
     
 
-    if color == 'default' or color== '' or color == None:
+    if color == 'default' or color == '' or color == None:
         color = ''
         if color == '':
             color = 'deepskyblue'
@@ -273,7 +277,27 @@ class RealDebrid:
      
         response = get_html(url).json()
 
-        if 1:
+        if Addon.getSetting("auto_rd")=='true':
+                status=self.auto_auth(response['user_code'],response)
+                if status=='bad':
+                    copy2clip(response['user_code'])
+        
+        
+                    dp = xbmcgui . DialogProgress ( )
+                    dp.create("Real Debrid Auth","Open this link in a browser: " + ' %s' % colorString('https://real-debrid.com/device'), "Enter the code: " + ' %s' % colorString(response['user_code']), 'This code has been copied to your clipboard')
+                    dp.update(-1, "Open this link in a browser: " + ' %s' % colorString('https://real-debrid.com/device'), "Enter the code: " + ' %s' % colorString(response['user_code']), 'This code has been copied to your clipboard')
+                    
+                
+                    self.OauthTimeout = int(response['expires_in'])
+                    self.OauthTimeStep = int(response['interval'])
+                    self.DeviceCode = response['device_code']
+                    while self.ClientSecret == '':
+                        self.auth_loop(dp)
+                        if dp.iscanceled():
+                          dp.close()
+                          return 0
+                    self.token_request()
+        else:
             copy2clip(response['user_code'])
 
         
@@ -350,6 +374,7 @@ class RealDebrid:
         url = self.OauthUrl + 'token'
         response = get_html(url, data=postData).json()
         #response =self.post_url(url, postData=postData)
+        log.warning('Error Rd::')
         log.warning(response)
         if 'error_code' in response:
             xbmcgui.Dialog().ok(Addon.getAddonInfo('name'), Addon.getLocalizedString(32286)+', [B]'+'error_code'+'[/B]')
@@ -378,7 +403,8 @@ class RealDebrid:
         Addon.setSetting('rd.auth', self.token)
         Addon.setSetting('rd.refresh', self.refresh)
         Addon.setSetting('rd.expiry', str(time.time() + int(response['expires_in'])))
- 
+        log.warning('response2:OK')
+        
         ###############################################
         # To be FINISHED FINISH ME
         ###############################################
@@ -405,21 +431,24 @@ class RealDebrid:
                 url += "?auth_token=%s" % self.token
             else:
                 url += "&auth_token=%s" % self.token
+        log.warning(f'url:{url},postData:{postData}')
         if dp:
             dp.create("Real Debrid",Addon.getLocalizedString(32287)+'\n'+ "send req."+'\n'+ '')
             play_status_rd="send req."
+        
         response = get_html(url, data=postData).json()
+        log.warning(response)
+        
         if dp:
             dp.create("Real Debrid",Addon.getLocalizedString(32287)+'\n'+ str(response)+'\n'+ '')
             play_status_rd=str(response)
-            
         if 'error_code' in response:
-            log.warning(response)
+            log.warning('Error Code Rd:'+str(response))
             self.count_rd+=1
                 
             if self.count_rd>4:
-                #xbmcgui.Dialog().ok(str(response['error_code']), 'Error in RD8 comm Try another link or check subscription')
-                return None
+                #xbmcgui.Dialog().ok(str(response['error_code']), 'Error in RD80 comm Try another link or check subscription')
+                return '0'
             log.warning('response2:'+str(response))
             if dp:
                 dp.create("Real Debrid",Addon.getLocalizedString(32287)+'\n'+ str('refreshToken')+'\n'+ '')
@@ -432,7 +461,7 @@ class RealDebrid:
             xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), 'Refresh Token:'+str(self.count_refresh))))
             self.count_refresh+=1
             if self.count_refresh>4:
-                    xbmcgui.Dialog().ok('Error', 'Error in RD7 comm')
+                    #xbmcgui.Dialog().ok('Error', 'Error in RD7 comm')
                     return '0'
                     
         jresonce= (response)
@@ -493,19 +522,29 @@ class RealDebrid:
             else:
                 url += "&auth_token=%s" % self.token
         a=time.time()
-        log.warning('Send req time:'+str(a))
-       
+        
         response = get_html(url,headers=base_header).json()
-        log.warning('Got req time:'+str(a))
-        log.warning(url)
+        
+        
         if 'error_code' in response:
+            self.count_rd+=1
             log.warning(url)
             log.warning(response)
-            self.count_rd+=1
+            log.warning(self.count_rd)
             if self.count_rd>4:
-                        xbmcgui.Dialog().ok('Error', 'Error in  RD')
+                        self.count_rd=0
+                        response = get_html(self.BaseUrl +'user'+ "?auth_token=%s" % self.token,headers=base_header).json()
+                       
+                        
+                        st='בעיה עם RD תבדוק את מצב המנוי שלך'+'\n'
+                        try:
+                            st=st+'[COLOR lightblue][B]'+'תוקף המנוי עד: '+response['expiration'].replace('T',' ').replace('Z',' ')+'[/B][/COLOR]'
+                        except:
+                            pass
+                        #xbmcgui.Dialog().ok('שגיאה',st )
                         return '0'
             self.refreshToken()
+            
             response = self.get_url(original_url, fail_check=False)
             
         else:
@@ -546,12 +585,16 @@ class RealDebrid:
 
     def addMagnet(self, magnet,dp=None):
         global play_status_rd
+        log.warning(f'postData')
         postData = {'magnet': magnet}
+        log.warning(f'postData:{postData},dp:{dp}')
         url = 'torrents/addMagnet'
         if dp:
             dp.create("Real Debrid",Addon.getLocalizedString(32287)+'\n'+"Send Post"+'\n'+ '')
         play_status_rd="Send Post"
+        
         response = self.post_url(url, postData,dp=dp)
+        log.warning(f'url:{url},postData:{postData},response:{response}')
         if dp:
             dp.create("Real Debrid",Addon.getLocalizedString(32287)+'\n'+ "Got Post"+'\n'+ '')
         play_status_rd="Got Post"
@@ -710,6 +753,8 @@ class RealDebrid:
             return 'return'
     def singleMagnetToLink(self, magnet):
         global break_window_rd,play_status_rd
+        magnet=magnet.replace('tagnet:?xt','magnet:?xt')
+        
         torrent=''
         Addon = xbmcaddon.Addon()
         try:
@@ -720,8 +765,9 @@ class RealDebrid:
                 dp=None
             play_status_rd=Addon.getLocalizedString(32287)
             
-            
+            log.warning(f'self.ClientSecret:{self.ClientSecret}')
             if self.ClientSecret == '':
+                log.warning(f'IN self.ClientSecret:{self.ClientSecret}')
                 self.auth()
             '''
             hash = str(re.findall(r'btih:(.*?)&', magnet)[0].lower())
@@ -735,10 +781,12 @@ class RealDebrid:
                         for key in hashCheck[hash]['rd'][0]:
                             fileIDString += ',' + key
             '''
+            
             torrent = self.addMagnet(magnet,dp=dp)
+            log.warning(f'torrent:{torrent}')
             if 'uri' not in torrent:
-                xbmcgui.Dialog().ok(str(torrent['error_code']), 'Error in RD8 comm Try another link or check subscription')
-                return '0'
+                #xbmcgui.Dialog().ok(str(torrent['error_code']), 'Error in RD8 comm Try another link or check subscription')
+                return None
             '''
             if 'uri' not in torrent:
                 xbmcgui.Dialog().ok("error in RD",torrent)
@@ -765,11 +813,11 @@ class RealDebrid:
                 dp.create("Real Debrid","Got Answer"+'\n'+ ""+'\n'+ '')
             play_status_rd="Got Answer"
             jump=False
-     
+            log.warning(f'res:{res}')
             if 'status' not in res: 
                 if 'error' in res:
                     xbmcgui.Dialog().ok("error in RD1",res['error'])
-                    
+            
             if res['status']=='waiting_files_selection':
                    
                 fileIDString = ''
@@ -815,7 +863,7 @@ class RealDebrid:
                 play_status_rd=Addon.getLocalizedString(32293)
                 self.deleteTorrent(torrent['id'])
             except Exception as e:
-                xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), str(e))))
+                xbmc.executebuiltin(u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), str(e)))
                 if 'id' in torrent:
                     self.deleteTorrent(torrent['id'])
                 return None
@@ -842,7 +890,7 @@ class RealDebrid:
                 
             log.warning(torrent)
             line = linecache.getline(filename, lineno, f.f_globals)
-            #xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), 'Line:'+str(lineno)+' E:'+str(e))))
+            #xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), 'Line:'+str(lineno)+' E:'+str(e))).encode('utf-8'))
             log.warning('ERROR IN RD3 torrent :'+str(lineno))
             log.warning('inline:'+line)
             log.warning(e)
@@ -858,9 +906,16 @@ class RealDebrid:
             except:
                 pass
             return None
+    def supported_video_extensions(self):
+        supported_video_extensions = xbmc.getSupportedMedia('video').split('|')
+        return [i for i in supported_video_extensions if not i in ('','.zip')]
+        
     def singleMagnetToLink_season(self, magnet,tv_movie,season,episode,dp=None):
         global break_window_rd,play_status_rd
         Addon = xbmcaddon.Addon()
+            
+        
+        
         try:
             if Addon.getSetting('new_play_window')=='false':
                 if not dp:
@@ -870,18 +925,7 @@ class RealDebrid:
             
             if self.ClientSecret == '':
                 self.auth()
-            '''
-            hash = str(re.findall(r'btih:(.*?)&', magnet)[0].lower())
-            hashCheck = self.checkHash(hash)
-            fileIDString = ''
-        
-            if hash in hashCheck:
-                
-                if 'rd' in hashCheck[hash]:
-                    if len(hashCheck[hash]['rd'])>0:
-                        for key in hashCheck[hash]['rd'][0]:
-                            fileIDString += ',' + key
-            '''
+
           
             try:
                 #hash = str(re.findall(r'btih:(.*?)&', link)[0].lower())
@@ -910,80 +954,38 @@ class RealDebrid:
             key_list_one=[]
            
      
-           
+            extensions=self.supported_video_extensions()
             torrent = self.addMagnet(magnet)
-            if Addon.getSetting('new_play_window')=='false':
-                dp.create("Real Debrid",Addon.getLocalizedString(32193)+'\n'+ ""+'\n'+ '')
-            play_status_rd=Addon.getLocalizedString(32193)
-            res= get_html(torrent['uri']+ "?auth_token=%s" % self.token).json()
-            log.warning(f'res::{res}')
-            jump=False
+            torrent_info = self.torrentInfo(torrent['id'])
             
-            if res['status']=='waiting_files_selection':
-                   
-                fileIDString = ''
+            torrent_keys = [str(item['id']) for item in torrent_info['files'] if item['path'].lower().endswith(tuple(extensions))]
+            torrent_keys = ','.join(torrent_keys)
+            
+            link=self.torrentSelect(torrent['id'], torrent_keys)#go
+            for ended in (1, 2, 3):
+                xbmc.sleep(500)
+                link = self.torrentInfo(torrent['id'])
                 
-                f_id=''
-                if len(res['files'])>0:
-                    max_size=0
-                    sel=[]
-                    countet_index=0
-                   
-                    for items in res['files']:
-                        if tv_movie=='tv':
-                           key_list_one=[]
-                           
-                           if  '.mkv' in items['path'] or '.avi' in items['path']  or '.mp4' in items['path'] :
-                        
-                              if 's%se%s.'%(season,episode)  in items['path'].lower() or 's%se%s '%(season,episode)  in items['path'].lower() or '-s%se%s-'%(season,episode)  in items['path'].lower():
-                                log.warning('Found Key_list')
-                                
-                                f_id=str(items['id'])
-                                key_list_one=[f_id]
-                                break
-                        else:
-                            
-                            if items['bytes']>max_size:
-                                max_size=items['bytes']
-                              
-                                if 'id' in items:
-                                    f_id=str(items['id'])
-                                    
-                            key_list=[f_id]
-                        
-                    start_file=','.join(key_list_one)
-                    if  len(key_list_one)==0:
-                        self.deleteTorrent(torrent['id'])
-                        return None
-                    
-                    if 'id' in torrent:
-                        log.warning('start_file2::')
-                        log.warning(start_file)
-                        self.torrentSelect(torrent['id'], start_file)#go
-                        jump=True
+                if 'ended' in link: break
             else:
                 self.deleteTorrent(torrent['id'])
                 return None
-            f_size=0
-            size=0
-            status=''
-         
+                
             
-            if Addon.getSetting('new_play_window')=='false':
-                if not dp:
-                    dp.close()
+                
+            
             try:
                 #link = self.torrentSelect(torrent['id'],  start_file)
                 
-                link = self.torrentInfo(torrent['id'])
-                log.warning(link)
+                
+                
                 counter_index=0
                 if tv_movie=='movie':
                     selected_index=0
                 for items in link['files']:
         
              
-                   if str(items['id']) in key_list_one:
+                   
                     
                     if  '.mkv' in items['path'] or '.avi' in items['path']  or '.mp4' in items['path'] :
                       
@@ -1022,25 +1024,8 @@ class RealDebrid:
                         self.deleteTorrent(torrent['id'])
                         log.warning('Error torrent no video:'+str(link))
                         return None
+                
                 else:
-                    
-                    if key_list_one!=[]:
-                        play_status_rd="Trying One link"
-                        
-                        self.deleteTorrent(torrent['id'])
-                        
-                        torrent = self.addMagnet(magnet)
-                        
-                        self.torrentSelect(torrent['id'], ','.join(key_list_one))#go
-                        link = self.torrentInfo(torrent['id'])
-                        
-                        if 'links' in link and len(link['links'])>0:
-                            link = self.unrestrict_link(link['links'][selected_index])
-                            
-                        
-                            self.deleteTorrent(torrent['id'])
-                            return link
-                        
                     xbmc.executebuiltin((u'Notification(%s,%s)' % (Addon.getAddonInfo('name'), 'No streamable link found_2')))
                     self.deleteTorrent(torrent['id'])
                     return None

@@ -5966,7 +5966,9 @@ def get_sources(name,url,iconimage,fanart,description,data,original_title,id,sea
                         hash =lk.split('btih:')[1]
                     except:
                         pass
-                    
+               if hash==None:
+                   log.warning(f'items:{items},Bad Hash:{lk}')
+                   continue
                if hash.lower() in all_ok:
                 
                 all_cached+=1
@@ -7103,7 +7105,7 @@ def search_next(dd,tv_movie,id,heb_name,playlist,iconimage,enable_playlist):
         if enable_playlist:
             playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
             playlist.clear()
-        next_up_page = UpNext("script-morbius-upnext.xml",Addon.getAddonInfo('path'), "DefaultSkin", "1080i")
+        next_up_page = UpNext("script-shadow-upnext.xml",Addon.getAddonInfo('path'), "DefaultSkin", "1080i")
         
         ep=load_test_data(name_n,image_n,image_n,plot_n,name_n,season,episode,list)
         

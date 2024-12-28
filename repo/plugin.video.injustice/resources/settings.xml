@@ -4,7 +4,7 @@
 		
 		<setting id="trailer_before_amovie"  type="number"  label="Play trailers before a movie"  default="0"/>
 		
-		<setting id="theme" type="enum" label="32205" values="Injustice"  default="0" />
+		<setting id="theme" type="enum" label="32205" values="Injustice|"  default="0" />
 		
 		<setting id="num_p"  type="number"  label="32206" visible="true" default="1"/>
 		<setting id="order_networks" type="enum" label="32207" lvalues="32208|32209|32210"  default="0" />

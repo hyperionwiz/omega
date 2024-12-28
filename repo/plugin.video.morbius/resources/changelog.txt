@@ -1,4 +1,8 @@
-[COLOR yellow][B]v3.5.9[/B]
+[COLOR yellow][B]v3.6.4[/B]
+* fix error while scraping.
+[COLOR lightblue][B]v3.6.2[/B]
+* fixed tv shows not playing links using RD.
+[COLOR lightblue][B]v3.5.9[/B]
 * Fixed trailer before movies.
 * added cached string for cached links.
 * order the cached links first in the list.
@@ -85,7 +89,7 @@ simply select years range, and combined categories(like sci-fi and mystery) and 
 * fix PM and AD error.
 * fix double auth. for PM and AD.
 * Now auth of PM and AD will auth resolveurl as well, 
-  if you are auth in resolveurl no need to auth in morbius too.
+  if you are auth in resolveurl no need to auth in shadow too.
 [COLOR lightblue][B]v3.1.6[/B]
 * fix play from here in jen lists.
 * fix error "selected index not found" when playing.
@@ -93,7 +97,7 @@ simply select years range, and combined categories(like sci-fi and mystery) and 
 [COLOR lightblue][B]v3.1.5[/B]
 * now you can activate RD,PM and AD all at the same time.
 * you can activate download first subtitle without the subtitle window (in the settings).
-* you can choose to scrape scrubsv2 with morbius results, so you will get free link as well (slower).
+* you can choose to scrape scrubsv2 with shadow results, so you will get free link as well (slower).
 enjoy.
 
 [COLOR lightblue][B]v3.1.3[/B]

@@ -24,6 +24,7 @@ except:
 hostprDict = ['1fichier.com', 'oboom.com', 'rapidgator.net', 'rg.to', 'uploaded.net',
                    'uploaded.to', 'ul.to', 'filefactory.com', 'nitroflare.com', 'turbobit.net', 'uploadrocket.net','uploadgig.com']
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
+lang=xbmc.getLanguage(0)
 if KODI_VERSION<=18:
     xbmc_tranlate_path=xbmc.translatePath
 else:
@@ -527,16 +528,16 @@ def get_imdb_data(info,name_o,image,source,type):
            info['title']=name_o.replace('.',' ')
          if 1:
           if 'year' in info:
-            tmdb_data=f"https://api.themoviedb.org/3/search/%s?api_key={tmdb_key}&query=%s&year=%s&language=he&append_to_response=external_ids"%(type,urllib.quote_plus(info['title']),info['year'])
+            tmdb_data=f"https://api.themoviedb.org/3/search/%s?api_key={tmdb_key}&query=%s&year=%s&language={lang}&append_to_response=external_ids"%(type,urllib.quote_plus(info['title']),info['year'])
             year_n=info['year']
           else:
-            tmdb_data=f"https://api.themoviedb.org/3/search/%s?api_key={tmdb_key}&query=%s&language=he&append_to_response=external_ids"%(type,urllib.quote_plus(info['title']))
+            tmdb_data=f"https://api.themoviedb.org/3/search/%s?api_key={tmdb_key}&query=%s&language={lang}&append_to_response=external_ids"%(type,urllib.quote_plus(info['title']))
 
           all_data=get_html(tmdb_data).json()
           if 'results' in all_data:
            if len(all_data['results'])>0:
                 if (all_data['results'][0]['id'])!=None:
-                    url=f'https://api.themoviedb.org/3/%s/%s?api_key={tmdb_key}&language=he&append_to_response=external_ids'%(type,all_data['results'][0]['id'])
+                    url=f'https://api.themoviedb.org/3/%s/%s?api_key={tmdb_key}&language={lang}&append_to_response=external_ids'%(type,all_data['results'][0]['id'])
                     try:
                         all_d2=get_html(url).json()
                         imdb_id=all_d2['external_ids']['imdb_id']
