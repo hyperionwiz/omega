@@ -45,8 +45,6 @@ def main_menu():
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]Morbius Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Morbius Movies by year',search_db='')
     all_d.append(aa)
-    aa=addDir3('[B][COLOR mediumslateblue]Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
-    all_d.append(aa)
     aa=addDir3('[B][COLOR mediumslateblue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Disney',search_db='')
     all_d.append(aa)    
     aa=addDir3('[B][COLOR mediumslateblue]Intros[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/intro.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Intros',search_db='')

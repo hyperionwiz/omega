@@ -43,9 +43,6 @@ def main_menu():
     
     aa=addDir3('[B][COLOR blue]Julies Favs[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/julie_xml/julie_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Julies Favs',search_db='')
     all_d.append(aa)
-    aa=addDir3('[B][COLOR blue] Christmas[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/christmas.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Pics/Christmas/santa.jpg','Christmas',search_db='')
-    all_d.append(aa)
-    
     aa=addDir3('[B][COLOR blue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
     all_d.append(aa)
     if Addon.getSetting('movie_world')=='true':

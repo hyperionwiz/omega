@@ -65,32 +65,6 @@
         See Changelog on Tools menu
         </news>
     </extension>
-</addon><addon id="plugin.video.blacklightning" name="Black Lightning" provider-name="cMaN" version="2.1.7">
-  <requires>
-        <import addon="script.module.six" version="0.0.1" />
-		<import addon="script.module.requests" />
-		<import addon="script.module.resolveurl" />
-		<import addon="script.module.beautifulsoup4" />
-		<import addon="plugin.video.youtube" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-        <provides>video</provides>
-  </extension>
-  <extension library="resources/modules/" point="xbmc.python.module" />
-  <extension library="resources/sources/" point="xbmc.python.module" />
-  <extension library="resources/" point="xbmc.python.module" />
-  <extension point="xbmc.addon.metadata">
-	<reuselanguageinvoker>true</reuselanguageinvoker>
-    <summary lang="en" />
-    <description lang="en" />
-	
-    <platform>all</platform>
-	<assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-    </assets>
-  </extension>
-  
 </addon><addon id="plugin.video.injustice" name="Injustice" version="3.6.4" provider-name="The Hood">
   <requires>
 	<import addon="script.module.requests" /> 
@@ -284,7 +258,7 @@
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
-</addon><addon id="repository.omega" name="Omega Repo" version="1.0.9" provider-name="The Hood">
+</addon><addon id="repository.omega" name="Omega Repo" version="1.1.0" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>
