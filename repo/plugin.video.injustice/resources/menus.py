@@ -43,16 +43,19 @@ def main_menu():
     
     aa=addDir3('[B][COLOR blue]Julies Favs[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/julie_xml/julie_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Julies Favs',search_db='')
     all_d.append(aa)
-    aa=addDir3('[B][COLOR blue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://kodiwind.com/hw/build_artwork/morbius/icon1.png','https://kodiwind.com/hw/build_artwork/morbius/fanart.jpg','Disney',search_db='')
+    aa=addDir3('[B][COLOR blue]Injustice Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Injustice Movies by year',search_db='')
     all_d.append(aa)
+    aa=addDir3('[B][COLOR blue]Disney[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/disney/disney_main.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/icon.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/injustice/artwork_injustice/fanart.jpg','Disney',search_db='')
+    all_d.append(aa)
+        
     if Addon.getSetting('movie_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32024),'www',2,BASE_LOGO+'movies.png',all_fanarts['32024'],'Movies')
         all_d.append(aa)
     if Addon.getSetting('tv_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32025),'www',3,BASE_LOGO+'tv.png',all_fanarts['32025'],'TV')
         all_d.append(aa)
-    #aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
-    #all_d.append(aa)
+    aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
+    all_d.append(aa)
     if Addon.getSetting('trakt_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32026),'www',21,BASE_LOGO+'trakt.png',all_fanarts['32026'],'No account needed)')
         all_d.append(aa)
