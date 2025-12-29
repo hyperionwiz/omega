@@ -93,7 +93,7 @@
         See Changelog on Tools menu
         </news>
     </extension>
-</addon><addon id="plugin.video.injustice" name="Injustice" version="3.6.4a" provider-name="The Hood">
+</addon><addon id="plugin.video.injustice" name="Injustice" version="3.6.4b" provider-name="The Hood">
   <requires>
 	<import addon="script.module.requests" /> 
   </requires>

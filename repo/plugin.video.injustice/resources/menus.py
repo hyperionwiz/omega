@@ -54,8 +54,8 @@ def main_menu():
     if Addon.getSetting('tv_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32025),'www',3,BASE_LOGO+'tv.png',all_fanarts['32025'],'TV')
         all_d.append(aa)
-    aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
-    all_d.append(aa)
+    #aa=addDir3('One Click free','www',198,'https://i1.wp.com/reviewvpn.com/wp-content/uploads/2020/07/How-to-Install-T2K-One-Click-Movie-Addon-e1595234117323.png?fit=305%2C321&ssl=1','https://i1.wp.com/paulsohn.org/wp-content/uploads/2012/05/movie-click.jpg','Movies')
+    #all_d.append(aa)
     if Addon.getSetting('trakt_world')=='true':
         aa=addDir3(Addon.getLocalizedString(32026),'www',21,BASE_LOGO+'trakt.png',all_fanarts['32026'],'No account needed)')
         all_d.append(aa)
