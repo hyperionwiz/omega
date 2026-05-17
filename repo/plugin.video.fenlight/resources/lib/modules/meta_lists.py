@@ -1,113 +1,78 @@
 # -*- coding: utf-8 -*-
 
-years_movies = [
-{'name': '2030', 'id': 2030}, {'name': '2029', 'id': 2029}, {'name': '2028', 'id': 2028}, {'name': '2027', 'id': 2027}, {'name': '2026', 'id': 2026}, {'name': '2025', 'id': 2025},
-{'name': '2024', 'id': 2024}, {'name': '2023', 'id': 2023}, {'name': '2022', 'id': 2022}, {'name': '2021', 'id': 2021}, {'name': '2020', 'id': 2020}, {'name': '2019', 'id': 2019},
-{'name': '2018', 'id': 2018}, {'name': '2017', 'id': 2017}, {'name': '2016', 'id': 2016}, {'name': '2015', 'id': 2015}, {'name': '2014', 'id': 2014}, {'name': '2013', 'id': 2013},
-{'name': '2012', 'id': 2012}, {'name': '2011', 'id': 2011}, {'name': '2010', 'id': 2010}, {'name': '2009', 'id': 2009}, {'name': '2008', 'id': 2008}, {'name': '2007', 'id': 2007},
-{'name': '2006', 'id': 2006}, {'name': '2005', 'id': 2005}, {'name': '2004', 'id': 2004}, {'name': '2003', 'id': 2003}, {'name': '2002', 'id': 2002}, {'name': '2001', 'id': 2001},
-{'name': '2000', 'id': 2000}, {'name': '1999', 'id': 1999}, {'name': '1998', 'id': 1998}, {'name': '1997', 'id': 1997}, {'name': '1996', 'id': 1996}, {'name': '1995', 'id': 1995},
-{'name': '1994', 'id': 1994}, {'name': '1993', 'id': 1993}, {'name': '1992', 'id': 1992}, {'name': '1991', 'id': 1991}, {'name': '1990', 'id': 1990}, {'name': '1989', 'id': 1989},
-{'name': '1988', 'id': 1988}, {'name': '1987', 'id': 1987}, {'name': '1986', 'id': 1986}, {'name': '1985', 'id': 1985}, {'name': '1984', 'id': 1984}, {'name': '1983', 'id': 1983},
-{'name': '1982', 'id': 1982}, {'name': '1981', 'id': 1981}, {'name': '1980', 'id': 1980}, {'name': '1979', 'id': 1979}, {'name': '1978', 'id': 1978}, {'name': '1977', 'id': 1977},
-{'name': '1976', 'id': 1976}, {'name': '1975', 'id': 1975}, {'name': '1974', 'id': 1974}, {'name': '1973', 'id': 1973}, {'name': '1972', 'id': 1972}, {'name': '1971', 'id': 1971},
-{'name': '1970', 'id': 1970}, {'name': '1969', 'id': 1969}, {'name': '1968', 'id': 1968}, {'name': '1967', 'id': 1967}, {'name': '1966', 'id': 1966}, {'name': '1965', 'id': 1965},
-{'name': '1964', 'id': 1964}, {'name': '1963', 'id': 1963}, {'name': '1962', 'id': 1962}, {'name': '1961', 'id': 1961}, {'name': '1960', 'id': 1960}, {'name': '1959', 'id': 1959},
-{'name': '1958', 'id': 1958}, {'name': '1957', 'id': 1957}, {'name': '1956', 'id': 1956}, {'name': '1955', 'id': 1955}, {'name': '1954', 'id': 1954}, {'name': '1953', 'id': 1953},
-{'name': '1952', 'id': 1952}, {'name': '1951', 'id': 1951}, {'name': '1950', 'id': 1950}, {'name': '1949', 'id': 1949}, {'name': '1948', 'id': 1948}, {'name': '1947', 'id': 1947},
-{'name': '1946', 'id': 1946}, {'name': '1945', 'id': 1945}, {'name': '1944', 'id': 1944}, {'name': '1943', 'id': 1943}, {'name': '1942', 'id': 1942}, {'name': '1941', 'id': 1941},
-{'name': '1940', 'id': 1940}, {'name': '1939', 'id': 1939}, {'name': '1938', 'id': 1938}, {'name': '1937', 'id': 1937}, {'name': '1936', 'id': 1936}, {'name': '1935', 'id': 1935},
-{'name': '1934', 'id': 1934}, {'name': '1933', 'id': 1933}, {'name': '1932', 'id': 1932}, {'name': '1931', 'id': 1931}, {'name': '1930', 'id': 1930}, {'name': '1929', 'id': 1929},
-{'name': '1928', 'id': 1928}, {'name': '1927', 'id': 1927}, {'name': '1926', 'id': 1926}, {'name': '1925', 'id': 1925}, {'name': '1924', 'id': 1924}, {'name': '1923', 'id': 1923},
-{'name': '1922', 'id': 1922}, {'name': '1921', 'id': 1921}, {'name': '1920', 'id': 1920}, {'name': '1919', 'id': 1919}, {'name': '1918', 'id': 1918}, {'name': '1917', 'id': 1917},
-{'name': '1916', 'id': 1916}, {'name': '1915', 'id': 1915}, {'name': '1914', 'id': 1914}, {'name': '1913', 'id': 1913}, {'name': '1912', 'id': 1912}, {'name': '1911', 'id': 1911},
-{'name': '1910', 'id': 1910}, {'name': '1909', 'id': 1909}, {'name': '1908', 'id': 1908}, {'name': '1907', 'id': 1907}, {'name': '1906', 'id': 1906}, {'name': '1905', 'id': 1905},
-{'name': '1904', 'id': 1904}, {'name': '1903', 'id': 1903}, {'name': '1902', 'id': 1902}, {'name': '1901', 'id': 1901}, {'name': '1900', 'id': 1900}
-	]
+def get_years(start_year):
+	from datetime import datetime
+	current_year = datetime.now().year
+	return [{'name': str(year), 'id': year} for year in range(current_year, start_year - 1, -1)]
 
-years_tvshows = [
-{'name': '2030', 'id': 2030}, {'name': '2029', 'id': 2029}, {'name': '2028', 'id': 2028}, {'name': '2027', 'id': 2027}, {'name': '2026', 'id': 2026}, {'name': '2025', 'id': 2025},
-{'name': '2024', 'id': 2024}, {'name': '2023', 'id': 2023}, {'name': '2022', 'id': 2022}, {'name': '2021', 'id': 2021}, {'name': '2020', 'id': 2020}, {'name': '2019', 'id': 2019},
-{'name': '2018', 'id': 2018}, {'name': '2017', 'id': 2017}, {'name': '2016', 'id': 2016}, {'name': '2015', 'id': 2015}, {'name': '2014', 'id': 2014}, {'name': '2013', 'id': 2013},
-{'name': '2012', 'id': 2012}, {'name': '2011', 'id': 2011}, {'name': '2010', 'id': 2010}, {'name': '2009', 'id': 2009}, {'name': '2008', 'id': 2008}, {'name': '2007', 'id': 2007},
-{'name': '2006', 'id': 2006}, {'name': '2005', 'id': 2005}, {'name': '2004', 'id': 2004}, {'name': '2003', 'id': 2003}, {'name': '2002', 'id': 2002}, {'name': '2001', 'id': 2001},
-{'name': '2000', 'id': 2000}, {'name': '1999', 'id': 1999}, {'name': '1998', 'id': 1998}, {'name': '1997', 'id': 1997}, {'name': '1996', 'id': 1996}, {'name': '1995', 'id': 1995},
-{'name': '1994', 'id': 1994}, {'name': '1993', 'id': 1993}, {'name': '1992', 'id': 1992}, {'name': '1991', 'id': 1991}, {'name': '1990', 'id': 1990}, {'name': '1989', 'id': 1989},
-{'name': '1988', 'id': 1988}, {'name': '1987', 'id': 1987}, {'name': '1986', 'id': 1986}, {'name': '1985', 'id': 1985}, {'name': '1984', 'id': 1984}, {'name': '1983', 'id': 1983},
-{'name': '1982', 'id': 1982}, {'name': '1981', 'id': 1981}, {'name': '1980', 'id': 1980}, {'name': '1979', 'id': 1979}, {'name': '1978', 'id': 1978}, {'name': '1977', 'id': 1977},
-{'name': '1976', 'id': 1976}, {'name': '1975', 'id': 1975}, {'name': '1974', 'id': 1974}, {'name': '1973', 'id': 1973}, {'name': '1972', 'id': 1972}, {'name': '1971', 'id': 1971},
-{'name': '1970', 'id': 1970}, {'name': '1969', 'id': 1969}, {'name': '1968', 'id': 1968}, {'name': '1967', 'id': 1967}, {'name': '1966', 'id': 1966}, {'name': '1965', 'id': 1965},
-{'name': '1964', 'id': 1964}, {'name': '1963', 'id': 1963}, {'name': '1962', 'id': 1962}, {'name': '1961', 'id': 1961}, {'name': '1960', 'id': 1960}, {'name': '1959', 'id': 1959},
-{'name': '1958', 'id': 1958}, {'name': '1957', 'id': 1957}, {'name': '1956', 'id': 1956}, {'name': '1955', 'id': 1955}, {'name': '1954', 'id': 1954}, {'name': '1953', 'id': 1953},
-{'name': '1952', 'id': 1952}, {'name': '1951', 'id': 1951}, {'name': '1950', 'id': 1950}, {'name': '1949', 'id': 1949}, {'name': '1948', 'id': 1948}, {'name': '1947', 'id': 1947},
-{'name': '1946', 'id': 1946}, {'name': '1945', 'id': 1945}, {'name': '1944', 'id': 1944}
-	]
+def get_decades(start_decade):
+	from datetime import datetime
+	current_year = datetime.now().year
+	current_decade = (current_year // 10) * 10
+	return [{'name': '%ss' % decade, 'id': decade} for decade in range(current_decade, start_decade - 1, -10)]
 
-years_anime = [
-{'name': '2030', 'id': 2030}, {'name': '2029', 'id': 2029}, {'name': '2028', 'id': 2028}, {'name': '2027', 'id': 2027}, {'name': '2026', 'id': 2026}, {'name': '2025', 'id': 2025},
-{'name': '2024', 'id': 2024}, {'name': '2023', 'id': 2023}, {'name': '2022', 'id': 2022}, {'name': '2021', 'id': 2021}, {'name': '2020', 'id': 2020}, {'name': '2019', 'id': 2019},
-{'name': '2018', 'id': 2018}, {'name': '2017', 'id': 2017}, {'name': '2016', 'id': 2016}, {'name': '2015', 'id': 2015}, {'name': '2014', 'id': 2014}, {'name': '2013', 'id': 2013},
-{'name': '2012', 'id': 2012}, {'name': '2011', 'id': 2011}, {'name': '2010', 'id': 2010}, {'name': '2009', 'id': 2009}, {'name': '2008', 'id': 2008}, {'name': '2007', 'id': 2007},
-{'name': '2006', 'id': 2006}, {'name': '2005', 'id': 2005}, {'name': '2004', 'id': 2004}, {'name': '2003', 'id': 2003}, {'name': '2002', 'id': 2002}, {'name': '2001', 'id': 2001},
-{'name': '2000', 'id': 2000}, {'name': '1999', 'id': 1999}, {'name': '1998', 'id': 1998}, {'name': '1997', 'id': 1997}, {'name': '1996', 'id': 1996}, {'name': '1995', 'id': 1995},
-{'name': '1994', 'id': 1994}, {'name': '1993', 'id': 1993}, {'name': '1992', 'id': 1992}, {'name': '1991', 'id': 1991}, {'name': '1990', 'id': 1990}, {'name': '1989', 'id': 1989},
-{'name': '1988', 'id': 1988}, {'name': '1987', 'id': 1987}, {'name': '1986', 'id': 1986}, {'name': '1985', 'id': 1985}, {'name': '1984', 'id': 1984}, {'name': '1983', 'id': 1983},
-{'name': '1982', 'id': 1982}, {'name': '1981', 'id': 1981}, {'name': '1980', 'id': 1980}, {'name': '1979', 'id': 1979}, {'name': '1978', 'id': 1978}, {'name': '1977', 'id': 1977},
-{'name': '1976', 'id': 1976}, {'name': '1975', 'id': 1975}, {'name': '1974', 'id': 1974}, {'name': '1973', 'id': 1973}, {'name': '1972', 'id': 1972}, {'name': '1971', 'id': 1971},
-{'name': '1970', 'id': 1970}, {'name': '1969', 'id': 1969}, {'name': '1968', 'id': 1968}, {'name': '1967', 'id': 1967}, {'name': '1966', 'id': 1966}, {'name': '1965', 'id': 1965},
-{'name': '1964', 'id': 1964}, {'name': '1963', 'id': 1963}, {'name': '1962', 'id': 1962}, {'name': '1961', 'id': 1961}
-	]
+def years_movies():
+	return get_years(1900)
 
-decades_movies = [
-{'name': '2030s', 'id': 2030}, {'name': '2020s', 'id': 2020}, {'name': '2010s', 'id': 2010}, {'name': '2000s', 'id': 2000}, {'name': '1990s', 'id': 1990},
-{'name': '1980s', 'id': 1980}, {'name': '1970s', 'id': 1970}, {'name': '1960s', 'id': 1960}, {'name': '1950s', 'id': 1950}, {'name': '1940s', 'id': 1940},
-{'name': '1930s', 'id': 1930}, {'name': '1920s', 'id': 1920}, {'name': '1910s', 'id': 1910}, {'name': '1900s', 'id': 1900}
-	]
+def years_tvshows():
+	return get_years(1944)
 
-decades_tvshows = [
-{'name': '2030s', 'id': 2030}, {'name': '2020s', 'id': 2020}, {'name': '2010s', 'id': 2010}, {'name': '2000s', 'id': 2000}, {'name': '1990s', 'id': 1990},
-{'name': '1980s', 'id': 1980}, {'name': '1970s', 'id': 1970}, {'name': '1960s', 'id': 1960}, {'name': '1950s', 'id': 1950}, {'name': '1940s', 'id': 1940}
-	]
+def years_anime():
+	return get_years(1961)
 
-decades_anime = [
-{'name': '2030s', 'id': 2030}, {'name': '2020s', 'id': 2020}, {'name': '2010s', 'id': 2010}, {'name': '2000s', 'id': 2000}, {'name': '1990s', 'id': 1990},
-{'name': '1980s', 'id': 1980}, {'name': '1970s', 'id': 1970}, {'name': '1960s', 'id': 1960}
-	]
+def decades_movies():
+	return get_decades(1900)
 
-oscar_winners = (
-{'results': [{'id': 872585}, {'id': 545611}, {'id': 776503}, {'id': 581734}, {'id': 496243}, {'id': 490132}, {'id': 399055}, {'id': 376867}, {'id': 314365},
-{'id': 194662}, {'id': 76203}, {'id': 68734}, {'id': 74643}, {'id': 45269}, {'id': 12162}, {'id': 12405}, {'id': 6977}, {'id': 1422}, {'id': 1640}, {'id': 70}],
+def decades_tvshows():
+	return get_decades(1940)
+
+def decades_anime():
+	return get_decades(1960)
+
+def oscar_winners():
+	return (
+{'results': [{'id': 1054867}, {'id': 1064213}, {'id': 872585}, {'id': 545611}, {'id': 776503}, {'id': 581734}, {'id': 496243}, {'id': 490132}, {'id': 399055}, {'id': 376867},
+{'id': 314365}, {'id': 194662}, {'id': 76203}, {'id': 68734}, {'id': 74643}, {'id': 45269}, {'id': 12162}, {'id': 12405}, {'id': 6977}, {'id': 1422}],
 'total_pages': 5, 'page': 1},
-{'results': [{'id': 122}, {'id': 1574}, {'id': 453}, {'id': 98}, {'id': 14}, {'id': 1934}, {'id': 597}, {'id': 409}, {'id': 197}, {'id': 13}, {'id': 424}, {'id': 33},
-{'id': 274}, {'id': 581}, {'id': 403}, {'id': 380}, {'id': 746}, {'id': 792}, {'id': 606}, {'id': 279}], 'total_pages': 5, 'page': 2},
-{'results': [{'id': 11050}, {'id': 783}, {'id': 9443}, {'id': 16619}, {'id': 12102}, {'id': 11778}, {'id': 703}, {'id': 1366}, {'id': 510}, {'id': 240}, {'id': 9277},
-{'id': 238}, {'id': 1051}, {'id': 11202}, {'id': 3116}, {'id': 17917}, {'id': 10633}, {'id': 874}, {'id': 15121}, {'id': 11113}], 'total_pages': 5, 'page': 3},
-{'results': [{'id': 5769}, {'id': 947}, {'id': 1725}, {'id': 284}, {'id': 665}, {'id': 17281}, {'id': 826}, {'id': 2897}, {'id': 15919}, {'id': 654}, {'id': 11426},
-{'id': 27191}, {'id': 2769}, {'id': 705}, {'id': 25430}, {'id': 23383}, {'id': 33667}, {'id': 887}, {'id': 28580}, {'id': 17661}], 'total_pages': 5, 'page': 4},
-{'results': [{'id': 27367}, {'id': 289}, {'id': 43266}, {'id': 223}, {'id': 770}, {'id': 34106}, {'id': 43278}, {'id': 43277}, {'id': 12311}, {'id': 3078}, {'id': 56164},
-{'id': 33680}, {'id': 42861}, {'id': 143}, {'id': 65203}, {'id': 28966}, {'id': 631}], 'total_pages': 5, 'page': 5}
+{'results': [{'id': 1640}, {'id': 70}, {'id': 122}, {'id': 1574}, {'id': 453}, {'id': 98}, {'id': 14}, {'id': 1934}, {'id': 597}, {'id': 409}, {'id': 197}, {'id': 13}, {'id': 424},
+{'id': 33}, {'id': 274}, {'id': 581}, {'id': 403}, {'id': 380}, {'id': 746}, {'id': 792}],
+'total_pages': 5, 'page': 2},
+{'results': [{'id': 606}, {'id': 279}, {'id': 11050}, {'id': 783}, {'id': 9443}, {'id': 16619}, {'id': 12102}, {'id': 11778}, {'id': 703}, {'id': 1366}, {'id': 510}, {'id': 240},
+{'id': 9277}, {'id': 238}, {'id': 1051}, {'id': 11202}, {'id': 3116}, {'id': 17917}, {'id': 10633}, {'id': 874}],
+'total_pages': 5, 'page': 3},
+{'results': [{'id': 15121}, {'id': 11113}, {'id': 5769}, {'id': 947}, {'id': 1725}, {'id': 284}, {'id': 665}, {'id': 17281}, {'id': 826}, {'id': 2897}, {'id': 15919}, {'id': 654},
+{'id': 11426}, {'id': 27191}, {'id': 2769}, {'id': 705}, {'id': 25430}, {'id': 23383}, {'id': 33667}, {'id': 887}],
+'total_pages': 5, 'page': 4},
+{'results': [{'id': 28580}, {'id': 17661}, {'id': 27367}, {'id': 289}, {'id': 43266}, {'id': 223}, {'id': 770}, {'id': 34106}, {'id': 43278}, {'id': 43277}, {'id': 12311},
+{'id': 3078}, {'id': 56164}, {'id': 33680}, {'id': 42861}, {'id': 143}, {'id': 65203}, {'id': 28966}, {'id': 631}],
+'total_pages': 5, 'page': 5}
 	)
 
-movie_certifications = [
+def movie_certifications():
+	return [
 {'name': 'G', 'id': 'G'}, {'name': 'PG', 'id': 'PG'}, {'name': 'PG-13', 'id': 'PG-13'},
 {'name': 'R', 'id': 'R'}, {'name': 'NC-17', 'id': 'NC-17'}, {'name': 'NR', 'id': 'NR'}
 	]
 
-tvshow_certifications = [
+def tvshow_certifications():
+	return [
 {'name': 'TV-Y', 'id': 'tv-y'}, {'name': 'TV-Y7', 'id': 'tv-y7'}, {'name': 'TV-G', 'id': 'tv-g'},
 {'name': 'TV-PG', 'id': 'tv-pg'}, {'name': 'TV-14', 'id': 'tv-14'}, {'name': 'TV-MA', 'id': 'tv-ma'}
 	]
 
-languages = [
+def languages():
+	return [
 {'name': 'Arabic', 'id': 'ar'}, {'name': 'Bosnian', 'id': 'bs'}, {'name': 'Bulgarian', 'id': 'bg'}, {'name': 'Chinese', 'id': 'zh'}, {'name': 'Croatian', 'id': 'hr'},
 {'name': 'Dutch', 'id': 'nl'}, {'name': 'English', 'id': 'en'}, {'name': 'Finnish', 'id': 'fi'}, {'name': 'French', 'id': 'fr'}, {'name': 'German', 'id': 'de'},
 {'name': 'Greek', 'id': 'el'}, {'name': 'Hebrew', 'id': 'he'}, {'name': 'Hindi', 'id': 'hi'}, {'name': 'Hungarian', 'id': 'hu'}, {'name': 'Icelandic', 'id': 'is'},
 {'name': 'Italian', 'id': 'it'}, {'name': 'Japanese', 'id': 'ja'}, {'name': 'Korean', 'id': 'ko'}, {'name': 'Macedonian', 'id': 'mk'}, {'name': 'Norwegian', 'id': 'no'},
 {'name': 'Persian', 'id': 'fa'}, {'name': 'Polish', 'id': 'pl'}, {'name': 'Portuguese', 'id': 'pt'}, {'name': 'Punjabi', 'id': 'pa'}, {'name': 'Romanian', 'id': 'ro'},
 {'name': 'Russian', 'id': 'ru'}, {'name': 'Serbian', 'id': 'sr'}, {'name': 'Slovenian', 'id': 'sl'}, {'name': 'Spanish', 'id': 'es'}, {'name': 'Swedish', 'id': 'sv'},
-{'name': 'Turkish', 'id': 'tr'}, {'name': 'Ukrainian', 'id': 'uk'}]
+{'name': 'Turkish', 'id': 'tr'}, {'name': 'Ukrainian', 'id': 'uk'}, {'name': 'Vietnamese', 'id': 'vi'}
+	]
 
-language_choices =  {
+def language_choices():
+	return {
 'None': 'None',              'Afrikaans': 'afr',            'Albanian': 'alb',             'Arabic': 'ara',
 'Armenian': 'arm',           'Basque': 'baq',               'Bengali': 'ben',              'Bosnian': 'bos',
 'Breton': 'bre',             'Bulgarian': 'bul',            'Burmese': 'bur',              'Catalan': 'cat',
@@ -128,7 +93,8 @@ language_choices =  {
 'Vietnamese': 'vie'
 	}
 
-regions = [
+def regions():
+	return [
 {'id': 'AF', 'name': 'Afghanistan'},        {'id': 'AL', 'name': 'Albania'},          {'id': 'DZ', 'name': 'Algeria'},
 {'id': 'AQ', 'name': 'Antarctica'},         {'id': 'AR', 'name': 'Argentina'},        {'id': 'AM', 'name': 'Armenia'},
 {'id': 'AU', 'name': 'Australia'},          {'id': 'AT', 'name': 'Austria'},          {'id': 'BD', 'name': 'Bangladesh'},
@@ -155,7 +121,8 @@ regions = [
 {'id': 'YE', 'name': 'Yemen'},              {'id': 'ZW', 'name': 'Zimbabwe'}
 	]
 
-movie_genres = [
+def movie_genres():
+	return [
 {'name': 'Action', 'id': '28', 'icon': 'genre_action'}, {'name': 'Adventure', 'id': '12', 'icon': 'genre_adventure'}, {'name': 'Animation', 'id': '16', 'icon': 'genre_animation'},
 {'name': 'Comedy', 'id': '35', 'icon': 'genre_comedy'}, {'name': 'Crime', 'id': '80', 'icon': 'genre_crime'}, {'name': 'Documentary', 'id': '99', 'icon': 'genre_documentary'},
 {'name': 'Drama', 'id': '18', 'icon': 'genre_drama'}, {'name': 'Family', 'id': '10751', 'icon': 'genre_family'}, {'name': 'Fantasy', 'id': '14', 'icon': 'genre_fantasy'},
@@ -165,7 +132,8 @@ movie_genres = [
 {'name': 'War', 'id': '10752', 'icon': 'genre_war'}, {'name': 'Western', 'id': '37', 'icon': 'genre_western'}
 	]
 
-tvshow_genres = [
+def tvshow_genres():
+	return [
 {'name': 'Action & Adventure', 'id': '10759', 'icon': 'genre_action'}, {'name': 'Animation', 'id': '16', 'icon': 'genre_animation'},
 {'name': 'Comedy', 'id': '35', 'icon': 'genre_comedy'}, {'name': 'Crime', 'id': '80', 'icon': 'genre_crime'}, {'name': 'Documentary', 'id': '99', 'icon': 'genre_documentary'},
 {'name': 'Drama', 'id': '18', 'icon': 'genre_drama'}, {'name': 'Family', 'id': '10751', 'icon': 'genre_family'}, {'name': 'Kids', 'id': '10762', 'icon': 'genre_kids'},
@@ -174,255 +142,167 @@ tvshow_genres = [
 {'name': 'War & Politics', 'id': '10768', 'icon': 'genre_war'}, {'name': 'Western', 'id': '37', 'icon': 'genre_western'}
 	]
 
-anime_genres = [
+def anime_genres():
+	return [
 {'name': 'Action & Adventure', 'id': '10759', 'icon': 'genre_action'}, {'name': 'Comedy', 'id': '35', 'icon': 'genre_comedy'}, {'name': 'Crime', 'id': '80', 'icon': 'genre_crime'},
 {'name': 'Drama', 'id': '18', 'icon': 'genre_drama'}, {'name': 'Family', 'id': '10751', 'icon': 'genre_family'}, {'name': 'Kids', 'id': '10762', 'icon': 'genre_kids'},
 {'name': 'Mystery', 'id': '9648', 'icon': 'genre_mystery'}, {'name': 'Sci-Fi & Fantasy', 'id': '10765', 'icon': 'genre_scifi'},
 {'name': 'War & Politics', 'id': '10768', 'icon': 'genre_war'}, {'name': 'Western', 'id': '37', 'icon': 'genre_western'}
 	]
 
-networks = [
-{'id': 54, 'name': 'Disney Channel', 'icon': 'network_disney'},                                  {'id': 44, 'name': 'Disney XD', 'icon': 'network_disneyxd'},
-{'id': 2, 'name': 'ABC', 'icon': 'network_abc'},                                                 {'id': 493, 'name': 'BBC America', 'icon': 'network_bbcamerica'},
-{'id': 6, 'name': 'NBC', 'icon': 'network_nbc'},                                                 {'id': 13, 'name': 'Nickelodeon', 'icon': 'network_nickelodeon'},
-{'id': 14, 'name': 'PBS', 'icon': 'network_pbs'},                                                {'id': 16, 'name': 'CBS', 'icon': 'network_cbs'},
-{'id': 19, 'name': 'FOX', 'icon': 'network_fox'},                                                {'id': 21, 'name': 'The WB', 'icon': 'network_thewb'},
-{'id': 24, 'name': 'BET', 'icon': 'network_bet'},                                                {'id': 30, 'name': 'USA Network', 'icon': 'network_usanetwork'},
-{'id': 23, 'name': 'CBC', 'icon': 'network_cbc'},                                                {'id': 88, 'name': 'FX', 'icon': 'network_fx'},
-{'id': 33, 'name': 'MTV', 'icon': 'network_mtv'},                                                {'id': 34, 'name': 'Lifetime', 'icon': 'network_lifetime'},
-{'id': 35, 'name': 'Nick Junior', 'icon': 'network_nickjr'},                                     {'id': 41, 'name': 'TNT', 'icon': 'network_tnt'},
-{'id': 43, 'name': 'National Geographic', 'icon': 'network_natgeo'},                             {'id': 47, 'name': 'Comedy Central', 'icon': 'network_comedycentral'},
-{'id': 49, 'name': 'HBO', 'icon': 'network_hbo'},                                                {'id': 55, 'name': 'Spike', 'icon': 'network_spike'},
-{'id': 67, 'name': 'Showtime', 'icon': 'network_showtime'},                                      {'id': 56, 'name': 'Cartoon Network', 'icon': 'network_cartoonnetwork'},
-{'id': 65, 'name': 'History Channel', 'icon': 'network_history'},                                {'id': 84, 'name': 'TLC', 'icon': 'network_tlc'},
-{'id': 68, 'name': 'TBS', 'icon': 'network_tbs'},                                                {'id': 71, 'name': 'The CW', 'icon': 'network_thecw'},
-{'id': 74, 'name': 'Bravo', 'icon': 'network_bravo'},                                            {'id': 76, 'name': 'E!', 'icon': 'network_e'},
-{'id': 77, 'name': 'Syfy', 'icon': 'network_syfy'},                                              {'id': 80, 'name': 'Adult Swim', 'icon': 'network_adultswim'},
-{'id': 91, 'name': 'Animal Planet', 'icon': 'network_animalplanet'},                             {'id': 110, 'name': 'CTV', 'icon': 'network_ctv'},
-{'id': 129, 'name': 'A&E', 'icon': 'network_ane'},                                               {'id': 158, 'name': 'VH1', 'icon': 'network_vh1'},
-{'id': 174, 'name': 'AMC', 'icon': 'network_amc'},                                               {'id': 928, 'name': 'Crackle', 'icon': 'network_crackle'},
-{'id': 202, 'name': 'WGN America', 'icon': 'network_wgnamerica'},                                {'id': 209, 'name': 'Travel Channel', 'icon': 'network_travel'},
-{'id': 213, 'name': 'Netflix', 'icon': 'network_netflix'},                                       {'id': 251, 'name': 'Audience', 'icon': 'network_audience'},
-{'id': 270, 'name': 'SundanceTV', 'icon': 'network_sundancetv'},                                 {'id': 318, 'name': 'Starz', 'icon': 'network_starz'},
-{'id': 359, 'name': 'Cinemax', 'icon': 'network_cinemax'},                                       {'id': 364, 'name': 'truTV', 'icon': 'network_trutv'},
-{'id': 384, 'name': 'Hallmark Channel', 'icon': 'network_hallmark'},                             {'id': 397, 'name': 'TV Land', 'icon': 'network_tvland'},
-{'id': 1024, 'name': 'Amazon', 'icon': 'network_amazon'},                                        {'id': 1267, 'name': 'Freeform', 'icon': 'network_freeform'},
-{'id': 4, 'name': 'BBC 1', 'icon': 'network_bbc1'},                                              {'id': 332, 'name': 'BBC 2', 'icon': 'network_bbc2'},
-{'id': 3, 'name': 'BBC 3', 'icon': 'network_bbc3'},                                              {'id': 100, 'name': 'BBC 4', 'icon': 'network_bbc4'},
-{'id': 214, 'name': 'Sky 1', 'icon': 'network_sky1'},                                            {'id': 9, 'name': 'ITV', 'icon': 'network_itv'},
-{'id': 26, 'name': 'Channel 4', 'icon': 'network_channel4'},                                     {'id': 99, 'name': 'Channel 5', 'icon': 'network_channel5'},
-{'id': 136, 'name': 'E4', 'icon': 'network_e4'},                                                 {'id': 210, 'name': 'HGTV', 'icon': 'network_hgtv'},
-{'id': 453, 'name': 'Hulu', 'icon': 'network_hulu'},                                             {'id': 1436, 'name': 'YouTube Red', 'icon': 'network_youtubered'},
-{'id': 64, 'name': 'Discovery Channel', 'icon': 'network_discovery'},                            {'id': 2739, 'name': 'Disney+', 'icon': 'network_disneyplus'},
-{'id': 2552, 'name': 'Apple TV +', 'icon': 'network_appletvplus'},                               {'id': 2697, 'name': 'Acorn TV', 'icon': 'network_acorntv'},
-{'id': 1709, 'name': 'CBS All Access', 'icon': 'network_cbsallaccess'},                          {'id': 3186, 'name': 'HBO Max', 'icon': 'network_hbomax'},
-{'id': 2243, 'name': 'DC Universe', 'icon': 'network_dcuniverse'},                               {'id': 2076, 'name': 'Paramount Network', 'icon': 'network_paramount'},
-{'id': 4330, 'name': 'Paramount+', 'icon': 'network_paramountplus'},                             {'id': 3353, 'name': 'Peacock', 'icon': 'network_peacock'},
-{'id': 4353, 'name': 'Discovery+', 'icon': 'network_discoveryplus'},                             {'id': 132, 'name': 'Oxygen', 'icon': 'network_oxygen'},
-{'id': 244, 'name': 'Discovery ID', 'icon': 'network_discoveryid'}
+def networks():
+	return sorted([
+{'id': 54, 'name': 'Disney Channel', 'logo': 'ZCgEkp6'}, {'id': 44, 'name': 'Disney XD', 'logo': 'PAJJoqQ'}, {'id': 2, 'name': 'ABC', 'logo': 'qePLxos'},
+{'id': 493, 'name': 'BBC America', 'logo': 'TUHDjfl'}, {'id': 6, 'name': 'NBC', 'logo': 'yPRirQZ'}, {'id': 13, 'name': 'Nickelodeon', 'logo': 'OUVoqYc'},
+{'id': 14, 'name': 'PBS', 'logo': 'r9qeDJY'}, {'id': 16, 'name': 'CBS', 'logo': '8OT8igR'}, {'id': 19, 'name': 'FOX', 'logo': '6vc0Iov'},
+{'id': 21, 'name': 'The WB', 'logo': 'rzfVME6'}, {'id': 24, 'name': 'BET', 'logo': 'ZpGJ5UQ'}, {'id': 30, 'name': 'USA Network', 'logo': 'Doccw9E'},
+{'id': 23, 'name': 'CBC', 'logo': 'unQ7WCZ'}, {'id': 88, 'name': 'FX', 'logo': 'aQc1AIZ'}, {'id': 33, 'name': 'MTV', 'logo': 'QM6DpNW'},
+{'id': 34, 'name': 'Lifetime', 'logo': 'tvYbhen'}, {'id': 35, 'name': 'Nick Junior', 'logo': 'leuCWYt'}, {'id': 41, 'name': 'TNT', 'logo': 'WnzpAGj'},
+{'id': 43, 'name': 'National Geographic', 'logo': 'XCGNKVQ'}, {'id': 47, 'name': 'Comedy Central', 'logo': 'ko6XN77'}, {'id': 49, 'name': 'HBO', 'logo': 'Hyu8ZGq'},
+{'id': 55, 'name': 'Spike', 'logo': 'BhXYytR'}, {'id': 67, 'name': 'Showtime', 'logo': 'SawAYkO'}, {'id': 56, 'name': 'Cartoon Network', 'logo': 'zmOLbbI'},
+{'id': 65, 'name': 'History Channel', 'logo': 'LEMgy6n'}, {'id': 84, 'name': 'TLC', 'logo': 'c24MxaB'}, {'id': 68, 'name': 'TBS', 'logo': 'RVCtt4Z'},
+{'id': 71, 'name': 'The CW', 'logo': 'Q8tooeM'}, {'id': 74, 'name': 'Bravo', 'logo': 'TmEO3Tn'}, {'id': 76, 'name': 'E!', 'logo': '3Delf9f'},
+{'id': 77, 'name': 'Syfy', 'logo': '9yCq37i'}, {'id': 80, 'name': 'Adult Swim', 'logo': 'jCqbRcS'}, {'id': 91, 'name': 'Animal Planet', 'logo': 'olKc4RP'},
+{'id': 110, 'name': 'CTV', 'logo': 'qUlyVHz'}, {'id': 129, 'name': 'A&E', 'logo': 'xLDfHjH'}, {'id': 158, 'name': 'VH1', 'logo': 'IUtHYzA'},
+{'id': 174, 'name': 'AMC', 'logo': 'ndorJxi'}, {'id': 928, 'name': 'Crackle', 'logo': '53kqZSY'}, {'id': 202, 'name': 'WGN America', 'logo': 'TL6MzgO'},
+{'id': 209, 'name': 'Travel Channel', 'logo': 'mWXv7SF'}, {'id': 213, 'name': 'Netflix', 'logo': 'jI5c3bw'}, {'id': 251, 'name': 'Audience', 'logo': '5Q3mo5A'},
+{'id': 270, 'name': 'SundanceTV', 'logo': 'qldG5p2'}, {'id': 318, 'name': 'Starz', 'logo': 'Z0ep2Ru'}, {'id': 359, 'name': 'Cinemax', 'logo': 'zWypFNI'},
+{'id': 364, 'name': 'truTV', 'logo': 'HnB3zfc'}, {'id': 384, 'name': 'Hallmark Channel', 'logo': 'zXS64I8'}, {'id': 397, 'name': 'TV Land', 'logo': '1nIeDA5'},
+{'id': 1024, 'name': 'Amazon', 'logo': 'ru9DDlL'}, {'id': 1267, 'name': 'Freeform', 'logo': 'f9AqoHE'}, {'id': 4, 'name': 'BBC 1', 'logo': 'u8x26te'},
+{'id': 332, 'name': 'BBC 2', 'logo': 'SKeGH1a'}, {'id': 3, 'name': 'BBC 3', 'logo': 'SDLeLcn'}, {'id': 100, 'name': 'BBC 4', 'logo': 'PNDalgw'},
+{'id': 214, 'name': 'Sky 1', 'logo': 'xbgzhPU'}, {'id': 9, 'name': 'ITV', 'logo': '5Hxp5eA'}, {'id': 26, 'name': 'Channel 4', 'logo': '6ZA9UHR'},
+{'id': 99, 'name': 'Channel 5', 'logo': '5ubnvOh'}, {'id': 136, 'name': 'E4', 'logo': 'frpunK8'}, {'id': 210, 'name': 'HGTV', 'logo': 'INnmgLT'},
+{'id': 453, 'name': 'Hulu', 'logo': 'uSD2Cdw'}, {'id': 1436, 'name': 'YouTube Red', 'logo': 'ZfewP1Y'}, {'id': 64, 'name': 'Discovery Channel', 'logo': '8UrXnAB'},
+{'id': 2739, 'name': 'Disney+', 'logo': 'DVrPgbM'}, {'id': 2552, 'name': 'Apple TV +', 'logo': 'fAQMVNp'}, {'id': 2697, 'name': 'Acorn TV', 'logo': 'fSWB5gB'},
+{'id': 1709, 'name': 'CBS All Access', 'logo': 'ZvaWMuU'}, {'id': 3186, 'name': 'HBO Max', 'logo': 'mmRMG75'}, {'id': 2243, 'name': 'DC Universe', 'logo': 'bhWIubn'},
+{'id': 2076, 'name': 'Paramount Network', 'logo': 'ez3U6NV'}, {'id': 4330, 'name': 'Paramount+', 'logo': 'dmUjWmU'}, {'id': 3353, 'name': 'Peacock', 'logo': '1JXFkSM'},
+{'id': 4353, 'name': 'Discovery+', 'logo': 'ukz1nOG'}, {'id': 132, 'name': 'Oxygen', 'logo': 'uFCQvbR'}, {'id': 244, 'name': 'Discovery ID', 'logo': '07w7BER'}
+	], key=lambda k: k['name'], reverse=True)
+
+def watch_providers_movies():
+	return [
+{'id': 337, 'name': 'Disney Plus', 'logo': '/97yvRBw1GzX7fXprcF80er19ot.jpg'}, {'id': 3, 'name': 'Google Play Movies', 'logo': '/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg'},
+{'id': 2, 'name': 'Apple TV', 'logo': '/SPnB1qiCkYfirS2it3hZORwGVn.jpg'}, {'id': 309, 'name': 'Sun Nxt', 'logo': '/6KEQzITx2RrCAQt5Nw9WrL1OI8z.jpg'},
+{'id': 8, 'name': 'Netflix', 'logo': '/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg'}, {'id': 9, 'name': 'Amazon Prime Video', 'logo': '/pvske1MyAoymrs5bguRfVqYiM9a.jpg'},
+{'id': 10, 'name': 'Amazon Video', 'logo': '/qR6FKvnPBx2O37FDg8PNM7efwF3.jpg'}, {'id': 100, 'name': 'GuideDoc', 'logo': '/eKVmLFHW5PeNhuR7Nedd8OIxW2M.jpg'},
+{'id': 175, 'name': 'Netflix Kids', 'logo': '/kwVegvKCinXTPuzZmYT1J3i1HJz.jpg'}, {'id': 350, 'name': 'Apple TV', 'logo': '/mcbz1LgtErU9p4UdbZ0rG6RTWHX.jpg'},
+{'id': 15, 'name': 'Hulu', 'logo': '/bxBlRPEPpMVDc4jMhSrTf2339DW.jpg'}, {'id': 257, 'name': 'fuboTV', 'logo': '/9BgaNQRMDvVlji1JBZi6tcfxpKx.jpg'},
+{'id': 190, 'name': 'Curiosity Stream', 'logo': '/oR1aNm1Qu9jQBkW4VrGPWhqbC3P.jpg'}, {'id': 583, 'name': 'MGM+ Amazon Channel', 'logo': '/efu1Cqc63XrPBoreYnf2mn0Nizj.jpg'},
+{'id': 1968, 'name': 'Crunchyroll Amazon Channel', 'logo': '/pgjz7bzfBq4nFDu8JJDLBoUVAX8.jpg'}, {'id': 386, 'name': 'Peacock Premium', 'logo': '/2aGrp1xw3qhwCYvNGAJZPdjfeeX.jpg'},
+{'id': 192, 'name': 'YouTube', 'logo': '/pTnn5JwWr4p3pG8H6VrpiQo7Vs0.jpg'}, {'id': 1855, 'name': 'Starz Apple TV Channel', 'logo': '/1C5EVCWyQD798CE1DFfcm6oAbxP.jpg'},
+{'id': 1854, 'name': 'AMC Plus Apple TV Channel ', 'logo': '/oTQdXIqM9iewlN4MC2nhKB0gHw.jpg'}, {'id': 430, 'name': 'HiDive', 'logo': '/iCV9oPBeoLDC5okFRZEgQkx7je0.jpg'},
+{'id': 1852, 'name': 'Britbox Apple TV Channel ', 'logo': '/bzEv2wssRqVgl12IVBfYhCIvvG.jpg'}, {'id': 444, 'name': 'Dekkoo', 'logo': '/x6nRFzF32hCzMHaVM4RHRo7lsgS.jpg'},
+{'id': 582, 'name': 'Paramount+ Amazon Channel', 'logo': '/hExO4PtimLIYn3kBOrzsejNv7cT.jpg'}, {'id': 457, 'name': 'VIX ', 'logo': '/jwRPknT20dfU1GeVqbcDXFyvtdG.jpg'},
+{'id': 584, 'name': 'Discovery+ Amazon Channel', 'logo': '/lgudHqEtTOzkMWlpTjU1oUyoUSZ.jpg'}, {'id': 528, 'name': 'AMC+ Amazon Channel', 'logo': '/2ino0WmHA4GROB7NYKzT6PGqLcb.jpg'},
+{'id': 283, 'name': 'Crunchyroll', 'logo': '/fzN5Jok5Ig1eJ7gyNGoMhnLSCfh.jpg'}, {'id': 207, 'name': 'The Roku Channel', 'logo': '/wQzSN83BnWVgO7xEh0SeTVqtrFv.jpg'},
+{'id': 1853, 'name': 'Paramount Plus Apple TV Channel ', 'logo': '/tJqmTmQ8jp9WfyaZfApHK8lSywA.jpg'}, {'id': 251, 'name': 'ALLBLK', 'logo': '/4cKdiYEPW1BsWLb9UmNzAyUlD5p.jpg'},
+{'id': 633, 'name': 'Paramount+ Roku Premium Channel', 'logo': '/ywIoxSjoYJGUIbR6BfxUiCHdPi3.jpg'}, {'id': 300, 'name': 'Pluto TV', 'logo': '/dB8G41Q6tSL5NBisrIeqByfepBc.jpg'},
+{'id': 634, 'name': 'Starz Roku Premium Channel', 'logo': '/9laPF1MAiUxlqM8T98F3Gj0bhzd.jpg'}, {'id': 446, 'name': 'Retrocrush', 'logo': '/5zUnCq0pvixEtQafzOBBWqxNRvX.jpg'},
+{'id': 635, 'name': 'AMC+ Roku Premium Channel', 'logo': '/gAGrSQCTAisxy2CsWbijVvJEnRo.jpg'}, {'id': 2285, 'name': 'JustWatch TV', 'logo': '/g2IaWyo6jCY0rIFjb4qgZ0bSmm3.jpg'},
+{'id': 526, 'name': 'AMC+', 'logo': '/ovmu6uot1XVvsemM2dDySXLiX57.jpg'}, {'id': 636, 'name': 'MGM Plus Roku Premium Channel', 'logo': '/lD7HKUmXDvUya58DceiTA809Zbf.jpg'},
+{'id': 188, 'name': 'YouTube Premium', 'logo': '/rMb93u1tBeErSYLv79zSTR07UdO.jpg'}, {'id': 11, 'name': 'MUBI', 'logo': '/x570VpH2C9EKDf1riP83rYc5dnL.jpg'},
+{'id': 83, 'name': 'The CW', 'logo': '/spcwROYevucLluqZZ8Fv75UuTBt.jpg'}, {'id': 191, 'name': 'Kanopy', 'logo': '/rcBwnERpNfPfWB5DaSTyEMCZbCA.jpg'},
+{'id': 212, 'name': 'Hoopla', 'logo': '/j7D006Uy3UWwZ6G0xH6BMgIWTzH.jpg'}, {'id': 7, 'name': 'Fandango At Home', 'logo': '/19fkcOz0xeUgCVW8tO85uOYnYK9.jpg'},
+{'id': 2528, 'name': 'YouTube TV', 'logo': '/x9zOHTUkQzt3PgPVKbMH9CKBwLK.jpg'}, {'id': 43, 'name': 'Starz', 'logo': '/yIKwylTLP1u8gl84Is7FItpYLGL.jpg'},
+{'id': 332, 'name': 'Fandango at Home Free', 'logo': '/19fkcOz0xeUgCVW8tO85uOYnYK9.jpg'}, {'id': 258, 'name': 'Criterion Channel', 'logo': '/yhrtzYd43pFIhRq0ruO8umJPuyn.jpg'},
+{'id': 209, 'name': 'PBS', 'logo': '/iLjStQKQwzyxXJb3jyNpvDmW9mx.jpg'}, {'id': 123, 'name': 'FXNow', 'logo': '/m4KUe3UoTnLgN4g6txYMnBqeUI5.jpg'},
+{'id': 2239, 'name': 'FlixHouse', 'logo': '/69eoIMVggmpyY7Aa8qeN4jsREfd.jpg'}, {'id': 80, 'name': 'AMC', 'logo': '/92Kx25Od0habmgRBTqT6XWgwgKt.jpg'},
+{'id': 25, 'name': 'Fandor', 'logo': '/45lSM3J7Ts4TXTtDv0EuTPL0eH5.jpg'}, {'id': 79, 'name': 'NBC', 'logo': '/6hFf3sIdmXSAczy3i6tLSmy6gwK.jpg'},
+{'id': 34, 'name': 'MGM Plus', 'logo': '/ctiRpS16dlaTXQBSsiFncMrgWmh.jpg'}, {'id': 211, 'name': 'Freeform', 'logo': '/4cHGd32hhEHmFjDGJcjVEAwFQg0.jpg'},
+{'id': 2383, 'name': 'Philo', 'logo': '/ptmbGSttkyzawLbxx9MElmxKuVo.jpg'}, {'id': 156, 'name': 'A&E', 'logo': '/pA4qJFsD4lUFxJzwOE7U4FAxK7v.jpg'},
+{'id': 157, 'name': 'Lifetime', 'logo': '/tWq6XvHqPjBW1BZTpf4Nziy8CDD.jpg'}, {'id': 99, 'name': 'Shudder', 'logo': '/vEtdiYRPRbDCp1Tcn3BEPF1Ni76.jpg'},
+{'id': 87, 'name': 'Acorn TV', 'logo': '/doCc555FPPgGtuaZJxf9QZVpIp5.jpg'}, {'id': 143, 'name': 'Sundance Now', 'logo': '/1Edma9SrJnqkQW3BqFd2rJNHZvX.jpg'},
+{'id': 151, 'name': 'BritBox', 'logo': '/8oA7IcDNNUtBa9JYB5kQ8hrDz5o.jpg'},
+{'id': 268, 'name': 'History Vault', 'logo': '/z5jtxEEeJEK1kYDqbyXzfquolC9.jpg'}, {'id': 260, 'name': 'WWE Network', 'logo': '/7Wo1H7YMmRy7S56sz6HJAMYRdGq.jpg'},
+{'id': 278, 'name': 'Pure Flix', 'logo': '/7L4eXQD0yFVDKZ2qwYtxcV5gm6n.jpg'}, {'id': 284, 'name': 'Lifetime Movie Club', 'logo': '/m4ofXxkTOj04N8df5KJGCIjnWii.jpg'}
 	]
 
-watch_providers_movies = [
-{'name': 'Netflix', 'id': 8, 'icon': 't2yyOv40HZeVlLjYsCsPHnWLk4W.jpg'},                     {'name': 'Amazon Prime Video', 'id': 9, 'icon': 'emthp39XA2YScoYL1p0sdbAH2WA.jpg'},
-{'name': 'Disney Plus', 'id': 337, 'icon': '7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg'},               {'name': 'Google Play Movies', 'id': 3, 'icon': 'tbEdFQDwx5LEVr8WpSeXQSIirVq.jpg'},
-{'name': 'Sun Nxt', 'id': 309, 'icon': 'uW4dPCcbXaaFTyfL5HwhuDt5akK.jpg'},                   {'name': 'Apple TV', 'id': 2, 'icon': 'peURlLlr8jggOwK53fJ5wdQl05y.jpg'},
-{'name': 'MUBI', 'id': 11, 'icon': 'bVR4Z1LCHY7gidXAJF5pMa4QrDS.jpg'},                       {'name': 'Apple TV Plus', 'id': 350, 'icon': '6uhKBfmtzFqOcLousHwZuzcrScK.jpg'},
-{'name': 'fuboTV', 'id': 257, 'icon': 'jPXksae158ukMLFhhlNvzsvaEyt.jpg'},                    {'name': 'Classix', 'id': 445, 'icon': 'iaMw6nOyxUzXSacrLQ0Au6CfZkc.jpg'},
-{'name': 'Hulu', 'id': 15, 'icon': 'zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg'},                       {'name': 'Curiosity Stream', 'id': 190, 'icon': '67Ee4E6qOkQGHeUTArdJ1qRxzR2.jpg'},
-{'name': 'Paramount Plus', 'id': 531, 'icon': 'xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg'},            {'name': 'GuideDoc', 'id': 100, 'icon': 'iX0pvJ2GFATbVIH5IHMwG0ffIdV.jpg'},
-{'name': 'Public Domain Movies', 'id': 638, 'icon': 'liEIj6CkvojVDiMWeexGvflSPZT.jpg'},      {'name': 'HBO Max', 'id': 384, 'icon': 'Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg'},
-{'name': 'Netflix Kids', 'id': 175, 'icon': 'j2OLGxyy0gKbPVI0DYFI2hJxP6y.jpg'},              {'name': 'Eventive', 'id': 677, 'icon': 'fadQYOyKL0tqfyj012nYJxm3N2I.jpg'},
-{'name': 'Spamflix', 'id': 521, 'icon': 'xN97FFkFAdY1JvHhS4zyPD4URgD.jpg'},                  {'name': 'AMC+', 'id': 526, 'icon': 'xlonQMSmhtA2HHwK3JKF9ghx7M8.jpg'},
-{'name': 'Cultpix', 'id': 692, 'icon': '59azlQKUgFdYq6QI5QEAxIeecyL.jpg'},                   {'name': 'DOCSVILLE', 'id': 475, 'icon': 'bvcdVO7SDHKEa6D40g1jntXKNj.jpg'},
-{'name': 'Peacock', 'id': 386, 'icon': '8VCV78prwd9QzZnEm0ReO6bERDa.jpg'},                   {'name': 'VIX ', 'id': 457, 'icon': '58aUMVWJRolhWpi4aJCkGHwfKdg.jpg'},
-{'name': 'FilmBox+', 'id': 701, 'icon': '4FqTBYsUSZgS9z9UGKgxSDBbtc8.jpg'},                  {'name': 'Peacock Premium', 'id': 387, 'icon': 'xTHltMrZPAJFLQ6qyCBjAnXSmZt.jpg'},
-{'name': 'aha', 'id': 532, 'icon': 'm3NWxxR23l1w1e156fyTuw931gx.jpg'},                       {'name': 'Amazon Video', 'id': 10, 'icon': '5NyLm42TmCqCMOZFvH4fcoSNKEW.jpg'},
-{'name': 'Kocowa', 'id': 464, 'icon': 'xfAAOAERZCnPB5jW5lhboAcXk8L.jpg'},                    {'name': 'WOW Presents Plus', 'id': 546, 'icon': 'mgD0T960hnYU4gBxbPPBrcDfgWg.jpg'},
-{'name': 'Takflix', 'id': 1771, 'icon': 'cnIHBy3uLWhHRR7VeWQhK3ZsYP0.jpg'},                  {'name': 'Crunchyroll', 'id': 283, 'icon': '8Gt1iClBlzTeQs8WQm8UrCoIxnQ.jpg'},
-{'name': 'YouTube', 'id': 192, 'icon': 'oIkQkEkwfmcG7IGpRR1NB8frZZM.jpg'},                   {'name': 'Magellan TV', 'id': 551, 'icon': 'gekkP93StjYdiMAInViVmrnldNY.jpg'},
-{'name': 'BroadwayHD', 'id': 554, 'icon': 'xLu1rkZNOKuNnRNr70wySosfTBf.jpg'},                {'name': 'KoreaOnDemand', 'id': 575, 'icon': 'uHv6Y4YSsr4cj7q4cBbAg7WXKEI.jpg'},
-{'name': 'Dekkoo', 'id': 444, 'icon': 'u2H29LCxRzjZVUoZUQAHKm5P8Zc.jpg'},                    {'name': 'Starz Apple TV', 'id': 1855, 'icon': 'hB24bAA8Y2ei6pbEGuCNdKUOjxI.jpg'},
-{'name': 'Filmzie', 'id': 559, 'icon': 'olmH7t5tEng8Yuq33KmvpvaaVIg.jpg'},                   {'name': 'Showtime Apple TV', 'id': 675, 'icon': 'xVN3LKkOtCrlFT9mavhkx8SzMwV.jpg'},
-{'name': 'True Story', 'id': 567, 'icon': 'osREemsc9uUB2J8VTkQeAVk2fu9.jpg'},                {'name': 'AMC Plus Apple TV ', 'id': 1854, 'icon': 'yFgm7vxwKZ4jfXIlPizlgoba2yi.jpg'},
-{'name': 'DocAlliance Films', 'id': 569, 'icon': 'aQ1ritN00jXc7RAFfUoQKGAAfp7.jpg'},         {'name': 'Britbox Apple TV ', 'id': 1852, 'icon': 'cN85Wjk0FIFr3z6rbiimz10uWVo.jpg'},
-{'name': 'Hoichoi', 'id': 315, 'icon': 'd4vHcXY9rwnr763wQns2XJThclt.jpg'},                   {'name': 'BritBox', 'id': 151, 'icon': 'aGIS8maihUm60A3moKYD9gfYHYT.jpg'},
-{'name': 'Pluto TV', 'id': 300, 'icon': 't6N57S17sdXRXmZDAkaGP0NHNG0.jpg'},                  {'name': 'Starz', 'id': 43, 'icon': 'eWp5LdR4p4uKL0wACBBXapDV2lB.jpg'},
-{'name': 'Rakuten Viki', 'id': 344, 'icon': 'qjtOUIUnk4kRpcZmaddjqDHM0dR.jpg'},              {'name': 'Discovery Plus Amazon', 'id': 584, 'icon': 'a2OcajC4bM5ItniQdjyOV7tgthW.jpg'},
-{'name': 'iQIYI', 'id': 581, 'icon': '8MXYXzZGoPAEQU13GWk1GVvKNUS.jpg'},                     {'name': 'Showtime Amazon', 'id': 203, 'icon': 'zoL69abPHiVC1Qzd4kM6hwLSo0j.jpg'},
-{'name': 'AMC+ Amazon', 'id': 528, 'icon': '9edKQczyuMmQM1yS520hgmJbcaC.jpg'},               {'name': 'Funimation Now', 'id': 269, 'icon': 'fWq61Fy4onav0wZJTA3c2fs0G66.jpg'},
-{'name': 'The Roku Channel', 'id': 207, 'icon': 'z0h7mBHwm5KfMB2MKeoQDD2ngEZ.jpg'},          {'name': 'Showtime Roku Premium', 'id': 632, 'icon': 'qMf2zirM2w0sO0mdAIIoP5XnQn8.jpg'},
-{'name': 'Runtime', 'id': 1875, 'icon': 'nvCfpn94VKJN4ZpkDgoupJWlXqq.jpg'},                  {'name': 'AMC+ Roku Premium', 'id': 635, 'icon': 'ni2NgPmIqqJRXeiA8Zdj4UhBZnU.jpg'},
-{'name': 'YouTube Premium', 'id': 188, 'icon': '6IPjvnYl6WWkIwN158qBFXCr2Ne.jpg'},           {'name': 'YouTube Free', 'id': 235, 'icon': '4SCmZgf7AeJLKKRPcbf5VFkGpBj.jpg'},
-{'name': 'Hoopla', 'id': 212, 'icon': 'aJ0b9BLU1Cvv5hIz9fEhKKc1x1D.jpg'},                    {'name': 'The CW', 'id': 83, 'icon': '6Y6w3F5mYoRHCcNAG0ZD2AndLJ2.jpg'},
-{'name': 'Vudu', 'id': 7, 'icon': '21dEscfO8n1tL35k4DANixhffsR.jpg'},                        {'name': 'Starz Roku Premium', 'id': 634, 'icon': '5OAb2w7D9C2VHa0k5PaoAYeFYFE.jpg'},
-{'name': 'VUDU Free', 'id': 332, 'icon': 'xzfVRl1CgJPYa9dOoyVI3TDSQo2.jpg'},                 {'name': 'Criterion Channel', 'id': 258, 'icon': '4TJTNWd2TT1kYj6ocUEsQc8WRgr.jpg'},
-{'name': 'Showtime', 'id': 37, 'icon': '4kL33LoKd99YFIaSOoOPMQOSw1A.jpg'},                   {'name': 'PBS', 'id': 209, 'icon': 'bbxgdl6B5T75wJE713BiTCIBXyS.jpg'},
-{'name': 'FXNow', 'id': 123, 'icon': 'twV9iQPYeaoBzwsfRFGMGoMIUg8.jpg'},                     {'name': 'Pantaflix', 'id': 177, 'icon': '2tAjxjo1n3H7fsXqMsxWFMeFUWp.jpg'},
-{'name': 'Tubi TV', 'id': 73, 'icon': 'w2TDH9TRI7pltf5LjN3vXzs7QbN.jpg'},                    {'name': 'Kanopy', 'id': 191, 'icon': 'wbCleYwRFpUtWcNi7BLP3E1f6VI.jpg'},
-{'name': 'Comedy Central', 'id': 243, 'icon': 'gmU9aPV3XUFusVs4kK1rcICUKqL.jpg'},            {'name': 'Microsoft Store', 'id': 68, 'icon': 'shq88b09gTBYC4hA7K7MUL8Q4zP.jpg'},
-{'name': 'Redbox', 'id': 279, 'icon': 'gbyLHzl4eYP0oP9oJZ2oKbpkhND.jpg'},                    {'name': 'ABC', 'id': 148, 'icon': 'l9BRdAgQ3MkooOalsuu3yFQv2XP.jpg'},
-{'name': 'Crackle', 'id': 12, 'icon': '7P2JHkfv4AmU2MgSPGaJ0z6nNLG.jpg'},                    {'name': 'DIRECTV', 'id': 358, 'icon': 'xL9SUR63qrEjFZAhtsipskeAMR7.jpg'},
-{'name': 'Fandor', 'id': 25, 'icon': 'eAhAUvV2ouai3cGti5y70YOtrBN.jpg'},                     {'name': 'MGM Plus', 'id': 34, 'icon': '6A1gRIJqLfFHOoTvbTxDAbuU2nQ.jpg'},
-{'name': 'Freeform', 'id': 211, 'icon': 'rgpmwMkXqFYch9cway9qWMw0uXu.jpg'},                  {'name': 'Syfy', 'id': 215, 'icon': 'f7iqKjWYdVoYVIvKP3nboULcrM2.jpg'},
-{'name': 'Lifetime', 'id': 157, 'icon': '3wJNOOCbvqi7fJAdgf1QpL7Wwe2.jpg'},                  {'name': 'realeyz', 'id': 14, 'icon': '10BQc1kYmgjXFrFKb3xsRcDDn14.jpg'},
-{'name': 'Shudder', 'id': 99, 'icon': 'pheENW1BxlexXX1CKJ4GyWudyMA.jpg'},                    {'name': 'Screambox', 'id': 185, 'icon': 'c2Ey5Q3uUjZgfWWQQIdVIjVfxE4.jpg'},
-{'name': 'Acorn TV', 'id': 87, 'icon': '5P99DkK1jVs95KcE8bYG9MBtGQ.jpg'},                    {'name': 'Sundance Now', 'id': 143, 'icon': 'pZ9TSk3wlRYwiwwRxTsQJ7t2but.jpg'},
-{'name': 'Popcornflix', 'id': 241, 'icon': 'olvOut34aWUFf1YoOqiqtjidiTK.jpg'},               {'name': 'Pantaya', 'id': 247, 'icon': '94IdHexespnJs96kmGiJlflfiwU.jpg'},
-{'name': 'Boomerang', 'id': 248, 'icon': 'oRXiHzPl2HJMXXFR4eebsb8F5Oc.jpg'},                 {'name': 'Urban Movie Channel', 'id': 251, 'icon': '5uTsmZnDQmIOjZPEv8TNTy7GRJB.jpg'},
-{'name': 'Dove Channel', 'id': 254, 'icon': 'cBCzPOX6ir5L8hCoJlfIWycxauh.jpg'},              {'name': 'History Vault', 'id': 268, 'icon': '3bm7P1O8WRqK6CYqfffJv4fba2p.jpg'},
-{'name': 'Nickhits', 'id': 261, 'icon': 'oMwjMgYiT2jcR7ELqCH3TPzpgTX.jpg'},                  {'name': 'Eros Now', 'id': 218, 'icon': '4XYI2rzRm34skcvamytegQx7Dmu.jpg'},
-{'name': 'Yupp TV', 'id': 255, 'icon': '8qNJcPBHZ4qewHrDJ7C7s2DBQ3V.jpg'},                   {'name': 'Magnolia Selects', 'id': 259, 'icon': 'foT1TtL67MgEOWR6Cib8dKyCvJI.jpg'},
-{'name': 'WWE Network', 'id': 260, 'icon': 'rDYZ9v3Y09fuFyan51tHKE1mFId.jpg'},               {'name': 'Noggin', 'id': 262, 'icon': 'yxBUPUBFzHE72uFXvFr1l0fnMJA.jpg'},
-{'name': 'Smithsonian Channel', 'id': 276, 'icon': 'UAZ2lJBWszijybQD4frqw2jxRO.jpg'},        {'name': 'Laugh Out Loud', 'id': 275, 'icon': 'w4GTJ1EDrgJku49XKSnRag9kKCT.jpg'},
-{'name': 'Hallmark Movies', 'id': 281, 'icon': 'llEJ6av9kAniTQUR9hF9mhVbzlB.jpg'},           {'name': 'Pure Flix', 'id': 278, 'icon': 'orsVBNvPWxJNOVSEHMOk2h8R1wA.jpg'},
-{'name': 'Lifetime Movie Club', 'id': 284, 'icon': 'p1v0UKH13xQsMjumRgCGmCdlgKm.jpg'},       {'name': 'Cinemax', 'id': 289, 'icon': 'kEnyHRflZPNWEOIXroZPhfdGi46.jpg'},
-{'name': 'OVID', 'id': 433, 'icon': 'nXi2nRDPMNivJyFOifEa2t15Xuu.jpg'},                      {'name': 'Cohen Media Amazon', 'id': 1811, 'icon': 'jV7sSPzUYYHHmoATkD9PhFoEZXb.jpg'},
-{'name': 'Viewster Amazon', 'id': 295, 'icon': 'mlH42JbZMrapSF6zc8iTYURcZlH.jpg'},           {'name': 'USA Network', 'id': 322, 'icon': 'ldU2RCgdvkcSEBWWbttCpVO450z.jpg'},
-{'name': 'Sling TV Orange and Blue', 'id': 299, 'icon': 'tZ4xzOtCRHjAw7tYJphivEfDr1L.jpg'},  {'name': 'HiDive', 'id': 430, 'icon': '9baY98ZKyDaNArp1H9fAWqiR3Zi.jpg'},
-{'name': 'Topic', 'id': 454, 'icon': 'ubWucXFn34TrVlJBaJFgPaC4tOP.jpg'},                     {'name': 'Night Flight Plus', 'id': 455, 'icon': 'ba8l0e5CkpVnrdFgzBySP7ckZnZ.jpg'},
-{'name': 'Retrocrush', 'id': 446, 'icon': '9ONs8SMAXtkiyaEIKATTpbwckx8.jpg'},                {'name': 'Shout! Factory TV', 'id': 439, 'icon': 'ju3T8MFGNIoPiYpwHFpNlrYNyG7.jpg'},
-{'name': 'Chai Flicks', 'id': 438, 'icon': '3tCqvc5hPm5nl8Hm8o2koDRZlPo.jpg'},               {'name': 'PBS Masterpiece Amazon', 'id': 294, 'icon': 'mMALQK52OFGoYUKOSCZILZkfGWs.jpg'},
-{'name': 'The Film Detective', 'id': 470, 'icon': 'rOwEnT8oDSTZ5rDKmyaa3O4gUnc.jpg'},        {'name': 'MUBI Amazon', 'id': 201, 'icon': 'aJUiN18NZFbpSkHZQV1C1cTpz8H.jpg'},       
-{'name': 'AcornTV Amazon', 'id': 196, 'icon': '8WWD7t5Irwq9kAH4rufQ4Pe1Dog.jpg'},            {'name': 'Screambox Amazon', 'id': 202, 'icon': 'naqM14qSfg2q0S2zDylM5zQQ3jn.jpg'},
-{'name': 'Bet+ Amazon', 'id': 343, 'icon': 'obBJU4ak4XvAOUM5iVmSUxDvqC3.jpg'},               {'name': 'FlixFling', 'id': 331, 'icon': '4U02VrbgLfUKJAUCHKzxWFtnPx4.jpg'},
-{'name': 'Darkmatter TV', 'id': 355, 'icon': 'x4AFz5koB2R8BRn8WNh6EqXUGHc.jpg'},             {'name': 'AMC on Demand', 'id': 352, 'icon': 'kJlVJLgbNPvKDYC0YMp3yA2OKq2.jpg'},
-{'name': 'TCM', 'id': 361, 'icon': '8TbsXATKVD4Humjzi6a8SVaSY7o.jpg'},                       {'name': 'TNT', 'id': 363, 'icon': 'gJnQ40Z6T7HyY6fbmmI6qKE0zmK.jpg'},
-{'name': 'BBC America', 'id': 397, 'icon': 'ukSXbR5qFjO2qCHpc6ZhcGPSjTJ.jpg'},               {'name': 'IndieFlix', 'id': 368, 'icon': '2NRn6OApVKfDTKLuHDRN8UadLRw.jpg'},
-{'name': 'Here TV', 'id': 417, 'icon': 'sa10pK4Jwr5aA7rvafFP2zyLFjh.jpg'},                   {'name': 'Flix Premiere', 'id': 432, 'icon': '6fX0J6x7zXsUCvPFczgOW4oD34D.jpg'},
-{'name': 'TBS', 'id': 506, 'icon': 'rcebVnRvZvPXauK4353Jgiu4DWI.jpg'},                       {'name': 'AsianCrush', 'id': 514, 'icon': '3VxDqUk25KU5860XxHKwV9cy3L8.jpg'},
-{'name': 'FILMRISE', 'id': 471, 'icon': 'mEiBVz62M9j3TCebmOspMfqkIn.jpg'},                   {'name': 'Revry', 'id': 473, 'icon': 'r1UgUKmt83FSDOIHBdRWKooZPNx.jpg'},
-{'name': 'Spectrum On Demand', 'id': 486, 'icon': '79mRAYq40lcYiXkQm6N7YErSSHd.jpg'},        {'name': 'VRV', 'id': 504, 'icon': 'rtTqPKRrVVXxvPV0T9OmSXhwXnY.jpg'},
-{'name': 'Hi-YAH', 'id': 503, 'icon': 'mB2eDIncwSAlyl8WAtfV24qEIkk.jpg'},                    {'name': 'tru TV', 'id': 507, 'icon': 'pg4bIFyUsSIhFChqOz5Up1BxuIU.jpg'},
-{'name': 'Discovery Plus', 'id': 520, 'icon': 'wYRiUqIgWcfUvO6OPcXuUNd4tc2.jpg'},            {'name': 'ARROW', 'id': 529, 'icon': '4UfmxLzph9Aso9pr9bXohp0V3sr.jpg'},
-{'name': 'Plex', 'id': 538, 'icon': 'wDWvnupneMbY6RhBTHQC9zU0SCX.jpg'},                      {'name': 'Alamo on Demand', 'id': 547, 'icon': '1UP7ysjKolfD0rmp2fLmvyRHkdn.jpg'},
-{'name': 'Dogwoof On Demand', 'id': 536, 'icon': '9sk88OAxDZSdMOzg8VuqtGpgWQ3.jpg'},         {'name': 'MovieSaints', 'id': 562, 'icon': 'fdWE8jpmQqkZrwg2ZMuCLz6ms5P.jpg'},
-{'name': 'Film Movement Plus', 'id': 579, 'icon': 'tKJdVrC0fjEtQtYYjlVwX9rmqrj.jpg'},        {'name': 'Metrograph', 'id': 585, 'icon': '8PmpsrVDLJ3m8I37W6UNFEymhm7.jpg'},
-{'name': 'Freevee', 'id': 613, 'icon': 'uBE4RMH15mrkuz6vXzuJc7ZLXp1.jpg'},                   {'name': 'Kino Now', 'id': 640, 'icon': 'ttxbDVmHMuNTKcSLOyIHFs7TdRh.jpg'},
-{'name': 'ShortsTV Amazon', 'id': 688, 'icon': 'm0mvKlSjn38S9w7WVNV7a7XyPIe.jpg'},           {'name': 'Bet+', 'id': 1759, 'icon': 'eZVDDqlBHpuk8GELhQchRIkA6th.jpg'},
-{'name': 'ESPN Plus', 'id': 1768, 'icon': 'iJBj5b4HYbjEPiwKJWQfcRr3nP2.jpg'},                {'name': 'Paramount+ Showtime', 'id': 1770, 'icon': 'vfUoancVnPRAxj8iBqhllanF0Eq.jpg'},
-{'name': 'Klassiki', 'id': 1793, 'icon': 'fXGdolQR7QlHgdx2hPCxoVQG8eP.jpg'},                 {'name': 'Starz Amazon', 'id': 1794, 'icon': 'x36C6aseF5l4uX99Kpse9dbPwBo.jpg'},
-{'name': 'Viaplay', 'id': 76, 'icon': 'cvl65OJnz14LUlC3yGK1KHj8UYs.jpg'},                    {'name': 'Popflick', 'id': 1832, 'icon': 'wbKHI2d5417yAAY7QestC3qnXyo.jpg'}
+def watch_providers_tvshows():
+	return [
+{'id': 337, 'name': 'Disney Plus', 'logo': '/97yvRBw1GzX7fXprcF80er19ot.jpg'}, {'id': 3, 'name': 'Google Play Movies', 'logo': '/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg'},
+{'id': 2, 'name': 'Apple TV', 'logo': '/SPnB1qiCkYfirS2it3hZORwGVn.jpg'}, {'id': 309, 'name': 'Sun Nxt', 'logo': '/6KEQzITx2RrCAQt5Nw9WrL1OI8z.jpg'},
+{'id': 8, 'name': 'Netflix', 'logo': '/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg'}, {'id': 9, 'name': 'Amazon Prime Video', 'logo': '/pvske1MyAoymrs5bguRfVqYiM9a.jpg'},
+{'id': 10, 'name': 'Amazon Video', 'logo': '/qR6FKvnPBx2O37FDg8PNM7efwF3.jpg'}, {'id': 175, 'name': 'Netflix Kids', 'logo': '/kwVegvKCinXTPuzZmYT1J3i1HJz.jpg'},
+{'id': 350, 'name': 'Apple TV', 'logo': '/mcbz1LgtErU9p4UdbZ0rG6RTWHX.jpg'}, {'id': 15, 'name': 'Hulu', 'logo': '/bxBlRPEPpMVDc4jMhSrTf2339DW.jpg'},
+{'id': 257, 'name': 'fuboTV', 'logo': '/9BgaNQRMDvVlji1JBZi6tcfxpKx.jpg'}, {'id': 190, 'name': 'Curiosity Stream', 'logo': '/oR1aNm1Qu9jQBkW4VrGPWhqbC3P.jpg'},
+{'id': 583, 'name': 'MGM+ Amazon Channel', 'logo': '/efu1Cqc63XrPBoreYnf2mn0Nizj.jpg'}, {'id': 1968, 'name': 'Crunchyroll Amazon Channel', 'logo': '/pgjz7bzfBq4nFDu8JJDLBoUVAX8.jpg'},
+{'id': 386, 'name': 'Peacock Premium', 'logo': '/2aGrp1xw3qhwCYvNGAJZPdjfeeX.jpg'}, {'id': 192, 'name': 'YouTube', 'logo': '/pTnn5JwWr4p3pG8H6VrpiQo7Vs0.jpg'},
+{'id': 1855, 'name': 'Starz Apple TV Channel', 'logo': '/1C5EVCWyQD798CE1DFfcm6oAbxP.jpg'}, {'id': 191, 'name': 'Kanopy', 'logo': '/rcBwnERpNfPfWB5DaSTyEMCZbCA.jpg'},
+{'id': 1854, 'name': 'AMC Plus Apple TV Channel ', 'logo': '/oTQdXIqM9iewlN4MC2nhKB0gHw.jpg'}, {'id': 528, 'name': 'AMC+ Amazon Channel', 'logo': '/2ino0WmHA4GROB7NYKzT6PGqLcb.jpg'},
+{'id': 1852, 'name': 'Britbox Apple TV Channel ', 'logo': '/bzEv2wssRqVgl12IVBfYhCIvvG.jpg'},{'id': 283, 'name': 'Crunchyroll', 'logo': '/fzN5Jok5Ig1eJ7gyNGoMhnLSCfh.jpg'},
+{'id': 582, 'name': 'Paramount+ Amazon Channel', 'logo': '/hExO4PtimLIYn3kBOrzsejNv7cT.jpg'},{'id': 207, 'name': 'The Roku Channel', 'logo': '/wQzSN83BnWVgO7xEh0SeTVqtrFv.jpg'},
+{'id': 584, 'name': 'Discovery+ Amazon Channel', 'logo': '/lgudHqEtTOzkMWlpTjU1oUyoUSZ.jpg'}, {'id': 2285, 'name': 'JustWatch TV', 'logo': '/g2IaWyo6jCY0rIFjb4qgZ0bSmm3.jpg'},
+{'id': 1853, 'name': 'Paramount Plus Apple TV Channel ', 'logo': '/tJqmTmQ8jp9WfyaZfApHK8lSywA.jpg'}, {'id': 526, 'name': 'AMC+', 'logo': '/ovmu6uot1XVvsemM2dDySXLiX57.jpg'},
+{'id': 633, 'name': 'Paramount+ Roku Premium Channel', 'logo': '/ywIoxSjoYJGUIbR6BfxUiCHdPi3.jpg'}, {'id': 188, 'name': 'YouTube Premium', 'logo': '/rMb93u1tBeErSYLv79zSTR07UdO.jpg'},
+{'id': 634, 'name': 'Starz Roku Premium Channel', 'logo': '/9laPF1MAiUxlqM8T98F3Gj0bhzd.jpg'}, {'id': 11, 'name': 'MUBI', 'logo': '/x570VpH2C9EKDf1riP83rYc5dnL.jpg'},
+{'id': 635, 'name': 'AMC+ Roku Premium Channel', 'logo': '/gAGrSQCTAisxy2CsWbijVvJEnRo.jpg'}, {'id': 83, 'name': 'The CW', 'logo': '/spcwROYevucLluqZZ8Fv75UuTBt.jpg'},
+{'id': 636, 'name': 'MGM Plus Roku Premium Channel', 'logo': '/lD7HKUmXDvUya58DceiTA809Zbf.jpg'},{'id': 212, 'name': 'Hoopla', 'logo': '/j7D006Uy3UWwZ6G0xH6BMgIWTzH.jpg'},
+{'id': 7, 'name': 'Fandango At Home', 'logo': '/19fkcOz0xeUgCVW8tO85uOYnYK9.jpg'}, {'id': 2528, 'name': 'YouTube TV', 'logo': '/x9zOHTUkQzt3PgPVKbMH9CKBwLK.jpg'},
+{'id': 43, 'name': 'Starz', 'logo': '/yIKwylTLP1u8gl84Is7FItpYLGL.jpg'}, {'id': 332, 'name': 'Fandango at Home Free', 'logo': '/19fkcOz0xeUgCVW8tO85uOYnYK9.jpg'},
+{'id': 258, 'name': 'Criterion Channel', 'logo': '/yhrtzYd43pFIhRq0ruO8umJPuyn.jpg'}, {'id': 209, 'name': 'PBS', 'logo': '/iLjStQKQwzyxXJb3jyNpvDmW9mx.jpg'},
+{'id': 123, 'name': 'FXNow', 'logo': '/m4KUe3UoTnLgN4g6txYMnBqeUI5.jpg'}, {'id': 80, 'name': 'AMC', 'logo': '/92Kx25Od0habmgRBTqT6XWgwgKt.jpg'},
+{'id': 79, 'name': 'NBC', 'logo': '/6hFf3sIdmXSAczy3i6tLSmy6gwK.jpg'}, {'id': 34, 'name': 'MGM Plus', 'logo': '/ctiRpS16dlaTXQBSsiFncMrgWmh.jpg'},
+{'id': 211, 'name': 'Freeform', 'logo': '/4cHGd32hhEHmFjDGJcjVEAwFQg0.jpg'}, {'id': 2383, 'name': 'Philo', 'logo': '/ptmbGSttkyzawLbxx9MElmxKuVo.jpg'},
+{'id': 156, 'name': 'A&E', 'logo': '/pA4qJFsD4lUFxJzwOE7U4FAxK7v.jpg'}, {'id': 157, 'name': 'Lifetime', 'logo': '/tWq6XvHqPjBW1BZTpf4Nziy8CDD.jpg'},
+{'id': 99, 'name': 'Shudder', 'logo': '/vEtdiYRPRbDCp1Tcn3BEPF1Ni76.jpg'}, {'id': 87, 'name': 'Acorn TV', 'logo': '/doCc555FPPgGtuaZJxf9QZVpIp5.jpg'},
+{'id': 143, 'name': 'Sundance Now', 'logo': '/1Edma9SrJnqkQW3BqFd2rJNHZvX.jpg'}, {'id': 151, 'name': 'BritBox', 'logo': '/8oA7IcDNNUtBa9JYB5kQ8hrDz5o.jpg'},
+{'id': 251, 'name': 'ALLBLK', 'logo': '/4cKdiYEPW1BsWLb9UmNzAyUlD5p.jpg'}, {'id': 264, 'name': 'MyOutdoorTV', 'logo': '/bSmoVepHvK0ijBAWGx3QlIeTtsu.jpg'},
+{'id': 260, 'name': 'WWE Network', 'logo': '/7Wo1H7YMmRy7S56sz6HJAMYRdGq.jpg'}, {'id': 278, 'name': 'Pure Flix', 'logo': '/7L4eXQD0yFVDKZ2qwYtxcV5gm6n.jpg'},
+{'id': 293, 'name': 'PBS Kids Amazon Channel', 'logo': '/lIXDKV7LrZfF3SR2m8EQrMVRI5C.jpg'}, {'id': 289, 'name': 'Cinemax Amazon Channel', 'logo': '/ohcwolMl8E743CkS8MnhmJKOlRj.jpg'},
+{'id': 290, 'name': 'Hallmark+ Amazon Channel', 'logo': '/wVxA3Rw87917VEXChiVKZpXUjSm.jpg'}, {'id': 2129, 'name': 'BYUtv', 'logo': '/9YYuvhTfMuBR7keJ7DPa1GFlDrF.jpg'},
+{'id': 294, 'name': 'PBS Masterpiece Amazon Channel', 'logo': '/xN1vKpcypShJrWmf1t3dyGJM7sO.jpg'}, {'id': 300, 'name': 'Pluto TV', 'logo': '/dB8G41Q6tSL5NBisrIeqByfepBc.jpg'},
+{'id': 291, 'name': 'MZ Choice Amazon Channel', 'logo': '/hTAIgvUnmu1Yv0wFVJRu9KKAPtJ.jpg'}, {'id': 430, 'name': 'HiDive', 'logo': '/iCV9oPBeoLDC5okFRZEgQkx7je0.jpg'},
+{'id': 457, 'name': 'VIX ', 'logo': '/jwRPknT20dfU1GeVqbcDXFyvtdG.jpg'}, {'id': 446, 'name': 'Retrocrush', 'logo': '/5zUnCq0pvixEtQafzOBBWqxNRvX.jpg'},
+{'id': 444, 'name': 'Dekkoo', 'logo': '/x6nRFzF32hCzMHaVM4RHRo7lsgS.jpg'}, {'id': 439, 'name': 'Shout! Factory TV', 'logo': '/y9jFndski0fRO4MHh3yg5PIL9ZI.jpg'},
+{'id': 438, 'name': 'Chai Flicks', 'logo': '/qesugDq8sUCixmOOsqDM1xAnBYz.jpg'}, {'id': 427, 'name': 'Mhz Choice', 'logo': '/tnxLjN2lLYpkTIX8NPSId6bgqh8.jpg'},
+{'id': 204, 'name': 'Shudder Amazon Channel', 'logo': '/qb6Lj5BhNJavdmRVDzAqAjd4Tj3.jpg'}, {'id': 458, 'name': 'Vice TV ', 'logo': '/zU75skIWNQ06SeFkmbFoaqhg069.jpg'},
+{'id': 201, 'name': 'MUBI Amazon Channel', 'logo': '/a4IDLKjvP5gvq7tNlg2Xw5YyEkI.jpg'}, {'id': 196, 'name': 'AcornTV Amazon Channel', 'logo': '/1wYmvbAuVZz2JnKvYfYN8Qolnb.jpg'},
+{'id': 197, 'name': 'BritBox Amazon Channel', 'logo': '/49qepIM2KqtRwENEmfskTGShD7G.jpg'}, {'id': 199, 'name': 'Fandor Amazon Channel', 'logo': '/3eVIcUeRXji5SBV7gEv4f5U4CqV.jpg'},
+{'id': 202, 'name': 'Screambox Amazon Channel', 'logo': '/vmXC3D9Kqtt9TEohDEmcaxnLYA5.jpg'}, {'id': 318, 'name': 'Adult Swim', 'logo': '/da2dkyeFe4GCRaKxpsW4mzt2UPl.jpg'},
+{'id': 205, 'name': 'Sundance Now Amazon Channel', 'logo': '/i8PzzzOVJfXWLE1v5Up7nGTWWhp.jpg'}, {'id': 328, 'name': 'Fox', 'logo': '/fpLJgEK68o2ATtz2gEdYkevUYIF.jpg'},
+{'id': 331, 'name': 'FlixFling', 'logo': '/yFGu4sSzwUMfhwmSsZgez8QhaVl.jpg'}, {'id': 235, 'name': 'YouTube Free', 'logo': '/4tJBhJcuF1ZstI5Yqu82G0yroLa.jpg'},
+{'id': 343, 'name': 'Bet+ Amazon Channel', 'logo': '/2AvUqoIHAq2lLxRy2IxOBUgCYef.jpg'}, {'id': 344, 'name': 'Rakuten Viki', 'logo': '/73uV3YooOA8gD9YQTXFj2XakZWA.jpg'},
+{'id': 365, 'name': 'Bravo TV', 'logo': '/uGOba5AB0URrJd5gelWGinaVR2h.jpg'}, {'id': 363, 'name': 'TNT', 'logo': '/76CvnJAKAPbJuiXYwQGN7PFqOci.jpg'},
+{'id': 366, 'name': 'Food Network', 'logo': '/b5umeBN4kFf5KJ6FZiBkftA4q5q.jpg'}, {'id': 397, 'name': 'BBC America', 'logo': '/jfXLhMzHHmBYrtE9ZaW7as2RA98.jpg'},
+{'id': 412, 'name': 'TLC', 'logo': '/veArLGnRXZEGkjpkJrhfMeasODk.jpg'}, {'id': 406, 'name': 'HGTV', 'logo': '/5Vp8QzvrVsWDIBWgoTm0cNdeSgc.jpg'},
+{'id': 408, 'name': 'Investigation Discovery', 'logo': '/1oxTHsIcxJwVcubHLnHwl0g60EI.jpg'}, {'id': 411, 'name': 'Science Channel', 'logo': '/28cQ8Ux0pauEHyeZ7J9MTNF4RBP.jpg'},
+{'id': 399, 'name': 'Animal Planet', 'logo': '/uW87WpK4Zfz4zCf224vvFhn3ZJc.jpg'}, {'id': 403, 'name': 'Discovery', 'logo': '/w8uX5FHY01CmODT0QvGv5CBGbPS.jpg'},
+{'id': 413, 'name': 'Travel Channel', 'logo': '/8NwVgZlX4Nh3WCebkaKtbSmdDn1.jpg'}, {'id': 417, 'name': 'Here TV', 'logo': '/kiNWL1wGBg3z2FBXJcd8R8MaZrV.jpg'},
+{'id': 422, 'name': 'VH1', 'logo': '/zH8mZ7YV2WHuVuLyOjtnIjar3Zn.jpg'}, {'id': 263, 'name': 'DreamWorksTV Amazon Channel', 'logo': '/hDoYXuGJtGwpvgPjmgx4jQFil01.jpg'},
+{'id': 506, 'name': 'TBS', 'logo': '/cZvP3XsDKlHFhNIyHYCVPStXT5l.jpg'}, {'id': 514, 'name': 'AsianCrush', 'logo': '/jCgWMxqGaq0h0VOxyJPfQdTqmii.jpg'},
+{'id': 473, 'name': 'Revry', 'logo': '/llQ8zV50Wqh4gYCYfr52R1b9gfD.jpg'}, {'id': 475, 'name': 'DOCSVILLE', 'logo': '/5zqbck5mo8PuVbGu2ngBUdn5Yga.jpg'},
+{'id': 486, 'name': 'Spectrum On Demand', 'logo': '/aAb9CUHjFe9Y3O57qnrJH0KOF1B.jpg'}, {'id': 507, 'name': 'tru TV', 'logo': '/mMJ6AQUpHDsD5s2Q2dnbpX1NFwp.jpg'},
+{'id': 508, 'name': 'DisneyNOW', 'logo': '/d8HzRaIa5aGE5mJB1SsIA9hODdx.jpg'}, {'id': 509, 'name': 'WeTV', 'logo': '/9abwIEW9wZ12RavyKnInlK684xm.jpg'},
+{'id': 538, 'name': 'Plex', 'logo': '/vLZKlXUNDcZR7ilvfY9Wr9k80FZ.jpg'}, {'id': 2077, 'name': 'Plex Channel', 'logo': '/27WMfRN7pQE3j5Khm8fPM7vYyLV.jpg'},
+{'id': 546, 'name': 'WOW Presents Plus', 'logo': '/6dET59jNU0ADysghEjl8Unuc7Ca.jpg'}, {'id': 551, 'name': 'Magellan TV', 'logo': '/mSH24WQcRDJ2fsL5iucXqqRnSRb.jpg'},
+{'id': 555, 'name': 'The Oprah Winfrey Network', 'logo': '/z4MqXgpzqxVy7GF8mlPOe8VOx82.jpg'}, {'id': 575, 'name': 'OnDemandKorea', 'logo': '/gR8rrj71VCLjlF1LJpplo72MXf0.jpg'},
+{'id': 2308, 'name': 'Darkroom', 'logo': '/8G7qvHF7hdmXpfxxqtF1WT9ib68.jpg'}, {'id': 315, 'name': 'Hoichoi', 'logo': '/u7dwMceEbjxd1N3TLEUBILSK2x6.jpg'},
+{'id': 581, 'name': 'iQIYI', 'logo': '/c4eVkfMna2VzHzZ8N2vWXUnMrlD.jpg'}, {'id': 613, 'name': 'Amazon Prime Video Free with Ads', 'logo': '/gZlCYHPx9a0TRUCEeTvHXBf9ibX.jpg'},
+{'id': 2411, 'name': 'Eternal Family', 'logo': '/in4AaJPqO6wCquDcXsirin7UQBb.jpg'}, {'id': 2409, 'name': 'Fawesome', 'logo': '/pSUa7lMYLoQAU00ikXoHxmOfTZ9.jpg'},
+{'id': 692, 'name': 'Cultpix', 'logo': '/uauVx3dGWt0GICqdMCBYJObd3Mo.jpg'}, {'id': 701, 'name': 'FilmBox+', 'logo': '/fbveJTcro9Xw2KuPIIoPPePHiwy.jpg'},
+{'id': 532, 'name': 'aha', 'logo': '/8WerMI8XcZXqPpkHTZNtzMzousF.jpg'}, {'id': 1794, 'name': 'Starz Amazon Channel', 'logo': '/esiLBRzDUwodjfN8gA4qj7l3ZF7.jpg'}
 	]
 
-watch_providers_tvshows = [
-{'name': 'Netflix', 'id': 8, 'icon': 't2yyOv40HZeVlLjYsCsPHnWLk4W.jpg'},                        {'name': 'Amazon Prime Video', 'id': 9, 'icon': 'emthp39XA2YScoYL1p0sdbAH2WA.jpg'},
-{'name': 'Disney +', 'id': 337, 'icon': '7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg'},                     {'name': 'Apple TV', 'id': 2, 'icon': 'peURlLlr8jggOwK53fJ5wdQl05y.jpg'},
-{'name': 'Google Play Movies', 'id': 3, 'icon': 'tbEdFQDwx5LEVr8WpSeXQSIirVq.jpg'},             {'name': 'Hulu', 'id': 15, 'icon': 'zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg'},
-{'name': 'MUBI', 'id': 11, 'icon': 'bVR4Z1LCHY7gidXAJF5pMa4QrDS.jpg'},                          {'name': 'Rooster Teeth', 'id': 485, 'icon': '3MflXNopMv3EFKbVgJGoEkJEnnF.jpg'},
-{'name': 'fuboTV', 'id': 257, 'icon': 'jPXksae158ukMLFhhlNvzsvaEyt.jpg'},                       {'name': 'Paramount +', 'id': 531, 'icon': 'xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg'},
-{'name': 'HBO Max', 'id': 384, 'icon': 'Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg'},                      {'name': 'Max', 'id': 1899, 'icon': '6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg'},
-{'name': 'Netflix Kids', 'id': 175, 'icon': 'j2OLGxyy0gKbPVI0DYFI2hJxP6y.jpg'},                 {'name': 'Apple TV +', 'id': 350, 'icon': '6uhKBfmtzFqOcLousHwZuzcrScK.jpg'},
-{'name': 'Max Amazon', 'id': 1825, 'icon': '7TVfqxyWGqaJZM715IPHTwtgcXo.jpg'},                  {'name': 'MGM + Amazon', 'id': 583, 'icon': 'hoqk74y8HTJTMWcVes1ZVwohCue.jpg'},
-{'name': 'Sun Nxt', 'id': 309, 'icon': 'uW4dPCcbXaaFTyfL5HwhuDt5akK.jpg'},                      {'name': 'Crunchyroll Amazon', 'id': 1968, 'icon': 'xQfBwtG1pLWhpejDoMFUxDS14eP.jpg'},
-{'name': 'Curiosity Stream', 'id': 190, 'icon': '67Ee4E6qOkQGHeUTArdJ1qRxzR2.jpg'},             {'name': 'VIX ', 'id': 457, 'icon': 'ijHUSuVY0PLfTBMfRwH2PrzTD7G.jpg'},
-{'name': 'aha', 'id': 532, 'icon': 'm3NWxxR23l1w1e156fyTuw931gx.jpg'},                          {'name': 'Peacock', 'id': 386, 'icon': '8VCV78prwd9QzZnEm0ReO6bERDa.jpg'},
-{'name': 'Peacock Premium', 'id': 387, 'icon': 'xTHltMrZPAJFLQ6qyCBjAnXSmZt.jpg'},              {'name': 'Kocowa', 'id': 464, 'icon': 'xfAAOAERZCnPB5jW5lhboAcXk8L.jpg'},
-{'name': 'DOCSVILLE', 'id': 475, 'icon': 'bvcdVO7SDHKEa6D40g1jntXKNj.jpg'},                     {'name': 'WOW Presents +', 'id': 546, 'icon': 'mgD0T960hnYU4gBxbPPBrcDfgWg.jpg'},
-{'name': 'Amazon Video', 'id': 10, 'icon': '5NyLm42TmCqCMOZFvH4fcoSNKEW.jpg'},                  {'name': 'Magellan TV', 'id': 551, 'icon': 'gekkP93StjYdiMAInViVmrnldNY.jpg'},
-{'name': 'BroadwayHD', 'id': 554, 'icon': 'xLu1rkZNOKuNnRNr70wySosfTBf.jpg'},                   {'name': 'YouTube', 'id': 192, 'icon': 'oIkQkEkwfmcG7IGpRR1NB8frZZM.jpg'},
-{'name': 'Showtime Apple TV', 'id': 675, 'icon': 'xVN3LKkOtCrlFT9mavhkx8SzMwV.jpg'},            {'name': 'Dekkoo', 'id': 444, 'icon': 'u2H29LCxRzjZVUoZUQAHKm5P8Zc.jpg'},
-{'name': 'Paramount+ with Showtime', 'id': 1770, 'icon': 'cqizxemZmCDDOfaGCqALiCbrAoR.jpg'},    {'name': 'Starz Apple TV', 'id': 1855, 'icon': 'hB24bAA8Y2ei6pbEGuCNdKUOjxI.jpg'},
-{'name': 'Hoichoi', 'id': 315, 'icon': 'd4vHcXY9rwnr763wQns2XJThclt.jpg'},                      {'name': 'AMC + Apple TV ', 'id': 1854, 'icon': 'yFgm7vxwKZ4jfXIlPizlgoba2yi.jpg'},
-{'name': 'BritBox', 'id': 151, 'icon': 'aGIS8maihUm60A3moKYD9gfYHYT.jpg'},                      {'name': 'KoreaOnDemand', 'id': 575, 'icon': 'uHv6Y4YSsr4cj7q4cBbAg7WXKEI.jpg'},
-{'name': 'Britbox Apple TV ', 'id': 1852, 'icon': 'cN85Wjk0FIFr3z6rbiimz10uWVo.jpg'},           {'name': 'Rakuten Viki', 'id': 344, 'icon': 'qjtOUIUnk4kRpcZmaddjqDHM0dR.jpg'},
-{'name': 'Paramount+ Amazon', 'id': 582, 'icon': '3E0RkIEQrrGYazs63NMsn3XONT6.jpg'},            {'name': 'Pluto TV', 'id': 300, 'icon': 't6N57S17sdXRXmZDAkaGP0NHNG0.jpg'},
-{'name': 'iQIYI', 'id': 581, 'icon': '8MXYXzZGoPAEQU13GWk1GVvKNUS.jpg'},                        {'name': 'Cultpix', 'id': 692, 'icon': '59azlQKUgFdYq6QI5QEAxIeecyL.jpg'},
-{'name': 'Starz Play Amazon', 'id': 194, 'icon': 'x36C6aseF5l4uX99Kpse9dbPwBo.jpg'},            {'name': 'FilmBox+', 'id': 701, 'icon': '4FqTBYsUSZgS9z9UGKgxSDBbtc8.jpg'},
-{'name': 'Discovery+ Amazon', 'id': 584, 'icon': 'a2OcajC4bM5ItniQdjyOV7tgthW.jpg'},            {'name': 'AMC+ Amazon', 'id': 528, 'icon': '9edKQczyuMmQM1yS520hgmJbcaC.jpg'},
-{'name': 'Shahid VIP', 'id': 1715, 'icon': 'uurfHKuprPDeKfIs7FYd5lQzw0L.jpg'},                  {'name': 'Funimation Now', 'id': 269, 'icon': 'fWq61Fy4onav0wZJTA3c2fs0G66.jpg'},
-{'name': 'The Roku Channel', 'id': 207, 'icon': 'z0h7mBHwm5KfMB2MKeoQDD2ngEZ.jpg'},             {'name': 'Classix', 'id': 445, 'icon': 'iaMw6nOyxUzXSacrLQ0Au6CfZkc.jpg'},
-{'name': 'Crunchyroll', 'id': 283, 'icon': '8Gt1iClBlzTeQs8WQm8UrCoIxnQ.jpg'},                  {'name': 'Showtime Roku', 'id': 632, 'icon': 'qMf2zirM2w0sO0mdAIIoP5XnQn8.jpg'},
-{'name': 'Paramount+ Roku Premium', 'id': 633, 'icon': 'qlVSrZgfXlFw0Jj6hsYq2zi70JD.jpg'},      {'name': 'Univer Video', 'id': 1860, 'icon': 'esfuWSTkFr39ETpD9xvb0sduZt7.jpg'},
-{'name': 'Starz Roku Premium', 'id': 634, 'icon': '5OAb2w7D9C2VHa0k5PaoAYeFYFE.jpg'},           {'name': 'Runtime', 'id': 1875, 'icon': 'nvCfpn94VKJN4ZpkDgoupJWlXqq.jpg'},
-{'name': 'AMC+ Roku Premium', 'id': 635, 'icon': 'ni2NgPmIqqJRXeiA8Zdj4UhBZnU.jpg'},            {'name': 'Paramount+ AppleTV ', 'id': 1853, 'icon': '9pdeflA0P1b8qlkeDA1oLfyvR06.jpg'},
-{'name': 'Showtime Amazon', 'id': 203, 'icon': 'zoL69abPHiVC1Qzd4kM6hwLSo0j.jpg'},              {'name': 'AMC+', 'id': 526, 'icon': 'xlonQMSmhtA2HHwK3JKF9ghx7M8.jpg'},
-{'name': 'MGM + Roku Premium', 'id': 636, 'icon': '3sE2JNYZJRD9Le1P8B6oVEqarad.jpg'},           {'name': 'YouTube Premium', 'id': 188, 'icon': '6IPjvnYl6WWkIwN158qBFXCr2Ne.jpg'},
-{'name': 'Hoopla', 'id': 212, 'icon': 'aJ0b9BLU1Cvv5hIz9fEhKKc1x1D.jpg'},                       {'name': 'The CW', 'id': 83, 'icon': '6Y6w3F5mYoRHCcNAG0ZD2AndLJ2.jpg'},
-{'name': 'CW Seed', 'id': 206, 'icon': '7UpZTaQFcdISOzDOBMx6RavcaR.jpg'},                       {'name': 'Vudu', 'id': 7, 'icon': '21dEscfO8n1tL35k4DANixhffsR.jpg'},
-{'name': 'Starz', 'id': 43, 'icon': 'eWp5LdR4p4uKL0wACBBXapDV2lB.jpg'},                         {'name': 'VUDU Free', 'id': 332, 'icon': 'xzfVRl1CgJPYa9dOoyVI3TDSQo2.jpg'},
-{'name': 'Showtime', 'id': 37, 'icon': '4kL33LoKd99YFIaSOoOPMQOSw1A.jpg'},                      {'name': 'PBS', 'id': 209, 'icon': 'bbxgdl6B5T75wJE713BiTCIBXyS.jpg'},
-{'name': 'FXNow', 'id': 123, 'icon': 'twV9iQPYeaoBzwsfRFGMGoMIUg8.jpg'},                        {'name': 'Pantaflix', 'id': 177, 'icon': '2tAjxjo1n3H7fsXqMsxWFMeFUWp.jpg'},
-{'name': 'Tubi TV', 'id': 73, 'icon': 'w2TDH9TRI7pltf5LjN3vXzs7QbN.jpg'},                       {'name': 'Kanopy', 'id': 191, 'icon': 'wbCleYwRFpUtWcNi7BLP3E1f6VI.jpg'},
-{'name': 'Comedy Central', 'id': 243, 'icon': 'gmU9aPV3XUFusVs4kK1rcICUKqL.jpg'},               {'name': 'Microsoft Store', 'id': 68, 'icon': 'shq88b09gTBYC4hA7K7MUL8Q4zP.jpg'},
-{'name': 'Redbox', 'id': 279, 'icon': 'gbyLHzl4eYP0oP9oJZ2oKbpkhND.jpg'},                       {'name': 'ABC', 'id': 148, 'icon': 'l9BRdAgQ3MkooOalsuu3yFQv2XP.jpg'},
-{'name': 'Crackle', 'id': 12, 'icon': '7P2JHkfv4AmU2MgSPGaJ0z6nNLG.jpg'},                       {'name': 'DIRECTV', 'id': 358, 'icon': 'xL9SUR63qrEjFZAhtsipskeAMR7.jpg'},
-{'name': 'AMC', 'id': 80, 'icon': 'dTKs9JkJl06hnbnqUXHAxUwZrUS.jpg'},                           {'name': 'NBC', 'id': 79, 'icon': 'wSAxtofaArEuTOsqBmghVuJx7eP.jpg'},
-{'name': 'MGM +', 'id': 34, 'icon': '6A1gRIJqLfFHOoTvbTxDAbuU2nQ.jpg'},                         {'name': 'Freeform', 'id': 211, 'icon': 'rgpmwMkXqFYch9cway9qWMw0uXu.jpg'},
-{'name': 'History', 'id': 155, 'icon': 'm6pLJ0l6MQJiKg1yxEs1holRSiq.jpg'},                      {'name': 'Syfy', 'id': 215, 'icon': 'f7iqKjWYdVoYVIvKP3nboULcrM2.jpg'},
-{'name': 'A&E', 'id': 156, 'icon': 'ujE7L9z0Ceu1T74RcahVn1FMbbK.jpg'},                          {'name': 'Lifetime', 'id': 157, 'icon': '3wJNOOCbvqi7fJAdgf1QpL7Wwe2.jpg'},
-{'name': 'Shudder', 'id': 99, 'icon': 'pheENW1BxlexXX1CKJ4GyWudyMA.jpg'},                       {'name': 'Screambox', 'id': 185, 'icon': 'c2Ey5Q3uUjZgfWWQQIdVIjVfxE4.jpg'},
-{'name': 'Acorn TV', 'id': 87, 'icon': '5P99DkK1jVs95KcE8bYG9MBtGQ.jpg'},                       {'name': 'Sundance Now', 'id': 143, 'icon': 'pZ9TSk3wlRYwiwwRxTsQJ7t2but.jpg'},
-{'name': 'Popcornflix', 'id': 241, 'icon': 'olvOut34aWUFf1YoOqiqtjidiTK.jpg'},                  {'name': 'Pantaya', 'id': 247, 'icon': '94IdHexespnJs96kmGiJlflfiwU.jpg'},
-{'name': 'Boomerang', 'id': 248, 'icon': 'oRXiHzPl2HJMXXFR4eebsb8F5Oc.jpg'},                    {'name': 'Urban Movie Channel', 'id': 251, 'icon': '5uTsmZnDQmIOjZPEv8TNTy7GRJB.jpg'},
-{'name': 'Dove Channel', 'id': 254, 'icon': 'cBCzPOX6ir5L8hCoJlfIWycxauh.jpg'},                 {'name': 'Nickhits Amazon', 'id': 261, 'icon': 'oMwjMgYiT2jcR7ELqCH3TPzpgTX.jpg'},
-{'name': 'Eros Now', 'id': 218, 'icon': '4XYI2rzRm34skcvamytegQx7Dmu.jpg'},                     {'name': 'Yupp TV', 'id': 255, 'icon': '8qNJcPBHZ4qewHrDJ7C7s2DBQ3V.jpg'},
-{'name': 'MyOutdoorTV', 'id': 264, 'icon': 'tTLB4xkjrKXxdtiWTeeS6qQB1v9.jpg'},                  {'name': 'Magnolia Selects', 'id': 259, 'icon': 'foT1TtL67MgEOWR6Cib8dKyCvJI.jpg'},
-{'name': 'WWE Network', 'id': 260, 'icon': 'rDYZ9v3Y09fuFyan51tHKE1mFId.jpg'},                  {'name': 'Noggin Amazon', 'id': 262, 'icon': 'yxBUPUBFzHE72uFXvFr1l0fnMJA.jpg'},
-{'name': 'Hopster TV', 'id': 267, 'icon': 'gYC72bT1nz4NvOFe7pPuCsNdKch.jpg'},                   {'name': 'Smithsonian Channel', 'id': 276, 'icon': 'UAZ2lJBWszijybQD4frqw2jxRO.jpg'},
-{'name': 'Laugh Out Loud', 'id': 275, 'icon': 'w4GTJ1EDrgJku49XKSnRag9kKCT.jpg'},               {'name': 'Pure Flix', 'id': 278, 'icon': 'orsVBNvPWxJNOVSEHMOk2h8R1wA.jpg'},
-{'name': 'Hallmark Movies', 'id': 281, 'icon': 'llEJ6av9kAniTQUR9hF9mhVbzlB.jpg'},              {'name': 'PBS Kids Amazon', 'id': 293, 'icon': 'tU4tamrqRjbg3Lbmkryp3EiLPQJ.jpg'},
-{'name': 'Boomerang Amazon', 'id': 288, 'icon': '1zfRJQc14uEzZThdwNvxtxeWJw6.jpg'},             {'name': 'Cinemax Amazon', 'id': 289, 'icon': 'kEnyHRflZPNWEOIXroZPhfdGi46.jpg'},
-{'name': 'Pantaya Amazon', 'id': 292, 'icon': 'fvSJ17mOt3MxKfnSgQVrtXTuepq.jpg'},               {'name': 'Hallmark Amazon', 'id': 290, 'icon': '6L2wLiZz3IG2X4MRbdRlGLgftMK.jpg'},
-{'name': 'PBS Masterpiece Amazon', 'id': 294, 'icon': 'mMALQK52OFGoYUKOSCZILZkfGWs.jpg'},       {'name': 'MZ Choice Amazon', 'id': 291, 'icon': '72tiOIjZQPqm7MGhqoqyjyTJzSv.jpg'},
-{'name': 'Viewster Amazon', 'id': 295, 'icon': 'mlH42JbZMrapSF6zc8iTYURcZlH.jpg'},              {'name': 'HiDive', 'id': 430, 'icon': '9baY98ZKyDaNArp1H9fAWqiR3Zi.jpg'},
-{'name': 'Topic', 'id': 454, 'icon': 'ubWucXFn34TrVlJBaJFgPaC4tOP.jpg'},                        {'name': 'MTV', 'id': 453, 'icon': 'ttCYMg3dbKYeGCgCxzsNvT3L4qF.jpg'},
-{'name': 'Retrocrush', 'id': 446, 'icon': '9ONs8SMAXtkiyaEIKATTpbwckx8.jpg'},                   {'name': 'Shout! Factory TV', 'id': 439, 'icon': 'ju3T8MFGNIoPiYpwHFpNlrYNyG7.jpg'},
-{'name': 'Chai Flicks', 'id': 438, 'icon': '3tCqvc5hPm5nl8Hm8o2koDRZlPo.jpg'},                  {'name': 'Mhz Choice', 'id': 427, 'icon': 'vuS4VlY50SJVHbCU3vGxQehcsAg.jpg'},
-{'name': 'Vice TV ', 'id': 458, 'icon': 'oYpUb0xkRfEE5iccELlumPGubt4.jpg'},                     {'name': 'Shudder Amazon', 'id': 204, 'icon': 'sc5pTTCFbx7GQyOst5SG4U7nkPH.jpg'},
-{'name': 'MUBI Amazon', 'id': 201, 'icon': 'aJUiN18NZFbpSkHZQV1C1cTpz8H.jpg'},                  {'name': 'AcornTV Amazon', 'id': 196, 'icon': '8WWD7t5Irwq9kAH4rufQ4Pe1Dog.jpg'},
-{'name': 'BritBox Amazon', 'id': 197, 'icon': 'xTfyFZqWv8c8sxlFooUzemi6WRM.jpg'},               {'name': 'Fandor Amazon', 'id': 199, 'icon': '8vBJZkwkrUDYMSfmw5R0ZENd7yw.jpg'},
-{'name': 'Screambox Amazon', 'id': 202, 'icon': 'naqM14qSfg2q0S2zDylM5zQQ3jn.jpg'},             {'name': 'Sundance Now Amazon', 'id': 205, 'icon': 'xImSZRKRYzIMPr4COgJNsEHdd2T.jpg'},
-{'name': 'Cartoon Network', 'id': 317, 'icon': 'A5vrIl7YqlmNrOHZikrtO41V0sY.jpg'},              {'name': 'Adult Swim', 'id': 318, 'icon': 'sPlIWhBAcoyw2IWuQ2PDdToNXld.jpg'},
-{'name': 'USA Network', 'id': 322, 'icon': 'ldU2RCgdvkcSEBWWbttCpVO450z.jpg'},                  {'name': 'Fox', 'id': 328, 'icon': 'rbCRT408gY44bZH0KdtmKzoituI.jpg'},
-{'name': 'Bet+ Amazon', 'id': 343, 'icon': 'obBJU4ak4XvAOUM5iVmSUxDvqC3.jpg'},                  {'name': 'FlixFling', 'id': 331, 'icon': '4U02VrbgLfUKJAUCHKzxWFtnPx4.jpg'},
-{'name': 'Darkmatter TV', 'id': 355, 'icon': 'x4AFz5koB2R8BRn8WNh6EqXUGHc.jpg'},                {'name': 'Bravo TV', 'id': 365, 'icon': 'cezAIHmsUVvgAahfCR7J0z30y1N.jpg'},
-{'name': 'TNT', 'id': 363, 'icon': 'gJnQ40Z6T7HyY6fbmmI6qKE0zmK.jpg'},                          {'name': 'Food Network', 'id': 366, 'icon': 'auXCWejtQmZL7DplgokLXYq73Ed.jpg'},
-{'name': 'BBC America', 'id': 397, 'icon': 'ukSXbR5qFjO2qCHpc6ZhcGPSjTJ.jpg'},                  {'name': 'IndieFlix', 'id': 368, 'icon': '2NRn6OApVKfDTKLuHDRN8UadLRw.jpg'},
-{'name': 'TLC', 'id': 412, 'icon': 'eZK2W0v3yA2Dq7cFzifK0v9FN1b.jpg'},                          {'name': 'AHCTV', 'id': 398, 'icon': 'gxCvG3STez0PrDqi05LSYyWjLPk.jpg'},
-{'name': 'HGTV', 'id': 406, 'icon': 'bwTpY8DTKUjoi6YfuiMenahGrTj.jpg'},                         {'name': 'DIY Network', 'id': 405, 'icon': 'odh8CexN7yXa7IX4aIYtsUc0vHY.jpg'},
-{'name': 'Investigation Discovery', 'id': 408, 'icon': 'gMV6YwrWO9YpLiUQ5dAxnxJiWWj.jpg'},      {'name': 'Science Channel', 'id': 411, 'icon': '3bRK8VOvIfWIhOLGGwNA67kphXC.jpg'},
-{'name': 'Destination America', 'id': 402, 'icon': 'xZMxO6tGdeMmKxIvT4QjPz59ujm.jpg'},          {'name': 'Discovery Life', 'id': 404, 'icon': '3LGhdwqMB0iuEwidFusc0I38Omm.jpg'},
-{'name': 'Animal Planet', 'id': 399, 'icon': 'fXcLPLz67yG0JzLWXIsNJrdwRzr.jpg'},                {'name': 'Discovery', 'id': 403, 'icon': 'dfz7hQm0icTUdXJrScZXPMeO963.jpg'},
-{'name': 'Motor Trend', 'id': 410, 'icon': 'st6VcNMu18MKbiTFhaWnxU9rBat.jpg'},                  {'name': 'Travel Channel', 'id': 413, 'icon': '7pkbHGkSYh6MKMTojJ80bT0KtPY.jpg'},
-{'name': 'Cooking Channel', 'id': 400, 'icon': 'aTiukuAuttjE2OdGv1eUhk3xsi0.jpg'},              {'name': 'Paramount Network', 'id': 418, 'icon': 'hG3NOo8CJJTq7CQMj44kLFHoWOi.jpg'},
-{'name': 'Here TV', 'id': 417, 'icon': 'sa10pK4Jwr5aA7rvafFP2zyLFjh.jpg'},                      {'name': 'TV Land', 'id': 419, 'icon': 'zU4b7cGYV6kRDOI6s8dgZqUvwFI.jpg'},
-{'name': 'VH1', 'id': 422, 'icon': 'jJUUb3clz84u347JWx7RUFMdjwP.jpg'},                          {'name': 'Logo TV', 'id': 420, 'icon': 'eWm07gxivsHwDx8CZRzVQIfVO4h.jpg'},
-{'name': 'DreamWorksTV Amazon', 'id': 263, 'icon': '1Vzd0eRyJJ7djh0GuZczx4ap8PK.jpg'},          {'name': 'TBS', 'id': 506, 'icon': 'rcebVnRvZvPXauK4353Jgiu4DWI.jpg'},
-{'name': 'AsianCrush', 'id': 514, 'icon': '3VxDqUk25KU5860XxHKwV9cy3L8.jpg'},                   {'name': 'FILMRISE', 'id': 471, 'icon': 'mEiBVz62M9j3TCebmOspMfqkIn.jpg'},
-{'name': 'Revry', 'id': 473, 'icon': 'r1UgUKmt83FSDOIHBdRWKooZPNx.jpg'},                        {'name': 'OXYGEN', 'id': 487, 'icon': 'lrZQdxtEHMbDZDnDo92KBkEHxSl.jpg'},
-{'name': 'Spectrum On Demand', 'id': 486, 'icon': '1tLCqSH5xiViDxMiTVWl6DmE8hd.jpg'},           {'name': 'tru TV', 'id': 507, 'icon': 'pg4bIFyUsSIhFChqOz5Up1BxuIU.jpg'},
-{'name': 'DisneyNOW', 'id': 508, 'icon': 'pu5I5Fis0r7ReAOswcJzOKmdLrK.jpg'},                    {'name': 'WeTV', 'id': 509, 'icon': 'qiwHTuSh91SgVMtY9lP7y5tH6kN.jpg'},
-{'name': 'Plex', 'id': 538, 'icon': 'swMyOSh6p3ZOTr76yPV6EyQFTik.jpg'},                         {'name': 'Plex Player', 'id': 1945, 'icon': '2qHTjqMoBxpa2gJPbbEDvqpLZJS.jpg'},
-{'name': 'Oprah Winfrey Network', 'id': 555, 'icon': 'jbcfM4YaulkzcPRIpiPZWIfcA67.jpg'},        {'name': 'Freevee', 'id': 613, 'icon': 'uBE4RMH15mrkuz6vXzuJc7ZLXp1.jpg'},
-{'name': 'Bet+', 'id': 1759, 'icon': 'eZVDDqlBHpuk8GELhQchRIkA6th.jpg'},                        {'name': 'Starz Amazon', 'id': 1794, 'icon': 'x36C6aseF5l4uX99Kpse9dbPwBo.jpg'},
-{'name': 'Netflix basic with Ads', 'id': 1796, 'icon': 'mShqQVDhHoK7VUbfYG3Un6xE8Mv.jpg'},      {'name': 'Cohen Media Amazon', 'id': 1811, 'icon': 'jV7sSPzUYYHHmoATkD9PhFoEZXb.jpg'},
-{'name': 'Popflick', 'id': 1832, 'icon': 'wbKHI2d5417yAAY7QestC3qnXyo.jpg'},                    {'name': 'Viaplay', 'id': 76, 'icon': 'cvl65OJnz14LUlC3yGK1KHj8UYs.jpg'},
-{'name': 'Discovery+', 'id': 520, 'icon': 'wYRiUqIgWcfUvO6OPcXuUNd4tc2.jpg'},                   {'name': 'Reveel', 'id': 1948, 'icon': '9X86vPeIfv7mNHW9DOf88n4g03x.jpg'},
-{'name': 'Ovation TV', 'id': 1953, 'icon': 'ua5RmU2I9tkmpPR6IenXUPxnkzC.jpg'},                  {'name': 'Angel Studios', 'id': 1956, 'icon': 'c1H5A9BqqceTzZvLXmfh0fehNTY.jpg'},
-{'name': 'Cineverse', 'id': 1957, 'icon': 'pPLjA4eW9186YXMh48r7pmLoNYH.jpg'},                   {'name': 'AD tv', 'id': 1958, 'icon': 'x6N4Sp4cwP9lYutveMruJcAKNQg.jpg'},
-{'name': 'Midnight Pulp', 'id': 1960, 'icon': 'pHwuJc9HFgK229r4C3f1AajjGA2.jpg'},               {'name': 'FYI Network', 'id': 1962, 'icon': 'nUXrIDIQzQuA3ZptGznUfHcAVHe.jpg'},
-{'name': 'Xumo Play', 'id': 1963, 'icon': '6Mr2gYhkC1AxcRlcPFV1rnmMAjC.jpg'},                   {'name': 'National Geographic', 'id': 1964, 'icon': 'd81hzdOMy560vJZMsbpYgnLbK4s.jpg'},
-{'name': 'DistroTV', 'id': 1971, 'icon': '77HXTBLPXGYRx1xm4w0Qyj1S5DN.jpg'},                    {'name': 'myfilmfriend', 'id': 1972, 'icon': 'u6RDPCBgkTpM5OIJ1LXO2KeekiX.jpg'},
-{'name': 'Hallmark Movies & Mysteries', 'id': 1966, 'icon': '80iXgRgamAX3JOMVg1EDHMX9s1f.jpg'}, {'name': 'Outside Watch', 'id': 1976, 'icon': '7N6w9Hz541qNhlHEHjHgEGCjKDh.jpg'},
-{'name': 'Citytv', 'id': 1985, 'icon': 'piaX7JA1HEJ3qA4CKQ5LZyxxshm.jpg'}]
-
-movie_sorts = [
+def movie_sorts():
+	return [
 {'name': 'Popularity (asc)', 'id': '&sort_by=popularity.asc'}, {'name': 'Popularity (desc)', 'id': '&sort_by=popularity.desc'},
 {'name': 'Release Date (asc)', 'id': '&sort_by=primary_release_date.asc'}, {'name': 'Release Date (desc)', 'id': '&sort_by=primary_release_date.desc'},
 {'name': 'Total Revenue (asc)', 'id': '&sort_by=revenue.asc'}, {'name': 'Total Revenue (desc)', 'id': '&sort_by=revenue.desc'},
 {'name': 'Title (asc)', 'id': '&sort_by=original_title.asc'}, {'name': 'Title (desc)', 'id': '&sort_by=original_title.desc'},
 {'name': 'Rating (asc)', 'id': '&sort_by=vote_average.asc'}, {'name': 'Rating (desc)', 'id': '&sort_by=vote_average.desc'},
 {'name': 'Random', 'id': '[random]'}
-		]
+	]
 
-tvshow_sorts = [
+def tvshow_sorts():
+	return [
 {'name': 'Popularity (asc)', 'id': '&sort_by=popularity.asc'}, {'name': 'Popularity (desc)', 'id': '&sort_by=popularity.desc'},
 {'name': 'First Aired (asc)', 'id': '&sort_by=first_air_date.asc'}, {'name': 'First Aired (desc)', 'id': '&sort_by=first_air_date.desc'},
 {'name': 'Rating (asc)', 'id': '&sort_by=vote_average.asc'}, {'name': 'Rating (desc)', 'id': '&sort_by=vote_average.desc'},
 {'name': 'Random', 'id': '[random]'}
-		]
+	]
 
-discover_items = {
+def discover_items():
+	return {
 'with_year_start': {'label': 'Year Start', 'key': 'with_year_start', 'display_key': 'with_year_start_display', 'action': 'years',
 'url_insert_movie': '&primary_release_date.gte=%s-01-01', 'url_insert_tvshow': '&first_air_date.gte=%s-01-01', 'name_value': ' | %s onwards', 'icon': 'calender'},
 'with_year_end': {'label': 'Year End', 'key': 'with_year_end', 'display_key': 'with_year_end_display', 'action': 'years',
@@ -438,9 +318,11 @@ discover_items = {
 'with_certification': {'label': 'Certification', 'key': 'with_certification', 'display_key': 'with_certification_display', 'action': 'certifications',
 'url_insert': '&certification_country=US&certification=%s', 'name_value': ' | %s', 'limited': 'movie', 'icon': 'certifications'},
 'with_certification_and_lower': {'label': 'Certification (& lower)', 'key': 'with_certification_and_lower', 'display_key': 'with_certification_and_lower_display',
-'action': 'certification_and_lowers', 'url_insert': '&certification_country=US&certification.lte=%s', 'name_value': ' | %s', 'limited': 'movie', 'icon': 'certifications'},		
+'action': 'certification_and_lowers', 'url_insert': '&certification_country=US&certification.lte=%s', 'name_value': ' | %s', 'limited': 'movie', 'icon': 'certifications'},
+'with_language': {'label': 'Language', 'key': 'with_language', 'display_key': 'with_language_display', 'action': 'languages',
+'url_insert': '&with_original_language=%s', 'name_value': ' | %s', 'icon': 'languages'},	
 'with_keywords': {'label': 'With Keywords', 'key': 'with_keywords', 'display_key': 'with_keywords_display', 'action': 'keywords',
-'url_insert': '&with_keywords=%s', 'name_value': ' | Keywords: %s', 'icon': 'genre_fantasy'},
+'url_insert': '&with_keywords=%s', 'name_value': ' | Keywords: %s', 'icon': 'fantasy'},
 'with_rating': {'label': 'Minimum Rating', 'key': 'with_rating', 'display_key': 'with_rating_display', 'action': 'ratings',
 'url_insert': '&vote_average.gte=%s', 'name_value': ' | %s+', 'icon': 'most_watched'},
 'with_rating_votes': {'label': 'Minimum Number of Votes', 'key': 'with_rating_votes', 'display_key': 'with_rating_votes_display', 'action': 'votes',
@@ -452,10 +334,11 @@ discover_items = {
 'with_released': {'label': 'Released Only', 'key': 'with_released', 'display_key': 'with_released_display', 'action': 'released',
 'url_insert_movie': '&primary_release_date.lte=%s', 'url_insert_tvshow': '&include_null_first_air_dates=false&first_air_date.lte=%s', 'name_value': ' | Released Only', 'icon': 'dvd'},
 'with_adult': {'label': 'Include Adult', 'key': 'with_adult', 'display_key': 'with_adult_display', 'action': 'adult',
-'url_insert': '&include_adult=%s', 'name_value': ' | Include Adult', 'limited': 'movie', 'icon': 'genre_romance'}
-		}
+'url_insert': '&include_adult=%s', 'name_value': ' | Include Adult', 'limited': 'movie', 'icon': 'romance'},
+	}
 
-color_palette = [
+def color_palette():
+	return [
 'FFFFFFE3', 'FFFFFAE6', 'FFFEF5E6', 'FFFEF0E5', 'FFFEEBE5', 'FFFFEFEF', 'FFFFE6EA', 'FFFFE6F1', 'FFFEE6F4', 'FFFFE6FB', 'FFFEE6FE', 'FFFAE6FF', 'FFF4E6FF', 'FFF0E6FF', 'FFEAE7FC',
 'FFE6E7FC', 'FFE6EBFF', 'FFE7F0FF', 'FFE7F5FF', 'FFE7FAFF', 'FFE6FFFF', 'FFE6FFFB', 'FFE7FEF4', 'FFE7FFF1', 'FFE6FFEA', 'FFE7FFE7', 'FFEBFFF3', 'FFF1FFE6', 'FFF5FFE6', 'FFFBFFE6',
 'FFFFFFFF', 'FFFFFFCB', 'FFFEFACA', 'FFFFEACB', 'FFFFE0CC', 'FFFED6CC', 'FFFFCACD', 'FFFFCCD5', 'FFFFCDE0', 'FFFFCCEB', 'FFFFCBF5', 'FFFECCFD', 'FFF6CBFF', 'FFECCCFE', 'FFE0CCFF',
@@ -493,3 +376,14 @@ color_palette = [
 'FF0E004B', 'FF01004C', 'FF000E4B', 'FF001F4D', 'FF012E4D', 'FF003D4C', 'FF004C4C', 'FF004D3D', 'FF004C2E', 'FF004C1E', 'FF004C0E', 'FF004C01', 'FF0F4C00', 'FF204C01', 'FF2D4C00',
 'FF3E4C01', 'FF000000'
 	]
+
+def list_display_choices(list_type):
+	return {
+'tmdb': {'choices': [('Title', '0'), ('Date Created (asc)', '1'), ('Date Created (desc)', '2'), ('Recently Updated (asc)', '3'), ('Recently Updated (desc)', '4'),
+('Item Count (asc)', '5'), ('Item Count (desc)', '6'), ('Average Rating (asc)', '7'), ('Average Rating (desc)', '8'), ('Total Runtime (asc)', '9'),
+('Total Runtime (desc)', '10'), ('Total Revenue (asc)', '11'), ('Total Revenue (desc)', '12')],
+'setting': 'tmdblist'},
+'personal': {'choices': [('Title', '0'), ('Author', '1'), ('Date Created (asc)', '2'), ('Date Created (desc)', '3'),
+('Recently Updated (asc)', '4'), ('Recently Updated (desc)', '5'), ('Item Count (asc)', '6'), ('Item Count (desc)', '7')],
+'setting': 'personal_list'}
+	}[list_type]

@@ -3,11 +3,6 @@ import json
 from windows.base_window import BaseDialog
 # from modules.kodi_utils import logger
 
-ok_id, cancel_id, selectall_id, deselectall_id = 10, 11, 12, 13
-button_ids = (ok_id, cancel_id, selectall_id, deselectall_id)
-select_deselect_ids = (selectall_id, deselectall_id)
-confirm_dict = {10: True, 11: False}
-
 class Select(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, *args)
@@ -22,6 +17,7 @@ class Select(BaseDialog):
 		self.media_type = self.kwargs.get('media_type', '')
 		self.narrow_window = self.kwargs.get('narrow_window', 'false')
 		self.enable_context_menu = self.kwargs.get('enable_context_menu', 'false') == 'true'
+		self.set_focus = self.kwargs.get('set_focus', None)
 		self.item_list = []
 		self.chosen_indexes = []
 		self.selected = None
@@ -36,6 +32,7 @@ class Select(BaseDialog):
 				self.item_list[index].setProperty('check_status', 'checked')
 				self.chosen_indexes.append(index)
 		self.setFocusId(self.window_id)
+		if self.set_focus is not None: self.select_item(self.window_id, self.set_focus)
 
 	def run(self):
 		self.doModal()
@@ -44,19 +41,19 @@ class Select(BaseDialog):
 
 	def onClick(self, controlID):
 		self.control_id = None
-		if controlID in button_ids:
-			if controlID == ok_id:
+		if controlID in (10, 11, 12, 13):
+			if controlID == 10:
 				self.selected = sorted(self.chosen_indexes)
 				self.close()
-			elif controlID == cancel_id:
+			elif controlID == 11:
 				self.close()
-			elif controlID in select_deselect_ids:
+			elif controlID in (12, 13):
 				item_list_indexes = list(range(0, len(self.item_list)))
-				if controlID == selectall_id: status, select_property, self.chosen_indexes = 'checked', 'deselect_all', item_list_indexes
+				if controlID == 12: status, select_property, self.chosen_indexes = 'checked', 'deselect_all', item_list_indexes
 				else: status, select_property, self.chosen_indexes = '', 'select_all', []
 				for index in item_list_indexes: self.item_list[index].setProperty('check_status', status)
 				self.setProperty('select_button', select_property)
-				try: self.setFocusId(ok_id)
+				try: self.setFocusId(10)
 				except: pass
 		else: self.control_id = controlID
 
@@ -119,7 +116,7 @@ class Confirm(BaseDialog):
 		return self.selected
 
 	def onClick(self, controlID):
-		self.selected = confirm_dict[controlID]
+		self.selected = {10: True, 11: False}[controlID]
 		self.close()
 
 	def onAction(self, action):
