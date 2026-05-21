@@ -56,6 +56,11 @@ class OnUpdateChanges:
 		except: pass
 		return kodi_utils.logger('Mando', 'OnUpdateChanges Service Finished')
 
+	def fix_media_github_username(self):
+		stored = get_setting('mando.update.username', '')
+		if stored.replace('-', '').lower() == 'theredwizard' and stored != 'The-Red-Wizard':
+			set_setting('update.username', 'The-Red-Wizard')
+
 class CustomWindowsPrepare:
 	def run(self):
 		kodi_utils.logger('Mando', 'CustomWindowsPrepare Service Starting')
@@ -216,7 +221,7 @@ class AddonXMLCheck:
 		from indexers.dialogs import addon_icon_choice
 		addon_icon_choice({'set_icon': get_setting('addon_icon_choice_name', 'icon.png')})
 
-class mandoMonitor(Monitor):
+class MandoMonitor(Monitor):
 	def __init__ (self):
 		Monitor.__init__(self)
 		self.startServices()
@@ -248,5 +253,5 @@ class mandoMonitor(Monitor):
 			kodi_utils.logger('OnNotificationActions', 'UNPAUSING Mando Services Due to Device Awake')
 
 kodi_utils.logger('Mando', 'Main Monitor Service Starting')
-mandoMonitor().waitForAbort()
+MandoMonitor().waitForAbort()
 kodi_utils.logger('Mando', 'Main Monitor Service Finished')

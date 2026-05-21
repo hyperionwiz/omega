@@ -113,8 +113,8 @@ def resolve_tb(params):
 		kodi_utils.notification('TorBox: Unable to resolve link', 4000)
 		return None
 	if params.get('play', 'false') != 'true': return resolved_link
-	from modules.player import mandoPlayer
-	mandoPlayer().run(resolved_link, 'video')
+	from modules.player import MandoPlayer
+	MandoPlayer().run(resolved_link, 'video')
 
 
 def tb_send_webdl():

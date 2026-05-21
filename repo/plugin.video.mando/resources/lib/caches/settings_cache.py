@@ -95,8 +95,12 @@ def sync_settings(params={}):
 			for item in obsoletesettings_ids: settings_cache.remove_setting(item)
 	except: pass
 	if currentsettings:
+		if currentsettings.get('update.username', '').replace('-', '').lower() == 'theredwizard' \
+				and currentsettings.get('update.username') != 'The-Red-Wizard':
+			set_setting('update.username', 'The-Red-Wizard')
+			currentsettings['update.username'] = 'The-Red-Wizard'
 		c_settings = currentsettings.items()
-		for k, v  in c_settings: settings_cache.set_memory_cache(k, v)
+		for k, v in c_settings: settings_cache.set_memory_cache(k, v)
 	for item in d_settings:
 		setting_id = item['setting_id']
 		if setting_id in currentsettings: continue
@@ -264,8 +268,8 @@ def default_settings():
 {'setting_id': 'use_viewtypes', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'manual_viewtypes', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'view.main', 'setting_type': 'string', 'setting_default': '55'},
-{'setting_id': 'view.movies', 'setting_type': 'string', 'setting_default': '55'},
-{'setting_id': 'view.tvshows', 'setting_type': 'string', 'setting_default': '55'},
+{'setting_id': 'view.movies', 'setting_type': 'string', 'setting_default': '500'},
+{'setting_id': 'view.tvshows', 'setting_type': 'string', 'setting_default': '500'},
 {'setting_id': 'view.seasons', 'setting_type': 'string', 'setting_default': '55'},
 {'setting_id': 'view.episodes', 'setting_type': 'string', 'setting_default': '55'},
 {'setting_id': 'view.episodes_single', 'setting_type': 'string', 'setting_default': '55'},
@@ -333,13 +337,13 @@ def default_settings():
 #==================== Trakt
 #==================== Trakt
 {'setting_id': 'trakt.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'trakt.client', 'setting_type': 'string', 'setting_default': 'daa63a302b6a8c9f9281683b921c363402408efaa8c0ab05c396129ad4dec9b9'},
-{'setting_id': 'trakt.secret', 'setting_type': 'string', 'setting_default': 'a81d60d7754f2b77fc44ade57e2259f4ca79e4f5a13734445cffcda67f3c5422'},
+{'setting_id': 'trakt.client', 'setting_type': 'string', 'setting_default': '30e6c73030cc41dbff996200ac3060cde689555ba207020e08a2175533b912c3'},
+{'setting_id': 'trakt.secret', 'setting_type': 'string', 'setting_default': '726f6b12a9f0079d5850a7bb0e15860725cd487cbfb54ce5471de217639465c5'},
 #==================== TMDb API
-{'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': 'db6aa4def186c3ca8fc9065bd3492e79'},
+{'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': 'a0bf207c5ff6c0caabac0327e39b1cd2'},
 #==================== TMDb Lists
 {'setting_id': 'tmdb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'tmdb.username', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'tmdb.username', 'setting_type': 'string', 'setting_default': 'HYPERION2'},
 #==================== OMDb
 {'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': '52b7b0d6'},
 #==================== RPDb
@@ -407,7 +411,11 @@ def default_settings():
 {'setting_id': 'easynews_password', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'easynews.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'easynews.filter_lang', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'easynews.lang_filters', 'setting_type': 'string', 'setting_default': '0'},
+{'setting_id': 'easynews.lang_filters', 'setting_type': 'string', 'setting_default': 'eng'},
+{'setting_id': 'easynews.refresh_credentials', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'easynews.lang_include_unknown', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'easynews.fallback_search', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'easynews.search_width', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Focused', '1': 'Balanced', '2': 'Broad'}},
 {'setting_id': 'check.easynews', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.easynews', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'en.priority', 'setting_type': 'action', 'setting_default': '7', 'min_value': '1', 'max_value': '10'},
@@ -584,5 +592,5 @@ def default_settings():
 {'setting_id': 'extras.movie.button15', 'setting_type': 'string', 'setting_default': 'show_genres'},
 {'setting_id': 'extras.movie.button16', 'setting_type': 'string', 'setting_default': 'show_director'},
 {'setting_id': 'extras.movie.button17', 'setting_type': 'string', 'setting_default': 'show_options'},
-{'setting_id': 'updatechecks.refresh_addon_keys', 'setting_type': 'string', 'setting_default': 'true'}
+{'setting_id': 'updatechecks.refresh_addon_keys', 'setting_type': 'string', 'setting_default': 'false'}
 	]

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import time
+import requests
+from datetime import datetime, timezone
 from threading import Thread
 from urllib.parse import urlencode
 from caches.settings_cache import get_setting, set_setting
 from caches.main_cache import cache_object
 from modules.source_utils import supported_video_extensions, seas_ep_filter, extras
-from modules.kodi_utils import make_session, kodi_dialog, ok_dialog, notification, confirm_dialog
+from modules.utils import copy2clip, make_qrcode
+from modules.kodi_utils import make_session, ok_dialog, notification, confirm_dialog, progress_dialog, sleep
 # from modules.kodi_utils import logger
 
 base_url = 'https://api.torbox.app/v1/api/'
@@ -14,6 +18,35 @@ session = make_session(base_url)
 def _to_int(value, default=0):
 	try: return int(str(value).strip())
 	except Exception: return default
+
+
+def _device_auth_url(app_name, user_code):
+	return 'https://torbox.app/oauth/device?%s' % urlencode({'app': app_name, 'code': user_code})
+
+
+def _extract_device_token(response):
+	if not response or not response.get('success'):
+		return None
+	data = response.get('data')
+	if isinstance(data, str) and data.strip():
+		return data.strip()
+	if isinstance(data, dict):
+		for key in ('token', 'api_token', 'api_key', 'access_token'):
+			value = data.get(key)
+			if value:
+				return str(value).strip()
+	return None
+
+
+def _device_auth_poll_pending(response):
+	if not response:
+		return True
+	if response.get('success'):
+		return not _extract_device_token(response)
+	error = (response.get('error') or '').upper()
+	if error in ('ITEM_NOT_FOUND', 'DEVICE_CODE_EXPIRED', 'DEVICE_CODE_INVALID', 'INVALID_DEVICE_CODE'):
+		return False
+	return True
 
 
 class TorBoxAPI:
@@ -224,18 +257,68 @@ class TorBoxAPI:
 
 	# ----------- AUTH -----------
 	def auth(self):
-		api_key = kodi_dialog().input('TorBox API Key:')
-		if not api_key: return
+		self.token = ''
+		app_name = 'Mando'
 		try:
-			self.token = api_key.strip()
-			r = self.account_info()
-			if not r or not r.get('success'): raise Exception('invalid response')
-			set_setting('tb.token', self.token)
-			set_setting('tb.enabled', 'true')
-			message = 'Success'
+			response = requests.get(base_url + 'user/auth/device/start', params={'app': app_name}, timeout=20).json()
 		except Exception:
-			message = 'An Error Occurred'
-		ok_dialog(text=message)
+			return ok_dialog(text='Unable to start TorBox authorization')
+		if not response.get('success'):
+			return ok_dialog(text=response.get('detail') or 'Unable to start TorBox authorization')
+		data = response.get('data') or {}
+		device_code = data.get('device_code')
+		user_code = data.get('code')
+		if not device_code or not user_code:
+			return ok_dialog(text='Invalid TorBox authorization response')
+		auth_url = _device_auth_url(app_name, user_code)
+		qr_code = make_qrcode(auth_url) or ''
+		copy2clip(auth_url)
+		p_dialog_insert = '[CR]Full link copied to clipboard[CR]OR visit: [B]torbox.app/oauth/device[/B][CR]AND Enter this Code: [B]%s[/B]' % user_code
+		content = 'Please Scan the QR Code%s[CR]' % p_dialog_insert
+		progressDialog = progress_dialog('TorBox Authorize', qr_code)
+		progressDialog.update(content, 0)
+		sleep_interval = int(data.get('interval') or 5)
+		try:
+			expires_at = data.get('expires_at', '').replace('Z', '+00:00')
+			exp = datetime.fromisoformat(expires_at)
+			if exp.tzinfo is None:
+				exp = exp.replace(tzinfo=timezone.utc)
+			expires_in = max(120, int((exp - datetime.now(timezone.utc)).total_seconds()) + 30)
+		except Exception:
+			expires_in = 900
+		poll_url = base_url + 'user/auth/device/token'
+		poll_body = {'device_code': device_code, 'code': user_code}
+		start, time_passed = time.time(), 0
+		sleep(2000)
+		while not progressDialog.iscanceled() and time_passed < expires_in and not self.token:
+			sleep(1000 * sleep_interval)
+			time_passed = time.time() - start
+			try:
+				poll = requests.post(poll_url, json=poll_body, timeout=20).json()
+			except Exception:
+				progressDialog.update(content, int(100 * time_passed / float(expires_in)))
+				continue
+			api_token = _extract_device_token(poll)
+			if api_token:
+				self.token = api_token
+				break
+			if not _device_auth_poll_pending(poll):
+				break
+			progressDialog.update(content, int(100 * time_passed / float(expires_in)))
+		try: progressDialog.close()
+		except: pass
+		if not self.token:
+			return
+		try:
+			set_setting('tb.token', self.token)
+			r = self.account_info()
+			if not r or not r.get('success'): raise Exception('invalid account')
+			set_setting('tb.enabled', 'true')
+			ok_dialog(text='Success')
+		except Exception:
+			set_setting('tb.token', 'empty_setting')
+			set_setting('tb.enabled', 'false')
+			ok_dialog(text='An Error Occurred')
 
 	def revoke(self):
 		if not confirm_dialog(): return

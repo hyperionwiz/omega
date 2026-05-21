@@ -26,7 +26,7 @@ class PremiumizeAPI:
 		auth_url = response.get('verification_uri')
 		qr_code = make_qrcode(auth_url) or ''
 		copy2clip(auth_url)
-		content = 'Authorize Debrid Services[CR]Navigate to: [B]%s[/B][CR]Enter the following code: [B]%s[/B]' % (auth_url, user_code)
+		content = 'Please Scan the QR Code[CR]Full link copied to clipboard[CR]OR visit: [B]%s[/B][CR]AND Enter this Code: [B]%s[/B]' % (auth_url, user_code)
 		progressDialog = progress_dialog('Premiumize Authorize', qr_code)
 		progressDialog.update(content, 0)
 		device_code = response['device_code']
