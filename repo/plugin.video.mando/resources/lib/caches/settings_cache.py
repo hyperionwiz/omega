@@ -209,8 +209,8 @@ def default_settings():
 #==================== Manage Updates
 {'setting_id': 'update.action', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Prompt', '1': 'Automatic', '2': 'Notification', '3': 'Off'}},
 {'setting_id': 'update.delay', 'setting_type': 'action', 'setting_default': '10', 'min_value': '10', 'max_value': '300'},
-{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'The-Red-Wizard'},
-{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'TheRedWizard.github.io'},
+{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz’'},
+{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'hyperionwiz.github.io/omega’'},
 #==================== Watched Indicators
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt'}},
 #======+============= Trakt Cache
@@ -345,7 +345,7 @@ def default_settings():
 {'setting_id': 'tmdb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tmdb.username', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== OMDb
-{'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': '52b7b0d6'},
 #==================== RPDb
 {'setting_id': 'rpdb_api', 'setting_type': 'string', 'setting_default': 't0-free-rpdb'},
 #==================== Google API
@@ -361,6 +361,7 @@ def default_settings():
 {'setting_id': 'provider.external', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'external_scraper.name', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'external.cache_check', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'external.include_uncached_torbox', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== Real Debrid
 {'setting_id': 'rd.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'rd.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -399,6 +400,7 @@ def default_settings():
 {'setting_id': 'tb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tb.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'store_resolved_to_cloud.torbox', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
+{'setting_id': 'tb.notify_cloud_ready', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'tb_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'check.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
