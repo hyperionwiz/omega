@@ -127,10 +127,10 @@ def addon_fanart():
 		or 'special://home/addons/plugin.video.mando/resources/media/fanart.jpg'
 	)
 
-MEDIA_GITHUB_USER = 'The-Red-Wizard'
-MEDIA_GITHUB_REPO = 'TheRedWizard.github.io'
+MEDIA_GITHUB_USER = 'kodiwind'
+MEDIA_GITHUB_REPO = 'proximus'
 MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/%s/%s/main/packages/media' % (MEDIA_GITHUB_USER, MEDIA_GITHUB_REPO)
-LEGACY_MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/TheRedWizard/TheRedWizard.github.io/main/packages/media'
+LEGACY_MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/kodiwind/proximus.github.io/main/packages/media'
 
 def media_github_credentials():
 	return MEDIA_GITHUB_USER, MEDIA_GITHUB_REPO
