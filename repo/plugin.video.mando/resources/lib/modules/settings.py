@@ -118,6 +118,22 @@ def include_prerelease_results():
 def auto_enable_subs():
 	return get_setting('mando.playback.auto_enable_subs', 'false') == 'true'
 
+def subtitles_source():
+	return get_setting('mando.playback.subs_source', '0')
+
+def submaker_enabled():
+	return subtitles_source() == '1'
+
+def submaker_manifest():
+	manifest = get_setting('mando.playback.submaker_manifest', 'empty_setting')
+	return '' if manifest == 'empty_setting' else manifest
+
+def submaker_language():
+	return get_setting('mando.playback.submaker_language_name', 'English')
+
+def submaker_prefer_local():
+	return get_setting('mando.playback.submaker_prefer_local', 'true') == 'true'
+
 def stingers_show():
 	return get_setting('mando.stinger_alert.show', 'false') == 'true'
 
