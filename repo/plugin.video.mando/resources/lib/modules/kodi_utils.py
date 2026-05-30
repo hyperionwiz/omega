@@ -66,7 +66,8 @@ def rescrape_items():
 	{'name': 'Rescrape With IMDb Year Data', 'value': 'imdb_year'},
 	{'name': 'Rescrape With All Scrapers', 'value': 'with_all'},
 	{'name': 'Rescrape With Episode Group', 'value': 'episode_group'},
-	{'name': 'Rescrape with Filters Ignored', 'value': 'ignore_filters'}]
+	{'name': 'Rescrape with Filters Ignored', 'value': 'ignore_filters'},
+	{'name': 'Start Full Scrape (After Prescrape)', 'value': 'full_scrape'}]
 
 def video_extensions():
 	return ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', 'rmvb', 'mpd', 'ifo', 'mov', 'qt', 'divx', 'xvid', 'bivx', 'vob', 'nrg', 'img', 'iso', 'udf', 'pva',
@@ -425,6 +426,10 @@ def jsonrpc_get_system_setting(setting_id, setting_value=''):
 	return result
 
 def open_settings():
+	try:
+		from apis.aiostreams_api import refresh_settings_properties
+		refresh_settings_properties()
+	except: pass
 	from windows.base_window import open_window
 	open_window(('windows.settings_manager', 'SettingsManager'), 'settings_manager.xml')
 
@@ -476,7 +481,7 @@ LIST_ITEM_NOT_IN_LIST = 'Item not in list'
 def notification(line1, time=5000, icon=None, settle_ms=0):
 	# Brief delay helps Kodi show the toast after select/confirm dialogs close (rapid calls can drop it otherwise).
 	if settle_ms: sleep(settle_ms)
-	kodi_dialog().notification('Mando', line1, icon or addon_icon(), time)
+	kodi_dialog().notification('Red Light', line1, icon or addon_icon(), time)
 
 def player_check(mode, params):
 	from modules.settings import playback_key

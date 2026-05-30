@@ -6,6 +6,9 @@ from modules.kodi_utils import logger
 def tmdb_api_key():
 	return get_setting('mando.tmdb_api', '')
 
+def tmdb_lists_read_token():
+	return get_setting('mando.tmdb.lists_read_token', '')
+
 def trakt_client():
 	return get_setting('mando.trakt.client', '')
 
@@ -240,6 +243,18 @@ def easynews_authorized():
 	else: easynews_status = True
 	return easynews_status
 
+def aiostreams_authorized():
+	username = get_setting('mando.aiostreams.username', 'empty_setting')
+	password = get_setting('mando.aiostreams.password', 'empty_setting')
+	if username in ('empty_setting', '') or password in ('empty_setting', ''): return False
+	return True
+
+def aiostreams_active():
+	from apis.aiostreams_api import ENABLED
+	if not ENABLED: return False
+	if get_setting('mando.provider.aiostreams', 'false') == 'true': return aiostreams_authorized()
+	return False
+
 def extras_enable_extra_ratings():
 	return get_setting('mando.extras.enable_extra_ratings', 'true') == 'true'
 
@@ -274,9 +289,23 @@ def tv_progress_location():
 	return int(get_setting('mando.tv_progress_location', '0'))
 
 def check_prescrape_sources(scraper, media_type):
-	if scraper in ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'tb_cloud', 'folders'): return get_setting('mando.check.%s' % scraper) == 'true'
-	if get_setting('mando.check.%s' % scraper) == 'true' and auto_play(media_type): return True
-	else: return False
+	if scraper in ('easynews', 'aiostreams', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'tb_cloud', 'folders'):
+		return get_setting('mando.check.%s' % scraper) == 'true'
+	if get_setting('mando.check.%s' % scraper) == 'true' and auto_play(media_type):
+		return True
+	return False
+
+def cloud_scrape_before_external(scraper):
+	"""Run debrid cloud scrapers before external torrent scrapers when the provider is enabled."""
+	cloud_scrapers = {
+		'rd_cloud': 'provider.rd_cloud',
+		'pm_cloud': 'provider.pm_cloud',
+		'ad_cloud': 'provider.ad_cloud',
+		'tb_cloud': 'provider.tb_cloud',
+	}
+	if scraper in cloud_scrapers:
+		return get_setting('mando.%s' % cloud_scrapers[scraper]) == 'true'
+	return False
 
 def external_scraper_info():
 	module = get_setting('mando.external_scraper.module')
@@ -301,6 +330,9 @@ def easynews_language_filter():
 	if enabled: filters = get_setting('mando.easynews.lang_filters').split(', ')
 	else: filters = []
 	return enabled, filters
+
+def easynews_exclude_adult():
+	return get_setting('mando.easynews.exclude_adult', 'false') == 'true'
 
 def easynews_refresh_credentials():
 	return get_setting('mando.easynews.refresh_credentials', 'true') == 'true'
@@ -334,16 +366,18 @@ def active_internal_scrapers():
 	for item in [('rd', 'provider.rd_cloud'), ('pm', 'provider.pm_cloud'), ('ad', 'provider.ad_cloud'), ('tb', 'provider.tb_cloud')]:
 		if enabled_debrids_check(item[0]): settings_append(item[1])
 	active = [i.split('.')[1] for i in settings if get_setting('mando.%s' % i) == 'true']
+	if aiostreams_active(): active.append('aiostreams')
 	return active
 
 def provider_sort_ranks():
 	fo_priority = int(get_setting('mando.folders.priority', '6'))
+	aio_priority = int(get_setting('mando.aio.priority', '7'))
 	en_priority = int(get_setting('mando.en.priority', '7'))
 	rd_priority = int(get_setting('mando.rd.priority', '8'))
 	ad_priority = int(get_setting('mando.ad.priority', '9'))
 	pm_priority = int(get_setting('mando.pm.priority', '10'))
 	tb_priority = int(get_setting('mando.tb.priority', '10'))
-	return {'easynews': en_priority, 'real-debrid': rd_priority, 'premiumize.me': pm_priority, 'alldebrid': ad_priority,
+	return {'easynews': en_priority, 'aiostreams': aio_priority, 'real-debrid': rd_priority, 'premiumize.me': pm_priority, 'alldebrid': ad_priority,
 	'torbox': tb_priority, 'rd_cloud': rd_priority, 'pm_cloud': pm_priority, 'ad_cloud': ad_priority, 'tb_cloud': tb_priority, 'folders': fo_priority}
 
 def sort_to_top(provider):
@@ -359,11 +393,12 @@ def scraping_settings():
 	if highlight_type == 2:
 		highlight = get_setting('mando.scraper_single_highlight', 'FF008EB2')
 		return {'highlight_type': 1, '4k': highlight, '1080p': highlight, '720p': highlight, 'sd': highlight}
-	easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', ''
-	rd_highlight, pm_highlight, ad_highlight, ed_highlight, tb_highlight = '', '', '', '', ''
+	easynews_highlight, aiostreams_highlight, debrid_cloud_highlight, folders_highlight = '', '', '', ''
+	rd_highlight, pm_highlight, ad_highlight, tb_highlight = '', '', '', ''
 	highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', ''
 	if highlight_type == 0:
 		easynews_highlight = get_setting('mando.provider.easynews_highlight', 'FF00B3B2')
+		aiostreams_highlight = get_setting('mando.provider.aiostreams_highlight', 'FF00D4FF')
 		debrid_cloud_highlight = get_setting('mando.provider.debrid_cloud_highlight', 'FF7A01CC')
 		folders_highlight = get_setting('mando.provider.folders_highlight', 'FFB36B00')
 		rd_highlight = get_setting('mando.provider.rd_highlight', 'FF3C9900')
@@ -377,7 +412,7 @@ def scraping_settings():
 		highlight_SD = get_setting('mando.scraper_SD_highlight', 'FF0166FF')
 	return {'highlight_type': highlight_type, 'real-debrid': rd_highlight, 'premiumize': pm_highlight, 'alldebrid': ad_highlight,
 			'torbox': tb_highlight, 'rd_cloud': debrid_cloud_highlight, 'pm_cloud': debrid_cloud_highlight, 'ad_cloud': debrid_cloud_highlight,
-			'tb_cloud': debrid_cloud_highlight, 'easynews': easynews_highlight, 'folders': folders_highlight,
+			'tb_cloud': debrid_cloud_highlight, 'easynews': easynews_highlight, 'aiostreams': aiostreams_highlight, 'folders': folders_highlight,
 			'4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD}
 
 def external_cache_check():
@@ -461,9 +496,12 @@ def update_action():
 	return int(get_setting('mando.update.action', '2'))
 
 def rescrape_settings():
-	rescrapes = [('cache_ignored', '1', '0'), ('imdb_year', '0', '1'), ('with_all', '0', '2'), ('episode_group', '0', '3'), ('ignore_filters', '0', '4')]
+	rescrapes = [('cache_ignored', '1', '0'), ('imdb_year', '0', '1'), ('with_all', '0', '2'), ('episode_group', '0', '3'), ('ignore_filters', '0', '4'), ('full_scrape', '2', '5')]
 	return sorted([(i[0], int(get_setting('mando.rescrape.%s' % i[0], i[1])), int(get_setting('mando.rescrape.%s.order' % i[0], i[2]))  ) \
 					for i in rescrapes if int(get_setting('mando.rescrape.%s' % i[0], i[1])) in (1, 2)], key=lambda x: x[2])
+
+def rescrape_action_value(action, default='0'):
+	return int(get_setting('mando.rescrape.%s' % action, default))
 
 def cm_enabled():
 	default = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \

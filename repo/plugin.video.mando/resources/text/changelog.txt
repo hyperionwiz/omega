@@ -1,3 +1,37 @@
+[COLOR gold][B]Version 1.2.1[/B][/COLOR]
+- Fixed prescrape regression: "Start Full Scrape" no longer appears when only EasyNews or debrid cloud results are shown unless Check Before Full Search is enabled or external scrapers still need to run. Debrid cloud still runs before external scrapers when the provider is enabled.
+- TorBox Cloud: episode search only returns files matching the requested season/episode (no longer lists every file in a season pack when the folder title matches).
+- Start Full Scrape: clean second-pass scrape — resets state, applies Results limits/filters and external scraper settings. Configurable under Tools > Settings > Rescrape Actions > Start Full Scrape (After Prescrape) (default Prompt).
+- Meta Accounts: TMDb Lists read access token is user-configurable (with restore default and test), same pattern as Trakt client credentials and the TMDb API key.
+- External scrapers: All Debrid cached-result filter now uses the All Debrid instant API (per hash) instead of MediaFusion only, so "Check for cached status (RD & AD)" returns AD results again when torrents are on your account.
+- External scrapers: fixed debrid cache check skipping re-query after a previous "not cached" result and failing to update when cache status changed (first pass empty, auto second pass).
+- External scrapers: All Debrid instant check uses GET magnet/instant (documented API), accepts instant/ready flags, and does not mark every torrent uncached when the API call fails.
+
+[COLOR gold][B]Version 1.2.0[/B][/COLOR]
+- TorBox Cloud: debrid cloud results (TorBox, RD, PM, AD) bypass Results quality/HDR/size filters — your cloud library is always shown.
+
+[COLOR gold][B]Version 1.1.9[/B][/COLOR]
+- TorBox Cloud: Search Cloud Storage now runs before external scrapers when enabled (no separate Check Before Full Search required).
+- TorBox Cloud: improved cloud matching and fresh mylist/file lookup during source search.
+- AIOStreams: temporarily disabled in this release (no source searches or settings UI) while integration is fixed.
+
+[COLOR gold][B]Version 1.1.9~alpha[/B][/COLOR]
+- AIOStreams: optional native source provider (Tools > Settings > Sources Accounts > AIOStreams > Enable). Uses HTTP Basic Auth username and password from your AIOStreams dashboard.
+- AIOStreams: instance picker and Active base URL row show each preset with its full domain (Kuu, ElfHosted, Yeb, Midnight, or Custom).
+- AIOStreams: Check Before Full Search and Autoplay Result toggles (same pattern as EasyNews and Debrid cloud scrapers).
+- AIOStreams runs alongside Debrid, EasyNews, and external scrapers; P2P results are ignored.
+- AIOStreams: optional result highlight colour under Tools > Settings > Results (provider highlight mode).
+- Results: removed obsolete Easy Debrid and Off Cloud highlight colours.
+
+[COLOR gold][B]Version 1.1.8[/B][/COLOR]
+- Fix rare scrape-screen lockup caused by thread exhaustion ("can't start new thread") by falling back to serial provider processing when new threads cannot be spawned.
+- Sources results window now fails safely if initialisation errors occur, preventing stuck scrape dialogs that required a Kodi restart.
+- Tools > Database & Cache Maintenance: added separate "Clear EasyNews Scrape Cache" and "Clear EasyNews Search History" actions.
+- "Clear All Cache (Excluding Favorites)" now also clears EasyNews search history.
+- Tools > Database & Cache Maintenance: removed obsolete "Clear Easy Debrid Cache" entry from menu and clear-all paths.
+- EasyNews: added "Exclude Adult Results" toggle (Safe Search) in settings.
+- Settings Manager: slowed help text autoscroll repeat timing to 7 seconds.
+
 [COLOR gold][B]Version 1.1.7[/B][/COLOR]
 - Subtitles: SubMaker now supports selectable Subtitle Language in Settings (default English).
 - Subtitles: Now a separate section in Settings > Playback.
@@ -57,7 +91,7 @@
 [COLOR gold][B]Version 1.0.6[/B][/COLOR]
 - Fixed Torbox Cloud Storage files not playing. This was broken in FenLightAM.
 - Added "Send URL to WebDL" to My Services > Torbox.
-- Default Mando fanart changed from local to special path.
+- Default Red Light fanart changed from local to special path.
 
 [COLOR gold][B]Version 1.0.5[/B][/COLOR]
 - A few small fixes.
