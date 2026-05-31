@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from caches.settings_cache import get_setting, set_setting, default_setting_values
+from caches.settings_cache import get_setting, set_setting, default_setting_values, _EXTRAS_LIST_DEFAULT
 from modules.kodi_utils import translate_path, get_property
 from modules.kodi_utils import logger
 
@@ -274,10 +274,10 @@ def extras_enabled():
 	return [int(i) for i in split_setting]
 
 def extras_order():
-	setting = get_setting('mando.extras.order', '2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062')
+	setting = get_setting('mando.extras.order', _EXTRAS_LIST_DEFAULT)
 	if setting in ('', None, 'noop', []): return []
 	split_setting = setting.split(',')
-	return [int(i) for i in split_setting]
+	return [int(i) for i in split_setting if i.strip()]
 
 def recommend_service():
 	return int(get_setting('mando.recommend_service', '0'))

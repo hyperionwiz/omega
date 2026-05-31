@@ -438,7 +438,7 @@ class TorBoxAPI:
 	# ----------- AUTH -----------
 	def auth(self):
 		self.token = ''
-		app_name = 'Red Light'
+		app_name = 'Mando'
 		try:
 			response = requests.get(base_url + 'user/auth/device/start', params={'app': app_name}, timeout=20).json()
 		except Exception:
