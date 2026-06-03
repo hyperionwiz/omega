@@ -506,8 +506,8 @@ def player_check(mode, params):
 		from modules.sources import Sources
 		Sources().playback_prep(params)
 	elif mode == 'playback.video':
-		from modules.player import RedLightPlayer
-		RedLightPlayer().run(params.get('url', None), params.get('obj', None))
+		from modules.player import MandoPlayer
+		MandoPlayer().run(params.get('url', None), params.get('obj', None))
 	else: ok_dialog('External Playback Detected', 'Playback through external addons is not supported')
 
 def external_playback_check(params):

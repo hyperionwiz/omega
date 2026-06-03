@@ -67,8 +67,8 @@ class Subtitles(xbmc.Player):
 		self.language = st.submaker_language()
 		filename_lang = self.language.replace(' ', '_')
 		self.subtitle_path = 'special://temp/'
-		if season: self.sub_filename = 'RedLightSubs_%s_%s_%s' % (self.imdb_id, self.season, self.episode)
-		else: self.sub_filename = 'RedLightSubs_%s' % self.imdb_id
+		if season: self.sub_filename = 'MandoSubs_%s_%s_%s' % (self.imdb_id, self.season, self.episode)
+		else: self.sub_filename = 'MandoSubs_%s' % self.imdb_id
 		self.search_filename = self.sub_filename + '_%s.srt' % filename_lang
 		ku.sleep(2500)
 		if st.submaker_prefer_local():

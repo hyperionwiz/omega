@@ -257,7 +257,7 @@ class AddonXMLCheck:
 		from indexers.dialogs import addon_icon_choice
 		addon_icon_choice({'set_icon': get_setting('addon_icon_choice_name', 'icon.png')})
 
-class RedLightMonitor(Monitor):
+class MandoMonitor(Monitor):
 	def __init__ (self):
 		Monitor.__init__(self)
 		self.startServices()
@@ -320,5 +320,5 @@ if __name__ == '__main__':
 	Thread(target=_am_trakt_startup, daemon=True).start()
 	# ----- AM Lite Trakt startup sync patch END -----
 	kodi_utils.logger('Mando', 'Main Monitor Service Starting')
-	RedLightMonitor().waitForAbort()
+	MandoMonitor().waitForAbort()
 	kodi_utils.logger('Mando', 'Main Monitor Service Finished')

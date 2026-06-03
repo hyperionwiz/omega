@@ -222,8 +222,8 @@ def _tb_play_cloud(resolved_link, filename=''):
 		if filename:
 			kodi_utils.set_property('mando.tb.play_mime', _tb_mime_type(filename))
 			kodi_utils.set_property('mando.tb.play_filename', filename)
-		from modules.player import RedLightPlayer
-		RedLightPlayer().run(resolved_link, 'video')
+		from modules.player import MandoPlayer
+		MandoPlayer().run(resolved_link, 'video')
 	finally:
 		kodi_utils.clear_property('mando.tb.play_mime')
 		kodi_utils.clear_property('mando.tb.play_filename')

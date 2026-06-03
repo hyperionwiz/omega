@@ -242,8 +242,8 @@ def resolve_ad(params):
 	resolved_link = AllDebrid.unrestrict_link(url)
 	if params.get('play', 'false') != 'true':
 		return resolved_link
-	from modules.player import RedLightPlayer
-	RedLightPlayer().run(resolved_link, 'video')
+	from modules.player import MandoPlayer
+	MandoPlayer().run(resolved_link, 'video')
 
 
 def ad_delete(file_id):
