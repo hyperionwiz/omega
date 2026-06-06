@@ -197,7 +197,8 @@ def trakt_authenticate(dummy=''):
 		set_setting('trakt.token', token['access_token'])
 		set_setting('trakt.refresh', token['refresh_token'])
 		set_setting('trakt.expires', str(time.time() + token['expires_in']))
-		set_setting('watched_indicators', '1')
+		if get_setting('mando.watched_indicators', '0') == '0': set_setting('watched_indicators', '1')
+		if get_setting('mando.sync_indicators', '') in ('', '0'): set_setting('sync_indicators', '1')
 		kodi_utils.sleep(1000)
 		try:
 			user = call_trakt('/users/me')
@@ -215,7 +216,8 @@ def trakt_revoke_authentication(dummy=''):
 	set_setting('trakt.token', '0')
 	set_setting('trakt.refresh', '0')
 	set_setting('trakt.next_daily_clear', '0')
-	set_setting('watched_indicators', '0')
+	if get_setting('mando.watched_indicators', '0') == '1': set_setting('watched_indicators', '2' if settings.simkl_user_active() else '0')
+	if get_setting('mando.sync_indicators', '0') == '1': set_setting('sync_indicators', '2' if settings.simkl_user_active() else '0')
 	trakt_cache.clear_all_trakt_cache_data(silent=True, refresh=False)
 	kodi_utils.notification('Trakt Account Authorization Reset', 3000)
 	CLIENT_ID = settings.trakt_client()
@@ -435,14 +437,22 @@ def trakt_reset_scrobble(params):
 		return kodi_utils.notification('Success', 3000)
 	except: return kodi_utils.notification('Error', 3000)
 
+def trakt_scrobble(action, media_type, tmdb_id, percent=0, season=None, episode=None):
+	if action not in ('start', 'stop', 'pause'): return
+	if media_type in ('movie', 'movies'):
+		data = {'movie': {'ids': {'tmdb': int(tmdb_id)}}, 'progress': float(percent)}
+	else:
+		data = {'show': {'ids': {'tmdb': int(tmdb_id)}}, 'episode': {'season': int(season), 'number': int(episode)}, 'progress': float(percent)}
+	call_trakt('scrobble/%s' % action, data=data)
+
 def trakt_progress(action, media, media_id, percent, season=None, episode=None, resume_id=None, refresh_trakt=False):
 	if action == 'clear_progress':
 		url = 'sync/playback/%s' % resume_id
 		result = call_trakt(url, is_delete=True)
 	else:
 		url = 'scrobble/pause'
-		if media in ('movie', 'movies'): data = {'movie': {'ids': {'tmdb': media_id}}, 'progress': float(percent)}
-		else: data = {'show': {'ids': {'tmdb': media_id}}, 'episode': {'season': int(season), 'number': int(episode)}, 'progress': float(percent)}
+		if media in ('movie', 'movies'): data = {'movie': {'ids': {'tmdb': int(media_id)}}, 'progress': float(percent)}
+		else: data = {'show': {'ids': {'tmdb': int(media_id)}}, 'episode': {'season': int(season), 'number': int(episode)}, 'progress': float(percent)}
 		call_trakt(url, data=data)
 	if refresh_trakt: trakt_sync_activities()
 

@@ -456,9 +456,6 @@ def mpaa_region():
 def widget_hide_next_page():
 	return get_setting('mando.widget_hide_next_page', 'false') == 'true'
 
-def widget_hide_watched():
-	return get_setting('mando.widget_hide_watched', 'false') == 'true'
-
 def calendar_sort_order():
 	return int(get_setting('mando.trakt.calendar_sort_order', '0'))
 
@@ -474,11 +471,36 @@ def date_offset():
 def media_open_action(media_type):
 	return int(get_setting('mando.media_open_action_%s' % media_type, '0'))
 
-def watched_indicators():
-	ind = int(get_setting('mando.watched_indicators', '0'))
+def _resolve_provider_setting(setting_id):
+	ind = int(get_setting('mando.%s' % setting_id, '0'))
 	if ind == 1 and not trakt_user_active(): return 0
 	if ind == 2 and not simkl_user_active(): return 0
 	return ind
+
+def watched_indicators():
+	return _resolve_provider_setting('watched_indicators')
+
+def sync_indicators():
+	return _resolve_provider_setting('sync_indicators')
+
+def playback_progress_provider():
+	"""Stored Playback & Progress Provider; never silently downgrade to Mando local."""
+	return int(get_setting('mando.sync_indicators', '0'))
+
+def migrate_sync_indicators_for_upgrade(had_existing_settings):
+	"""One-time: Playback & Progress Provider follows pre-split watched_indicators."""
+	if get_setting('mando.sync_indicators_playback_reconciled', 'false') != 'true':
+		set_setting('sync_indicators_playback_reconciled', 'true')
+		sync_val = get_setting('mando.sync_indicators', '0')
+		watched_val = get_setting('mando.watched_indicators', '0')
+		if sync_val == '0' and watched_val in ('1', '2'):
+			set_setting('sync_indicators', watched_val)
+			return True
+	if get_setting('mando.sync_indicators_migrated', 'false') == 'true': return False
+	set_setting('sync_indicators_migrated', 'true')
+	if not had_existing_settings: return False
+	set_setting('sync_indicators', get_setting('mando.watched_indicators', '0'))
+	return True
 
 def flatten_episodes():
 	return get_setting('mando.trakt.flatten_episodes', 'false') == 'true'

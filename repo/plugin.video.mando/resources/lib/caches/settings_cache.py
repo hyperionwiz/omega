@@ -335,8 +335,9 @@ def sync_settings(params={}):
 		settings_cache.set_many(insert_list, load_properties=load_properties)
 		migrated = True
 	try:
-		from modules.settings import migrate_simkl_context_menu_for_upgrade
+		from modules.settings import migrate_simkl_context_menu_for_upgrade, migrate_sync_indicators_for_upgrade
 		if migrate_simkl_context_menu_for_upgrade(had_existing_settings): migrated = True
+		if migrate_sync_indicators_for_upgrade(had_existing_settings): migrated = True
 	except: pass
 	if migrated and had_existing_settings:
 		kodi_utils.set_property(_SETTINGS_DB_MIGRATED, 'true')
@@ -450,10 +451,11 @@ def default_settings():
 #==================== Manage Updates
 {'setting_id': 'update.action', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Prompt', '1': 'Automatic', '2': 'Notification', '3': 'Off'}},
 {'setting_id': 'update.delay', 'setting_type': 'action', 'setting_default': '10', 'min_value': '10', 'max_value': '300'},
-{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz'},
-{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'hyperionwiz.github.io/omega'},
+{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega'},
+{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega.github.io'},
 #==================== Watched Indicators
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt', '2': 'Simkl'}},
+{'setting_id': 'sync_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt', '2': 'Simkl'}},
 #======+============= Trakt Cache
 {'setting_id': 'trakt.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'trakt.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -534,7 +536,6 @@ def default_settings():
 #==================== Widgets
 {'setting_id': 'widget_refresh_timer', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'widget_refresh_notification', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'widget_hide_watched', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'widget_hide_next_page', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== RPDb Ratings Posters
 {'setting_id': 'rpdb_enabled', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'Movies', '2': 'TV Shows', '3': 'Both'}},
@@ -842,6 +843,8 @@ def default_settings():
 {'setting_id': 'simkl.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'simkl.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'simkl.cm_menu_migrated', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'sync_indicators_migrated', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'sync_indicators_playback_reconciled', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'tmdblist.list_sort', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'tmdblist.list_sort_name', 'setting_type': 'string', 'setting_default': 'Title'},
 {'setting_id': 'personal_list.list_sort', 'setting_type': 'string', 'setting_default': '0'},

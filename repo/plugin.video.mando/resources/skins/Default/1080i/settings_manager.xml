@@ -532,12 +532,21 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting)</visible>
-                          <property name="setting_label">Watched Status Provider</property>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
+                          <property name="setting_label">Menus &amp; Widgets Provider</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.watched_indicators_name)]</property>
-                          <property name="setting_description">Choose the provider that keeps track of watched media: Mando (local), Trakt, or Simkl (requires authorization for Trakt/Simkl)</property>
+                          <property name="setting_description">Watched ticks, hide-watched filtering, and in-addon Watched / browse lists. Mando (local), Trakt, or Simkl (authorize under Meta Accounts).</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=watched_indicators)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
+                          <property name="setting_label">Playback &amp; Progress Provider</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.sync_indicators_name)]</property>
+                          <property name="setting_description">Resume points, scrobble, Next Episodes, and In Progress lists. Mando (local), Trakt, or Simkl. Can differ from Menus &amp; Widgets when both Trakt and Simkl are authorized.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=sync_indicators)</onclick>
                       </item>
         <!-- Simkl Cache -->
                       <item>
@@ -1198,14 +1207,6 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(30)</visible>
-                          <property name="setting_label">Hide Watched Items in Widgets</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_watched)]</property>
-                          <property name="setting_description">Enable this and watched items will be hidden in Mando widgets</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(30)</visible>
                           <property name="setting_label">Hide Next Page Item in Widgets</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_next_page)]</property>
@@ -1702,7 +1703,7 @@
                           <property name="setting_label">Check for Cached Results (RD)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.external.cache_check)]</property>
-                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Real Debrid account before listing them. You may see fewer links, but those shown should be instant on RD. All Debrid is not included in this check.</property>
+                          <property name="setting_description">When enabled, Mando API-checks Real-Debrid cache status for external results (fewer RD rows, but those shown should be instant). Premiumize and AllDebrid are not API-checked by this setting — every hash is labelled cached for those providers. TorBox and Offcloud use their own Include uncached settings for API checks, not this toggle.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external.cache_check)</onclick>
                       </item>
                       <item>
