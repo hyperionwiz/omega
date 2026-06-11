@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from caches.settings_cache import get_setting, set_setting, default_setting_values, _EXTRAS_LIST_DEFAULT
-from modules.kodi_utils import translate_path, get_property
+from modules.kodi_utils import translate_path, get_property, addon_profile
 from modules.kodi_utils import logger
 
 def tmdb_api_key():
@@ -17,15 +17,6 @@ def trakt_secret():
 
 def trakt_user_active():
 	return get_setting('mando.trakt.user', 'empty_setting') not in (None, 'empty_setting', '')
-
-def simkl_user_active():
-	return get_setting('mando.simkl.user', 'empty_setting') not in (None, 'empty_setting', '') \
-		and get_setting('mando.simkl.token', '0') not in (None, '0', '', 'empty_setting')
-
-def simkl_sync_interval():
-	setting = get_setting('mando.simkl.sync_interval', '60')
-	interval = int(setting) * 60
-	return setting, interval
 
 def tmdblist_user_active():
 	return get_setting('mando.tmdb.account_id', 'empty_setting') not in (None, 'empty_setting', '')
@@ -71,6 +62,12 @@ def download_directory(media_type):
 								'image_url': 'mando.image_download_directory','image': 'mando.image_download_directory', 'premium': 'mando.premium_download_directory',
 								None: 'mando.premium_download_directory', 'None': False}
 	return translate_path(get_setting(download_directories_dict[media_type]))
+
+def import_export_directory():
+	path = get_setting('mando.import_export_directory', '')
+	if path in ('', 'None', None):
+		return translate_path(addon_profile())
+	return translate_path(path)
 
 def ai_model_active():
 	if get_setting('mando.google_api', 'empty_setting') not in (None, 'None', '', 'empty_setting'): return True
@@ -304,6 +301,11 @@ def check_prescrape_sources(scraper, media_type):
 		return True
 	return False
 
+def prescrape_enabled(media_type, active_scrapers=None):
+	if active_scrapers is None:
+		active_scrapers = active_internal_scrapers()
+	return any(check_prescrape_sources(scraper, media_type) for scraper in active_scrapers)
+
 def cloud_scrape_before_external(scraper):
 	"""Run debrid cloud scrapers before external torrent scrapers when the provider is enabled."""
 	cloud_scrapers = {
@@ -329,11 +331,33 @@ def filter_by_name(scraper):
 def uncached_min_seeders():
 	return int(get_setting('mando.results.uncached_min_seeders', '0'))
 
+_DEBRID_CACHE_CHECK_SETTINGS = {
+	'Real-Debrid': 'rd.cache_check',
+	'TorBox': 'tb.cache_check',
+	'Premiumize.me': 'pm.cache_check',
+	'Offcloud': 'oc.cache_check',
+	'AllDebrid': 'ad.cache_check',
+}
+
+def debrid_cache_check(provider):
+	setting_id = _DEBRID_CACHE_CHECK_SETTINGS.get(provider)
+	if not setting_id: return False
+	return get_setting('mando.%s' % setting_id, 'false') == 'true'
+
+def any_external_cache_check():
+	for slug, provider in (('rd', 'Real-Debrid'), ('tb', 'TorBox'), ('pm', 'Premiumize.me'), ('oc', 'Offcloud'), ('ad', 'AllDebrid')):
+		if enabled_debrids_check(slug) and debrid_cache_check(provider):
+			return True
+	return False
+
 def include_uncached_torbox():
-	return get_setting('mando.external.include_uncached_torbox', 'false') == 'true'
+	return get_setting('mando.tb.include_uncached', 'false') == 'true' and debrid_cache_check('TorBox')
 
 def include_uncached_offcloud():
-	return get_setting('mando.external.include_uncached_offcloud', 'false') == 'true'
+	return get_setting('mando.oc.include_uncached', 'false') == 'true' and debrid_cache_check('Offcloud')
+
+def include_uncached_premiumize():
+	return get_setting('mando.pm.include_uncached', 'false') == 'true' and debrid_cache_check('Premiumize.me')
 
 def tb_notify_cloud_ready():
 	return get_setting('mando.tb.notify_cloud_ready', 'true') == 'true'
@@ -435,7 +459,7 @@ def scraping_settings():
 			'4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD}
 
 def external_cache_check():
-	return get_setting('mando.external.cache_check') == 'true'
+	return any_external_cache_check()
 
 def omdb_api_key():
 	return get_setting('mando.omdb_api', 'empty_setting')
@@ -456,6 +480,9 @@ def mpaa_region():
 def widget_hide_next_page():
 	return get_setting('mando.widget_hide_next_page', 'false') == 'true'
 
+def widget_hide_watched():
+	return get_setting('mando.widget_hide_watched', 'false') == 'true'
+
 def calendar_sort_order():
 	return int(get_setting('mando.trakt.calendar_sort_order', '0'))
 
@@ -471,36 +498,9 @@ def date_offset():
 def media_open_action(media_type):
 	return int(get_setting('mando.media_open_action_%s' % media_type, '0'))
 
-def _resolve_provider_setting(setting_id):
-	ind = int(get_setting('mando.%s' % setting_id, '0'))
-	if ind == 1 and not trakt_user_active(): return 0
-	if ind == 2 and not simkl_user_active(): return 0
-	return ind
-
 def watched_indicators():
-	return _resolve_provider_setting('watched_indicators')
-
-def sync_indicators():
-	return _resolve_provider_setting('sync_indicators')
-
-def playback_progress_provider():
-	"""Stored Playback & Progress Provider; never silently downgrade to Mando local."""
-	return int(get_setting('mando.sync_indicators', '0'))
-
-def migrate_sync_indicators_for_upgrade(had_existing_settings):
-	"""One-time: Playback & Progress Provider follows pre-split watched_indicators."""
-	if get_setting('mando.sync_indicators_playback_reconciled', 'false') != 'true':
-		set_setting('sync_indicators_playback_reconciled', 'true')
-		sync_val = get_setting('mando.sync_indicators', '0')
-		watched_val = get_setting('mando.watched_indicators', '0')
-		if sync_val == '0' and watched_val in ('1', '2'):
-			set_setting('sync_indicators', watched_val)
-			return True
-	if get_setting('mando.sync_indicators_migrated', 'false') == 'true': return False
-	set_setting('sync_indicators_migrated', 'true')
-	if not had_existing_settings: return False
-	set_setting('sync_indicators', get_setting('mando.watched_indicators', '0'))
-	return True
+	if not trakt_user_active(): return 0
+	return int(get_setting('mando.watched_indicators', '0'))
 
 def flatten_episodes():
 	return get_setting('mando.trakt.flatten_episodes', 'false') == 'true'
@@ -551,52 +551,19 @@ def rescrape_settings():
 def rescrape_action_value(action, default='0'):
 	return int(get_setting('mando.rescrape.%s' % action, default))
 
-_CM_ORDER_DEFAULT = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
-	'simkl_manager,trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
-
-def _merge_cm_order_with_enabled(order, enabled):
-	order = [i for i in order if i]
-	for item in enabled:
-		if item in order: continue
-		if item == 'simkl_manager' and 'trakt_manager' in order:
-			order.insert(order.index('trakt_manager'), item)
-		else:
-			order.append(item)
-	return order
-
-def migrate_simkl_context_menu_for_upgrade(had_existing_settings):
-	"""One-time: enable Simkl Manager in context menu for users upgrading from pre-Simkl builds."""
-	if get_setting('mando.simkl.cm_menu_migrated', 'false') == 'true': return False
-	set_setting('simkl.cm_menu_migrated', 'true')
-	if not had_existing_settings: return False
-	item, changed = 'simkl_manager', False
-	raw = get_setting('mando.context_menu.enabled', '')
-	if raw and raw not in ('noop', '[]'):
-		parts = [p for p in raw.split(',') if p]
-		if item not in parts:
-			set_setting('context_menu.enabled', ','.join(parts + [item]))
-			changed = True
-	raw = get_setting('mando.context_menu.order', '')
-	if raw and raw not in ('noop', '[]'):
-		parts = _merge_cm_order_with_enabled([p for p in raw.split(',') if p], cm_enabled())
-		if item not in raw.split(','):
-			set_setting('context_menu.order', ','.join(parts))
-			changed = True
-	return changed
-
 def cm_enabled():
-	setting = get_setting('mando.context_menu.enabled', _CM_ORDER_DEFAULT)
-	if setting in ('', None, 'noop', '[]'): return _CM_ORDER_DEFAULT.split(',')
-	return [p for p in setting.split(',') if p]
+	default = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
+				'trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
+	setting = get_setting('mando.context_menu.enabled', default)
+	if setting in ('', None, 'noop', '[]'): return default.split(',')
+	return setting.split(',')
 
 def cm_current_order():
-	setting = get_setting('mando.context_menu.order', _CM_ORDER_DEFAULT)
-	if setting in ('', None, 'noop', '[]'): order = _CM_ORDER_DEFAULT.split(',')
-	else: order = [p for p in setting.split(',') if p]
-	enabled = cm_enabled()
-	merged = _merge_cm_order_with_enabled(order, enabled)
-	if merged != order: set_setting('context_menu.order', ','.join(merged))
-	return merged
+	default = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
+				'trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
+	setting = get_setting('mando.context_menu.order', default)
+	if setting in ('', None, 'noop', '[]'): return default.split(',')
+	return setting.split(',')
 
 def cm_sort_order():
 	try: setting = {i: c for c, i in enumerate([i for i in cm_current_order() if i in cm_enabled()])}

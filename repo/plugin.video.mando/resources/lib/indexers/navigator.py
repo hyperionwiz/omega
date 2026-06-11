@@ -55,12 +55,12 @@ class Navigator:
 		self.end_directory()
 
 	def premium(self):
-		if s.authorized_debrid_check('rd'): self.add({'mode': 'navigator.real_debrid'}, 'Real Debrid', 'realdebrid')
-		if s.authorized_debrid_check('pm'): self.add({'mode': 'navigator.premiumize'}, 'Premiumize', 'premiumize')
 		if s.authorized_debrid_check('ad'): self.add({'mode': 'navigator.alldebrid'}, 'All Debrid', 'alldebrid')
-		if s.authorized_debrid_check('oc'): self.add({'mode': 'navigator.offcloud'}, 'Offcloud', 'offcloud')
-		if s.authorized_debrid_check('tb'): self.add({'mode': 'navigator.torbox'}, 'TorBox', 'torbox')
 		if s.easynews_authorized(): self.add({'mode': 'navigator.easynews'}, 'EasyNews', 'easynews')
+		if s.authorized_debrid_check('oc'): self.add({'mode': 'navigator.offcloud'}, 'Offcloud', 'offcloud')
+		if s.authorized_debrid_check('pm'): self.add({'mode': 'navigator.premiumize'}, 'Premiumize', 'premiumize')
+		if s.authorized_debrid_check('rd'): self.add({'mode': 'navigator.real_debrid'}, 'Real Debrid', 'realdebrid')
+		if s.authorized_debrid_check('tb'): self.add({'mode': 'navigator.torbox'}, 'TorBox', 'torbox')
 		self.end_directory()
 
 	def easynews(self):
@@ -240,8 +240,14 @@ class Navigator:
 		self.add({'mode': 'navigator.changelog_utils'}, 'Changelog & Log Utils', 'settings2')
 		self.add({'mode': 'build_next_episode_manager'}, 'TV Shows Progress Manager', 'settings2')
 		self.add({'mode': 'navigator.shortcut_folders'}, 'Shortcut Folders Manager', 'settings2')
+		self.add({'mode': 'navigator.import_export'}, 'Import & Export', 'settings2')
 		self.add({'mode': 'navigator.maintenance'}, 'Database & Cache Maintenance', 'settings2')
 		self.add({'mode': 'language_invoker_choice', 'isFolder': 'false'}, 'Toggle Language Invoker (ADVANCED!!)', 'settings2')
+		self.end_directory()
+
+	def import_export(self):
+		self.add({'mode': 'local_backup.import_data', 'isFolder': 'false'}, 'Import Mando Favorites & Progress', 'settings')
+		self.add({'mode': 'local_backup.export_data', 'isFolder': 'false'}, 'Export Mando Favorites & Progress', 'settings')
 		self.end_directory()
 
 	def maintenance(self):
@@ -257,7 +263,6 @@ class Navigator:
 		self.add({'mode': 'clear_cache', 'cache': 'ai_functions', 'isFolder': 'false'}, 'Clear AI Data Cache', 'settings')
 		self.add({'mode': 'clear_cache', 'cache': 'tmdb_list', 'isFolder': 'false'}, 'Clear TMDb Personal List Cache', 'settings')
 		self.add({'mode': 'clear_cache', 'cache': 'trakt', 'isFolder': 'false'}, 'Clear Trakt Cache', 'settings')
-		self.add({'mode': 'clear_cache', 'cache': 'simkl', 'isFolder': 'false'}, 'Clear Simkl Cache', 'settings')
 		self.add({'mode': 'clear_cache', 'cache': 'imdb', 'isFolder': 'false'}, 'Clear IMDb Cache', 'settings')
 		self.add({'mode': 'clear_cache', 'cache': 'internal_scrapers', 'isFolder': 'false'}, 'Clear Internal Scrapers Cache', 'settings')
 		self.add({'mode': 'clear_cache', 'cache': 'easynews_scrape', 'isFolder': 'false'}, 'Clear EasyNews Scrape Cache', 'settings')

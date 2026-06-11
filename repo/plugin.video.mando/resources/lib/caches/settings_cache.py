@@ -300,6 +300,31 @@ def sync_settings(params={}):
 			migrated = True
 			currentsettings = settings_cache.get_all()
 	except: pass
+	_setting_migrations = (
+		('external.cache_check', 'rd.cache_check'),
+		('external.include_uncached_torbox', 'tb.include_uncached'),
+		('external.include_uncached_offcloud', 'oc.include_uncached'),
+	)
+	for old_id, new_id in _setting_migrations:
+		if old_id not in currentsettings: continue
+		if new_id not in currentsettings:
+			value = currentsettings[old_id]
+			settings_cache.write_db(new_id, value, defaults_map.get(new_id))
+			currentsettings[new_id] = value
+			if load_properties: settings_cache.set_memory_cache(new_id, value)
+		settings_cache.remove_setting(old_id)
+		currentsettings.pop(old_id, None)
+		migrated = True
+	if had_existing_settings and currentsettings.get('migration.cache_check_pm_oc_tb_v129e') != 'true':
+		for cache_key in ('pm.cache_check', 'oc.cache_check', 'tb.cache_check'):
+			if currentsettings.get(cache_key) == 'true': continue
+			settings_cache.write_db(cache_key, 'true', defaults_map.get(cache_key))
+			currentsettings[cache_key] = 'true'
+			if load_properties: settings_cache.set_memory_cache(cache_key, 'true')
+			migrated = True
+		settings_cache.write_db('migration.cache_check_pm_oc_tb_v129e', 'true', defaults_map.get('migration.cache_check_pm_oc_tb_v129e'))
+		currentsettings['migration.cache_check_pm_oc_tb_v129e'] = 'true'
+		if load_properties: settings_cache.set_memory_cache('migration.cache_check_pm_oc_tb_v129e', 'true')
 	if currentsettings:
 		if currentsettings.get('update.username', '').replace('-', '').lower() == 'theredwizard' \
 				and currentsettings.get('update.username') != 'The-Red-Wizard':
@@ -334,11 +359,6 @@ def sync_settings(params={}):
 	if insert_list:
 		settings_cache.set_many(insert_list, load_properties=load_properties)
 		migrated = True
-	try:
-		from modules.settings import migrate_simkl_context_menu_for_upgrade, migrate_sync_indicators_for_upgrade
-		if migrate_simkl_context_menu_for_upgrade(had_existing_settings): migrated = True
-		if migrate_sync_indicators_for_upgrade(had_existing_settings): migrated = True
-	except: pass
 	if migrated and had_existing_settings:
 		kodi_utils.set_property(_SETTINGS_DB_MIGRATED, 'true')
 	if load_properties:
@@ -393,7 +413,13 @@ def set_numeric(params):
 def set_path(params):
 	setting_id = params['setting_id']
 	browse_mode = int(default_setting_values(setting_id)['browse_mode'])
-	new_value = kodi_utils.kodi_dialog().browse(browse_mode, '', '', defaultt=get_setting('mando.%s' % setting_id))
+	current = get_setting('mando.%s' % setting_id)
+	if browse_mode == 0:
+		new_value = kodi_utils.browse_directory(current)
+	else:
+		new_value = kodi_utils.kodi_dialog().browse(browse_mode, '', '', defaultt=current)
+	if not new_value:
+		return
 	set_setting(setting_id, new_value)
 
 def set_from_list(params):
@@ -454,8 +480,7 @@ def default_settings():
 {'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega'},
 {'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega.github.io'},
 #==================== Watched Indicators
-{'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt', '2': 'Simkl'}},
-{'setting_id': 'sync_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt', '2': 'Simkl'}},
+{'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Mando', '1': 'Trakt'}},
 #======+============= Trakt Cache
 {'setting_id': 'trakt.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'trakt.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -466,6 +491,7 @@ def default_settings():
 {'setting_id': 'tvshow_download_directory', 'setting_type': 'path', 'setting_default': 'special://profile/addon_data/plugin.video.mando/TV Show Downloads/', 'browse_mode': '0'},
 {'setting_id': 'premium_download_directory', 'setting_type': 'path', 'setting_default': 'special://profile/addon_data/plugin.video.mando/Premium Downloads/', 'browse_mode': '0'},
 {'setting_id': 'image_download_directory', 'setting_type': 'path', 'setting_default': 'special://profile/addon_data/plugin.video.mando/Image Downloads/', 'browse_mode': '0'},
+{'setting_id': 'import_export_directory', 'setting_type': 'path', 'setting_default': 'special://profile/addon_data/plugin.video.mando/Import Export/', 'browse_mode': '0'},
 
 
 #================================================================================#
@@ -536,6 +562,7 @@ def default_settings():
 #==================== Widgets
 {'setting_id': 'widget_refresh_timer', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'widget_refresh_notification', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'widget_hide_watched', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'widget_hide_next_page', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== RPDb Ratings Posters
 {'setting_id': 'rpdb_enabled', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'Movies', '2': 'TV Shows', '3': 'Both'}},
@@ -543,10 +570,10 @@ def default_settings():
 #==================== Context Menu
 {'setting_id': 'context_menu.enabled', 'setting_type': 'string',
 'setting_default': 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
-'simkl_manager,trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'},
+'trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'},
 {'setting_id': 'context_menu.order', 'setting_type': 'string',
 'setting_default': 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
-'simkl_manager,trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'},
+'trakt_manager,personal_manager,tmdb_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'},
 
 
 #==================================================================================#
@@ -603,12 +630,11 @@ def default_settings():
 #==================== External
 {'setting_id': 'provider.external', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'external_scraper.name', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'external.cache_check', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'external.include_uncached_torbox', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'external.include_uncached_offcloud', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'migration.cache_check_pm_oc_tb_v129e', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== Real Debrid
 {'setting_id': 'rd.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'rd.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'rd.cache_check', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'rd.account_id', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'store_resolved_to_cloud.real-debrid', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.rd_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -622,6 +648,8 @@ def default_settings():
 #==================== Premiumize
 {'setting_id': 'pm.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'pm.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'pm.cache_check', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'pm.include_uncached', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'pm.account_id', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'store_resolved_to_cloud.premiumize.me', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.pm_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -633,6 +661,7 @@ def default_settings():
 #==================== All Debrid
 {'setting_id': 'ad.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'ad.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'ad.cache_check', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'ad.account_id', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'store_resolved_to_cloud.alldebrid', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.ad_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -645,6 +674,8 @@ def default_settings():
 {'setting_id': 'oc.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'oc.account_id', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'oc.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'oc.cache_check', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'oc.include_uncached', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'store_resolved_to_cloud.offcloud', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'oc.notify_cloud_ready', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.oc_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -656,6 +687,8 @@ def default_settings():
 #==================== TorBox
 {'setting_id': 'tb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tb.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'tb.cache_check', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'tb.include_uncached', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'store_resolved_to_cloud.torbox', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'tb.notify_cloud_ready', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -837,14 +870,6 @@ def default_settings():
 {'setting_id': 'trakt.expires', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'trakt.refresh', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'trakt.token', 'setting_type': 'string', 'setting_default': '0'},
-#==================== Simkl
-{'setting_id': 'simkl.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'simkl.token', 'setting_type': 'string', 'setting_default': '0'},
-{'setting_id': 'simkl.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
-{'setting_id': 'simkl.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'simkl.cm_menu_migrated', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'sync_indicators_migrated', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'sync_indicators_playback_reconciled', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'tmdblist.list_sort', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'tmdblist.list_sort_name', 'setting_type': 'string', 'setting_default': 'Title'},
 {'setting_id': 'personal_list.list_sort', 'setting_type': 'string', 'setting_default': '0'},

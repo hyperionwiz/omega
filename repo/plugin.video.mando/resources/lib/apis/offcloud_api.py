@@ -15,6 +15,9 @@ class OffcloudAPI:
 	oauth_url = 'https://offcloud.com/oauth/'
 
 	def __init__(self):
+		self._sync_token()
+
+	def _sync_token(self):
 		self.token = get_setting('mando.oc.token', 'empty_setting')
 
 	def _authorized(self):
@@ -25,6 +28,7 @@ class OffcloudAPI:
 		return {'Authorization': 'Bearer %s' % self.token}
 
 	def _request(self, method, path, params=None, json_data=None, data=None, timeout=20):
+		self._sync_token()
 		if not self._authorized(): return None
 		url = path if path.startswith('http') else '%s%s' % (self.base_url, path.lstrip('/'))
 		try:
@@ -138,8 +142,23 @@ class OffcloudAPI:
 		username = info.get('user_id') or info.get('userId') or info.get('email') or ''
 		if username:
 			set_setting('oc.account_id', username)
+		self.clear_cache()
 		notification('Offcloud successfully authorized', 3000)
 		ok_dialog(text='Success')
+
+	def item_play_link(self, item):
+		url = item.get('url')
+		if url: return self.requote_uri(url)
+		server, request_id, file_name = item.get('server'), item.get('requestId', ''), item.get('fileName', '')
+		if server and request_id and file_name:
+			return self.requote_uri(self.build_url(server, request_id, file_name))
+		if request_id and not item.get('isDirectory'):
+			explore = self.torrent_info(request_id)
+			if isinstance(explore, list):
+				for link in explore:
+					if isinstance(link, str) and link:
+						return self.requote_uri(link)
+		return ''
 
 	def revoke(self):
 		set_setting('oc.token', 'empty_setting')
@@ -151,7 +170,8 @@ class OffcloudAPI:
 		return cache_object(self._get, 'oc_user_cloud', 'cloud/history', False, 0.03)
 
 	def user_cloud_check(self):
-		return self._get('cloud/history')
+		result = self._get('cloud/history')
+		return result if isinstance(result, list) else []
 
 	def user_cloud_info(self, request_id=''):
 		return cache_object(self._get, 'oc_user_cloud_%s' % request_id, 'cloud/explore/%s' % request_id, False, 0.03)

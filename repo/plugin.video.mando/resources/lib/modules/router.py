@@ -51,9 +51,6 @@ def routing(sys):
 			return exec('trakt_lists.%s(params)' % mode.split('.')[2])
 		from apis import trakt_api
 		return exec('trakt_api.%s(params)' % mode.split('.')[1])
-	elif 'simkl.' in mode:
-		from apis import simkl_api
-		return exec('simkl_api.%s(params)' % mode.split('.')[1])
 	elif 'build' in mode:
 		if mode == 'build_movie_list':
 			from indexers.movies import Movies
@@ -289,6 +286,9 @@ def routing(sys):
 		from modules import updater
 		return exec('updater.%s()' % mode.split('.')[1])
 	##EXTRA modes##
+	elif 'local_backup.' in mode:
+		from modules import local_backup
+		return getattr(local_backup, mode.split('.', 1)[1])(params)
 	elif mode == 'set_view':
 		from modules.kodi_utils import set_view
 		return kodi_utils.set_view(params.get('view_type'))

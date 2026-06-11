@@ -532,55 +532,12 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Menus &amp; Widgets Provider</property>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting)</visible>
+                          <property name="setting_label">Watched Status Provider</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.watched_indicators_name)]</property>
-                          <property name="setting_description">Watched ticks, hide-watched filtering, and in-addon Watched / browse lists. Mando (local), Trakt, or Simkl (authorize under Meta Accounts).</property>
+                          <property name="setting_description">Choose the provider that keeps track of the Movies and Episodes you have watched within Mando. Options are the built in method of Mando or your Trakt account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=watched_indicators)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Playback &amp; Progress Provider</property>
-                          <property name="setting_type">action</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.sync_indicators_name)]</property>
-                          <property name="setting_description">Resume points, scrobble, Next Episodes, and In Progress lists. Mando (local), Trakt, or Simkl. Can differ from Menus &amp; Widgets when both Trakt and Simkl are authorized.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=sync_indicators)</onclick>
-                      </item>
-        <!-- Simkl Cache -->
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <property name="setting_label">Simkl Cache</property>
-                          <property name="setting_type">separator</property>
-                          <onclick>noop</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Resync Interval (mins)</property>
-                          <property name="setting_type">numeric</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.simkl.sync_interval)]</property>
-                          <property name="setting_description">Choose how often Mando polls your Simkl service for any changes</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=simkl.sync_interval)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Refresh Widgets After Simkl Sync</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.simkl.refresh_widgets)]</property>
-                          <property name="setting_description">Enable this and Mando will refresh widgets after performing a Simkl Sync if there were any changes</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=simkl.refresh_widgets)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Force Simkl Sync</property>
-                          <property name="setting_type">action</property>
-                          <property name="setting_value">...</property>
-                          <property name="setting_description">Pull watched status and playback progress from Simkl now</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=simkl.simkl_force_sync)</onclick>
                       </item>
         <!-- Trakt Cache -->
                       <item>
@@ -660,6 +617,21 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.image_download_directory)]</property>
                           <property name="setting_description">Choose your download location for Images</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_path&amp;setting_id=image_download_directory)</onclick>
+                      </item>
+        <!-- Import & Export -->
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <property name="setting_label">Import &amp; Export</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <property name="setting_label">Import &amp; Export Directory</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.import_export_directory)]</property>
+                          <property name="setting_description">Choose your default location for Mando favorites and progress backup files</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_path&amp;setting_id=import_export_directory)</onclick>
                       </item>
 <!-- FEATURES 20-->
         <!-- Extras -->
@@ -1207,6 +1179,14 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(30)</visible>
+                          <property name="setting_label">Hide Watched Items in Widgets</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_watched)]</property>
+                          <property name="setting_description">Enable this and watched items will be hidden in Mando widgets</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(30)</visible>
                           <property name="setting_label">Hide Next Page Item in Widgets</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_next_page)]</property>
@@ -1423,31 +1403,6 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=trakt.calendar_future_days)</onclick>
                       </item>
 <!-- META ACCOUNTS 50 -->
-        <!-- Simkl -->
-                      <item>
-                          <visible>Container(2000).HasFocus(50)</visible>
-                          <property name="setting_label">Simkl</property>
-                          <property name="setting_type">separator</property>
-                          <onclick>noop</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Authorize</property>
-                          <property name="setting_type">action</property>
-                          <property name="setting_value">...</property>
-                          <property name="setting_description">Authorize your Simkl account. PIN shown on screen — visit simkl.com/pin</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=simkl.simkl_authenticate)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting)</visible>
-                          <property name="setting_label">Revoke Authorization</property>
-                          <property name="setting_type">action</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.simkl.user)]</property>
-                          <property name="setting_description">Revoke authorization of your Simkl account</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=simkl.simkl_revoke_authentication)</onclick>
-                      </item>
         <!-- Trakt -->
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
@@ -1469,6 +1424,7 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.trakt.user),empty_setting)</visible>
                           <property name="setting_label">Revoke Authorization</property>
                           <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.user)]</property>
                           <property name="setting_description">Revoke authorization of your Trakt account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=trakt.trakt_revoke_authentication)</onclick>
@@ -1687,39 +1643,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
-                          <property name="setting_label">Include uncached results (Offcloud)</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.external.include_uncached_offcloud)]</property>
-                          <property name="setting_description">When enabled, torrents not in Offcloud instant cache appear in the main results list (subject to minimum seeders). Default off shows cached Offcloud only. Selecting an uncached row adds it to your Offcloud cloud.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external.include_uncached_offcloud)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(60)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.rd.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.rd.enabled),true)</visible>
-                          <property name="setting_label">Check for Cached Results (RD)</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.external.cache_check)]</property>
-                          <property name="setting_description">When enabled, Mando API-checks Real-Debrid cache status for external results (fewer RD rows, but those shown should be instant). Premiumize and AllDebrid are not API-checked by this setting — every hash is labelled cached for those providers. TorBox and Offcloud use their own Include uncached settings for API checks, not this toggle.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external.cache_check)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(60)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
-                          <property name="setting_label">Include uncached results (TorBox)</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.external.include_uncached_torbox)]</property>
-                          <property name="setting_description">When enabled, torrents not in TorBox shared cache appear in the main results list (subject to minimum seeders). Default off shows cached TorBox only. Selecting an uncached row adds it to your TorBox cloud.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external.include_uncached_torbox)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(60)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.name),empty_setting)</visible>
                           <property name="setting_label">Open External Scraper Settings</property>
                           <property name="setting_type">action</property>
@@ -1762,6 +1685,17 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ad.account_id)]</property>
                           <property name="setting_description">Revoke authorization of your All Debrid account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=alldebrid.revoke_authentication)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.ad.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.ad.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Check Cached Status (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.ad.cache_check)]</property>
+                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your All Debrid account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=ad.cache_check)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
@@ -1878,7 +1812,7 @@
                           <property name="setting_label">Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.title_filter)]</property>
-                          <property name="setting_description">After EasyNews returns results, match filenames against the movie or episode title (and aliases). Uses exact title match before SxxExx (same as POV/Fen): short show names like Wings will not match Behind The Wings or Super Wings. EasyNews search is already narrow (e.g. Movie Year or Show S01E05); this step removes wrong hits from Broad search or similar titles. Disable if valid links go missing. Search Width does not replace this filter</property>
+                          <property name="setting_description">After EasyNews returns results, match filenames against the movie or episode title (and aliases). EasyNews search is already narrow (e.g. Movie Year or Show S01E05), so this often removes few extra results but helps when unrelated files slip through. Disable if valid links go missing. Search Width, Filter Languages, and Fallback Search Queries usually matter more for EasyNews</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.title_filter)</onclick>
                       </item>
                       <item>
@@ -2023,6 +1957,29 @@
                           <visible>Container(2000).HasFocus(60)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Check Cached Status (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.oc.cache_check)]</property>
+                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Offcloud account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=oc.cache_check)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.oc.cache_check),true)</visible>
+                          <property name="setting_label">Include Uncached Results (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.oc.include_uncached)]</property>
+                          <property name="setting_description">When enabled, torrents not in Offcloud instant cache also appear in the main results list (subject to minimum seeders). Selecting an uncached row adds it to your Offcloud cloud.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=oc.include_uncached)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
                           <property name="setting_label">Add Resolved Debrid Cache to Cloud</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.store_resolved_to_cloud.offcloud_name)]</property>
@@ -2126,6 +2083,29 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.pm.account_id)]</property>
                           <property name="setting_description">Revoke authorization of your Premiumize account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=premiumize.revoke_authentication)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.pm.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.pm.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Check Cached Status (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.pm.cache_check)]</property>
+                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Premiumize account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=pm.cache_check)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.pm.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.pm.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.pm.cache_check),true)</visible>
+                          <property name="setting_label">Include Uncached Results (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.pm.include_uncached)]</property>
+                          <property name="setting_description">When enabled, torrents not in Premiumize instant cache also appear in the main results list (subject to minimum seeders). Selecting an uncached row adds it to your Premiumize cloud.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=pm.include_uncached)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
@@ -2236,6 +2216,17 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.account_id)]</property>
                           <property name="setting_description">Revoke authorization of your Real Debrid account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=real_debrid.revoke_authentication)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.rd.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.rd.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Check Cached Status (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.rd.cache_check)]</property>
+                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Real Debrid account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd.cache_check)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
@@ -2371,6 +2362,29 @@
                           <visible>Container(2000).HasFocus(60)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Check Cached Status (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.tb.cache_check)]</property>
+                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your TorBox account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb.cache_check)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.tb.cache_check),true)</visible>
+                          <property name="setting_label">Include Uncached Results (External Scrapers)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.tb.include_uncached)]</property>
+                          <property name="setting_description">When enabled, torrents not in TorBox shared cache also appear in the main results list (subject to minimum seeders). Selecting an uncached row adds it to your TorBox cloud.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb.include_uncached)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
                           <property name="setting_label">Add Resolved Debrid Cache to Cloud</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.store_resolved_to_cloud.torbox_name)]</property>
@@ -2384,7 +2398,7 @@
                           <property name="setting_label">Notify when added torrents are ready in Cloud</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.tb.notify_cloud_ready)]</property>
-                          <property name="setting_description">Notify when a magnet you added to TorBox (uncached Add to Cloud, context menu, or kept via Store Resolved to Cloud) has finished and is available in Cloud Storage / History</property>
+                          <property name="setting_description">Notify when a torrent you added to TorBox (uncached Add to Cloud, or kept via Store Resolved to Cloud) has finished and is available in Cloud Storage / History</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb.notify_cloud_ready)</onclick>
                       </item>
                       <item>
@@ -2402,10 +2416,10 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.tb_cloud),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name (Movies only)</property>
+                          <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.tb_cloud.title_filter)]</property>
-                          <property name="setting_description">Extra filename title matching for TorBox Cloud source search on movies only. TV episodes always use season/episode matching in the filename; this toggle does not change episode behaviour. May remove some valid movie links if names differ from the TMDB title</property>
+                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your TorBox Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -2677,10 +2691,10 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(70)</visible>
-                          <property name="setting_label">Choose Rescrape Actions</property>
+                          <property name="setting_label">Rescrape Actions</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Choose Off, Auto, or Prompt for each rescrape step. Most steps run in priority order when a search ends with no playable results (after filtering). "Offer Full Search After Early Results" only applies when sources already appeared on the results screen - it controls whether to search all scrapers (including torrent sites) from that list, not an empty-search retry.</property>
+                          <property name="setting_description">Configure automatic retries when a source search returns no playable results. Each action can be Off, Auto, or Prompt, with order from Highest to Lowest. Rescrape With No Cache Check disables per-provider external cache checks (Real Debrid, All Debrid, TorBox, Premiumize, Offcloud). Rescrape With Disabled External Providers includes disabled external torrent providers (not internal scrapers such as EasyNews or debrid cloud). Offer Full Search After Early Results applies to the empty-search retry path only; Check Before Full Search and Run External Scraper Search during prescrape are separate.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=rescrape_actions_choice)</onclick>
                       </item>
         <!-- Sorting and Filtering -->

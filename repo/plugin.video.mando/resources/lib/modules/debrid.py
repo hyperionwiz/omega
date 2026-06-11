@@ -16,9 +16,15 @@ def debrid_enabled():
 	return [
 	i[0] for i in [('Real-Debrid', 'rd'), ('Premiumize.me', 'pm'), ('AllDebrid', 'ad'), ('Offcloud', 'oc'), ('TorBox', 'tb')] if enabled_debrids_check(i[1])]
 
-def debrid_for_ext_cache_check(enabled_debrid=None):
+def debrid_cache_check_available(enabled_debrid=None):
 	if not enabled_debrid: enabled_debrid = debrid_enabled()
-	return 'Real-Debrid' in enabled_debrid
+	return any(p in enabled_debrid for p in ('Real-Debrid', 'TorBox', 'Premiumize.me', 'Offcloud', 'AllDebrid'))
+
+NO_DOWNLOAD_URL_MSG = 'No URL found for Download. Pick another Source'
+NO_CLOUD_ADD_MSG = 'No URL found for Add to Cloud. Pick another Source'
+
+def debrid_for_ext_cache_check(enabled_debrid=None):
+	return debrid_cache_check_available(enabled_debrid)
 
 def normalize_debrid_provider(provider):
 	if not provider:
@@ -79,7 +85,7 @@ class ExternalPackSource:
 			if provider == 'TorBox':
 				notification('TorBox: No video files in this pack yet. Try again in a moment.', 4500)
 			else:
-				notification('Error')
+				notification(NO_DOWNLOAD_URL_MSG, 2500)
 			return None
 		pack_choices.sort(key=lambda k: (k.get('filename') or '').lower())
 		if download:
@@ -112,8 +118,10 @@ def manual_add_magnet_to_cloud(params):
 	result = api.create_transfer(magnet_url)
 	api.clear_cache()
 	hide_busy_dialog()
-	if not result or result == 'failed':
-		return notification('Failed')
+	if result == 'failed':
+		return notification('Failed', 2500)
+	if not result or result == 'no_url':
+		return notification(NO_CLOUD_ADD_MSG, 2500)
 	if provider == 'TorBox':
 		from modules.settings import tb_notify_cloud_ready
 		label = params.get('display_name') or params.get('name') or ''
