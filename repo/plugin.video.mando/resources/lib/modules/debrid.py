@@ -22,6 +22,7 @@ def debrid_cache_check_available(enabled_debrid=None):
 
 NO_DOWNLOAD_URL_MSG = 'No URL found for Download. Pick another Source'
 NO_CLOUD_ADD_MSG = 'No URL found for Add to Cloud. Pick another Source'
+BROWSE_NO_FILES_MSG = 'Could not list files for Browse — source may not be cached yet'
 
 def debrid_for_ext_cache_check(enabled_debrid=None):
 	return debrid_cache_check_available(enabled_debrid)
@@ -33,12 +34,17 @@ def normalize_debrid_provider(provider):
 		provider = provider[9:]
 	aliases = {
 		'offcloud': 'Offcloud',
+		'oc_cloud': 'Offcloud',
 		'torbox': 'TorBox',
 		'torbox cloud': 'TorBox',
+		'tb_cloud': 'TorBox',
 		'real-debrid': 'Real-Debrid',
+		'rd_cloud': 'Real-Debrid',
 		'premiumize.me': 'Premiumize.me',
 		'premiumize': 'Premiumize.me',
+		'pm_cloud': 'Premiumize.me',
 		'alldebrid': 'AllDebrid',
+		'ad_cloud': 'AllDebrid',
 	}
 	return aliases.get(str(provider).lower(), provider)
 
@@ -83,9 +89,11 @@ class ExternalPackSource:
 		hide_busy_dialog()
 		if not pack_choices:
 			if provider == 'TorBox':
-				notification('TorBox: No video files in this pack yet. Try again in a moment.', 4500)
-			else:
+				notification('TorBox: No video file(s) yet. Try again in a moment.', 4500)
+			elif download:
 				notification(NO_DOWNLOAD_URL_MSG, 2500)
+			else:
+				notification(BROWSE_NO_FILES_MSG, 4500)
 			return None
 		pack_choices.sort(key=lambda k: (k.get('filename') or '').lower())
 		if download:
