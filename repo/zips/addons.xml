@@ -79,7 +79,7 @@
     </assets>
   </extension>
   
-</addon><addon id="plugin.video.mando" name="[COLOR gold]Mando[/COLOR]" provider-name="[COLOR gold]The Hood[/COLOR]" version="1.2.9k">
+</addon><addon id="plugin.video.mando" name="[COLOR gold]Mando[/COLOR]" provider-name="[COLOR gold]The Hood[/COLOR]" version="1.2.9l">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
         <import addon="script.module.pil" version="1.1.7" />
@@ -92,7 +92,7 @@
     <extension point="xbmc.python.module" library="resources/lib/" />
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
-        <summary lang="en">[COLOR ghostwhite]This is the way...[/COLOR]</summary>
+        <summary lang="en">[COLOR ghostwhite]This is the way[/COLOR]</summary>
         <description lang="en">[COLOR gold]* We will not revoke our Trakt or TMDb keys
 * We will not block any third party apps or skins
 * No politics
@@ -257,7 +257,7 @@ I am grateful to Tikipeter and his various pseudonyms and aliases for creating a
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
-</addon><addon id="repository.omega" name="Omega Repo" version="1.1.8" provider-name="The Hood">
+</addon><addon id="repository.omega" name="Omega Repo" version="1.1.9" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>
@@ -275,49 +275,6 @@ I am grateful to Tikipeter and his various pseudonyms and aliases for creating a
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="repository.redwizard" name="[COLOR red]The Red Repo[/COLOR]" version="1.2.2" provider-name="[COLOR red]The Red Wizard[/COLOR]">
-	<extension point="xbmc.addon.repository" name="The Red Repo">
-		<dir>
-			<info compressed="false">https://repo.redwizard.xyz/redwizardrepo/main/addons.xml</info>
-			<checksum>https://repo.redwizard.xyz/redwizardrepo/main/addons.xml.md5</checksum>
-			<datadir zip="true">https://repo.redwizard.xyz/redwizardrepo/main/</datadir>
-		</dir>
-		<dir minversion="20.9.0" maxversion="21.8.9">
-			<info compressed="false">https://repo.redwizard.xyz/redwizardrepo/21omega/addons.xml</info>
-			<checksum>https://repo.redwizard.xyz/redwizardrepo/21omega/addons.xml.md5</checksum>
-			<datadir zip="true">https://repo.redwizard.xyz/redwizardrepo/21omega/</datadir>
-		</dir>
-		<dir minversion="21.9.0" maxversion="22.8.9">
-			<info compressed="false">https://repo.redwizard.xyz/redwizardrepo/22piers/addons.xml</info>
-			<checksum>https://repo.redwizard.xyz/redwizardrepo/22piers/addons.xml.md5</checksum>
-			<datadir zip="true">https://repo.redwizard.xyz/redwizardrepo/22piers/</datadir>
-		</dir>
-		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">[COLOR red]The Red Wizard Builds and Add-ons[/COLOR]</summary>
-		<description lang="en_GB">[COLOR red]The Red Repo for The Red Wizard builds and add-ons[/COLOR]</description>
-		<disclaimer lang="en_GB">[COLOR red]The author of this add-on does not host any content and has no affiliation with the content providers[/COLOR]</disclaimer>
-		<news>[COLOR red]2026-03-23
-- Change to the add-on description
-- Typos corrected in the news section and changelog
-- Chains Repository and The 7o9 Repo now available to install from The Red Repo
-- The Red Wizard has a new home! Go to https://redwizard.xyz[/COLOR]</news>
-		<platform>all</platform>
-		<language>en</language>
-		<license>GNU GENERAL PUBLIC LICENSE Version 3</license>
-		<email>info@redwizard.xyz</email>
-		<website>https://www.redwizard.xyz/</website>
-		<forum>https://t.me/+XiuBf9KvPfw2MzVk</forum>
-		<assets>
-			<icon>icon.png</icon>
-			<fanart>fanart.jpg</fanart>
-		</assets>
-	</extension>
 </addon><addon id="repository.thecrew" name="[COLOR orchid]THE CREW REPO[/COLOR]" provider-name="The Crew" version="0.3.7">
 	<extension point="xbmc.addon.repository" name="The Crew">
 			<dir minversion="18.9.9">
