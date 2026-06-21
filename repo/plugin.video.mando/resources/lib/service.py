@@ -12,21 +12,29 @@ pause_services_prop = 'mando.pause_services'
 firstrun_update_prop = 'mando.firstrun_update'
 current_skin_prop = 'mando.current_skin'
 trakt_service_string = 'TraktMonitor Service Update %s - %s'
-trakt_success_line_dict = {'success': 'Trakt Update Performed', 'no account': '(Unauthorized) Trakt Update Performed'}
+trakt_success_line_dict = {'success': 'Trakt Update Performed', 'no account': '(Unauthorised) Trakt Update Performed'}
 update_string = 'Next Update in %s minutes...'
 
 class SetAddonConstants:
 	def run(self):
 		kodi_utils.logger('Mando', 'SetAddonConstants Service Starting')
 		import random
+		new_version = kodi_utils.addon_info('version')
+		prev_version = kodi_utils.get_property('mando.addon_version')
+		if prev_version and prev_version != new_version:
+			kodi_utils.clear_property('mando.deferred_service_setup_done')
+			kodi_utils.logger('Mando', 'SetAddonConstants - version %s -> %s' % (prev_version, new_version))
+		icon_choice = get_setting('addon_icon_choice', 'resources/media/addon_icons/icon.png')
+		addon_path = kodi_utils.addon_info('path')
+		icon_path = kodi_utils.translate_path(os.path.join(addon_path, icon_choice))
+		icon_mini = os.path.join(addon_path, 'resources', 'media', 'addon_icons', 'minis', os.path.basename(icon_path))
 		addon_items = [
 			('mando.playback_key', str(random.randint(1000, 10000))),
-			('mando.addon_version', kodi_utils.addon_info('version')),
-			('mando.addon_path', kodi_utils.addon_info('path')),
+			('mando.addon_version', new_version),
+			('mando.addon_path', addon_path),
 			('mando.addon_profile', kodi_utils.translate_path(kodi_utils.addon_info('profile'))),
-			('mando.addon_icon', kodi_utils.translate_path(kodi_utils.addon_info('icon'))),
-			('mando.addon_icon_mini', os.path.join(kodi_utils.addon_info('path'), 'resources', 'media', 'addon_icons', 'minis',
-			os.path.basename(kodi_utils.translate_path(kodi_utils.addon_info('icon'))))),
+			('mando.addon_icon', icon_path),
+			('mando.addon_icon_mini', icon_mini),
 			('mando.addon_fanart', kodi_utils.addon_fanart())
 					]
 		for item in addon_items: kodi_utils.set_property(*item)
@@ -71,10 +79,10 @@ def start_custom_windows_prepare():
 def run_deferred_service_setup():
 	global _custom_windows_thread_started
 	kodi_utils.logger('Mando', 'Deferred Service Setup Starting')
+	try: kodi_utils.restore_addon_xml_from_settings()
+	except Exception as e: kodi_utils.logger('DeferredServiceSetup', 'RestoreAddonXml: %s' % e)
 	try: OnUpdateChanges().run()
 	except Exception as e: kodi_utils.logger('DeferredServiceSetup', 'OnUpdateChanges: %s' % e)
-	try: AddonXMLCheck().run()
-	except Exception as e: kodi_utils.logger('DeferredServiceSetup', 'AddonXMLCheck: %s' % e)
 	try:
 		from windows.base_window import ExtrasUtils
 		ExtrasUtils().run()
@@ -128,7 +136,7 @@ class TraktMonitor:
 			try:
 				sync_interval, wait_time = trakt_sync_interval()
 				next_update_string = update_string % sync_interval
-				if trakt_user_active: status = trakt_sync_activities()
+				if trakt_user_active(): status = trakt_sync_activities()
 				else: status = 'no_auth'
 				if status == 'failed': kodi_utils.logger('Mando', trakt_service_string % ('Failed. Error from Trakt', next_update_string))
 				elif status == 'no_auth': kodi_utils.logger('Mando', trakt_service_string % ('Not Run. No Current Trakt Account', next_update_string))
@@ -146,6 +154,31 @@ class TraktMonitor:
 		try: del player
 		except: pass
 		return kodi_utils.logger('Mando', 'TraktMonitor Service Finished')
+
+class SimklMonitor:
+	def run(self):
+		kodi_utils.logger('Mando', 'SimklMonitor Service Starting')
+		from apis.simkl_api import simkl_sync_activities
+		from modules.settings import simkl_user_active, simkl_sync_interval
+		monitor, player = kodi_utils.kodi_monitor(), kodi_utils.kodi_player()
+		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
+		wait_for_abort(45)
+		while not monitor.abortRequested():
+			while is_playing() or kodi_utils.get_property(pause_services_prop) == 'true': wait_for_abort(10)
+			wait_time = 1800
+			try:
+				sync_interval, wait_time = simkl_sync_interval()
+				next_update_string = 'Simkl Sync finished - Next Sync in %s minutes' % sync_interval
+				if simkl_user_active(): status = simkl_sync_activities()
+				else: status = 'no_auth'
+				if status == 'failed': kodi_utils.logger('Mando', 'Simkl Sync Failed')
+				elif status == 'no_auth': kodi_utils.logger('Mando', 'Simkl Sync Not Run - No Account')
+				else: kodi_utils.logger('Mando', 'Simkl Sync %s - %s' % ('OK' if status == 'success' else 'No Changes', next_update_string))
+				if status == 'success' and get_setting('mando.simkl.refresh_widgets', 'false') == 'true':
+					kodi_utils.run_plugin({'mode': 'kodi_refresh'})
+			except Exception as e: kodi_utils.logger('Mando', 'Simkl Sync Failed: %s' % str(e))
+			wait_for_abort(wait_time)
+		return kodi_utils.logger('Mando', 'SimklMonitor Service Finished')
 
 class UpdateCheck:
 	def run(self):
@@ -221,42 +254,6 @@ class AutoStart:
 		if auto_start_mando(): kodi_utils.run_addon()
 		return kodi_utils.logger('Mando', 'AutoStart Service Finished')
 
-class AddonXMLCheck:
-	def run(self):
-		kodi_utils.logger('Mando', 'AddonXMLCheck Service Starting')
-		from xml.dom.minidom import parse as mdParse
-		self.addon_xml = kodi_utils.translate_path('special://home/addons/plugin.video.mando/addon.xml')
-		self.root = mdParse(self.addon_xml)
-		self.change_list = []
-		self.check_property('reuse_language_invoker', 'reuselanguageinvoker')
-		self.check_property('addon_icon_choice', 'icon')
-		self.change_xml_file()
-		return kodi_utils.logger('Mando', 'AddonXMLCheck Service Finished')
-
-	def check_property(self, setting, tag_name):
-		current_addon_setting = get_setting('mando.%s' % setting, None)
-		if current_addon_setting is None: return
-		tag_instance = self.root.getElementsByTagName(tag_name)[0].firstChild
-		current_property = tag_instance.data
-		if current_property != current_addon_setting:
-			tag_instance.data = current_addon_setting
-			self.change_list.append(tag_name)
-
-	def change_xml_file(self):
-		if not self.change_list: return
-		if 'icon' in self.change_list: self.reassign_addon_icon()
-		kodi_utils.notification('Refreshing Addon XML. Restarting Addons')
-		new_xml = str(self.root.toxml()).replace('<?xml version="1.0" ?>', '')
-		with open(self.addon_xml, 'w') as f: f.write(new_xml)
-		kodi_utils.logger('Mando', 'AddonXMLCheck Service - Change Detected. Restarting Addons')
-		kodi_utils.execute_builtin('ActivateWindow(Home)', True)
-		kodi_utils.update_local_addons()
-		kodi_utils.disable_enable_addon()
-
-	def reassign_addon_icon(self):
-		from indexers.dialogs import addon_icon_choice
-		addon_icon_choice({'set_icon': get_setting('addon_icon_choice_name', 'icon.png')})
-
 class MandoMonitor(Monitor):
 	def __init__ (self):
 		Monitor.__init__(self)
@@ -269,9 +266,12 @@ class MandoMonitor(Monitor):
 		except Exception as e: kodi_utils.logger('DatabaseMaintenance', str(e))
 		try: SyncSettings().run()
 		except Exception as e: kodi_utils.logger('SyncSettings', str(e))
+		try: kodi_utils.restore_addon_xml_from_settings()
+		except Exception as e: kodi_utils.logger('RestoreAddonXml', str(e))
 		Thread(target=BootstrapSettings().run).start()
 		start_custom_windows_prepare()
 		Thread(target=TraktMonitor().run).start()
+		Thread(target=SimklMonitor().run).start()
 		Thread(target=UpdateCheck().run).start()
 		Thread(target=WidgetRefresher().run).start()
 		try: AutoStart().run()
