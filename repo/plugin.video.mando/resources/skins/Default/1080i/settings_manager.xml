@@ -40,7 +40,7 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE][B]MANDO- SETTINGS[/B][/UPPERCASE]</label>
+                    <label>[UPPERCASE][B]MANDO - SETTINGS[/B][/UPPERCASE]</label>
                 </control>
             </control>
             <control type="fixedlist" id="2000">
