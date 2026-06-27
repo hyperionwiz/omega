@@ -681,6 +681,8 @@ def set_from_list(params):
 	settings_list = [(v, k) for k, v in settings_options]
 	if setting_id == 'watched_indicators':
 		settings_list.sort(key=lambda item: item[0].lower())
+	elif setting_id in ('stinger_alert.alert_timing', 'autoplay_alert_timing', 'autoscrape_alert_timing'):
+		settings_list.sort(key=lambda item: item[0].lower())
 	new_value = kodi_utils.select_dialog(settings_list, **{'items': json.dumps([{'line1': item[0]} for item in settings_list]), 'narrow_window': 'true'})
 	if not new_value: return
 	setting_value = new_value[1]
@@ -741,8 +743,8 @@ def default_settings():
 {'setting_id': 'max_threads', 'setting_type': 'action', 'setting_default': '60', 'min_value': '10', 'max_value': '250'},
 #==================== Window Theme
 {'setting_id': 'window_theme', 'setting_type': 'string', 'setting_default': 'CC1F2020'},
-{'setting_id': 'window_theme_opacity', 'setting_type': 'string', 'setting_default': 'CC'},
-#==================== Manage Updates
+{'setting_id': 'window_theme_opacity', 'setting_type': 'string', 'setting_default': 'CC'}
+,#==================== Manage Updates
 {'setting_id': 'update.action', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Prompt', '1': 'Automatic', '2': 'Notification', '3': 'Off'}},
 {'setting_id': 'update.delay', 'setting_type': 'action', 'setting_default': '10', 'min_value': '10', 'max_value': '300'},
 {'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega'},
