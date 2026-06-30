@@ -324,7 +324,7 @@ def skip_intro_mode():
 	return int(get_setting('mando.autoplay_skip_intro', '0'))
 
 def skip_intro_all_episodes():
-	return get_setting('mando.skip_intro_all_episodes', 'false') == 'true'
+	return get_setting('mando.skip_intro_all_episodes', 'true') == 'true'
 
 def _skip_intro_chain_play_type(play_type):
 	return play_type in ('autoplay_nextep', 'autoscrape_nextep', 'random_continual')
@@ -545,11 +545,11 @@ def tv_progress_location():
 	return int(get_setting('mando.tv_progress_location', '0'))
 
 def check_prescrape_sources(scraper, media_type):
-	if scraper in ('easynews', 'aiostreams', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'folders'):
-		if get_setting('mando.check.%s' % scraper) == 'true': return True
-		if scraper == 'easynews' and autoplay_prescrape('easynews'): return True
-		if scraper in ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud') and autoplay_prescrape(scraper): return True
-		return False
+	"""Prescrape only when Check Before Full Search is enabled for that provider."""
+	if scraper in ('easynews', 'aiostreams', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'):
+		return get_setting('mando.check.%s' % scraper) == 'true'
+	if scraper == 'folders':
+		return get_setting('mando.check.folders') == 'true'
 	if get_setting('mando.check.%s' % scraper) == 'true' and auto_play(media_type):
 		return True
 	return False
@@ -761,7 +761,7 @@ def _resolve_watched_provider():
 def watched_provider_options():
 	options = {}
 	if mdblist_user_active(): options['3'] = 'MDBList'
-	options['0'] = 'Mando'
+	options['0'] = 'mando'
 	if simkl_user_active(): options['2'] = 'Simkl'
 	if trakt_user_active(): options['1'] = 'Trakt'
 	return options

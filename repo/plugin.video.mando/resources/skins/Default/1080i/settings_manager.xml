@@ -454,10 +454,10 @@
                      </item>
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
-                          <property name="setting_label">Autostart Mando When Kodi Starts</property>
+                          <property name="setting_label">Autostart mando When Kodi Starts</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.auto_start_mando)]</property>
-                          <property name="setting_description">Enable this and Mando will autostart after running its services upon Kodi start</property>
+                          <property name="setting_description">Enable this and mando will autostart after running its services upon Kodi start</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=auto_start_mando)</onclick>
                       </item>
                       <item>
@@ -466,7 +466,7 @@
                           <property name="setting_label">Assign Addon Background Image</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.default_addon_fanart)]</property>
-                          <property name="setting_description">Choose any custom background you would like to use within Mando</property>
+                          <property name="setting_description">Choose any custom background you would like to use within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_path&amp;setting_id=default_addon_fanart)</onclick>
                       </item>
                       <item>
@@ -475,7 +475,7 @@
                           <property name="setting_label">Restore Default Background Image</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.default_addon_fanart)]</property>
-                          <property name="setting_description">Restore default Mando background</property>
+                          <property name="setting_description">Restore default mando background</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.restore_setting_default&amp;setting_id=default_addon_fanart)</onclick>
                       </item>
                       <item>
@@ -483,7 +483,7 @@
                           <property name="setting_label">Limit Concurrent Threads</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.limit_concurrent_threads)]</property>
-                          <property name="setting_description">Enable this and Mando will limit the threads enacted simultaneously. Best to leave this disabled unless you are having issues with your device not supporting high numbers of concurrent threads in python</property>
+                          <property name="setting_description">Enable this and mando will limit the threads enacted simultaneously. Best to leave this disabled unless you are having issues with your device not supporting high numbers of concurrent threads in python</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=limit_concurrent_threads)</onclick>
                       </item>
                       <item>
@@ -492,7 +492,7 @@
                           <property name="setting_label">    - Maximum Active Threads</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.max_threads)]</property>
-                          <property name="setting_description">Choose the maximum active concurrent threads Mando will be limited to</property>
+                          <property name="setting_description">Choose the maximum active concurrent threads mando will be limited to</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=max_threads)</onclick>
                       </item>
         <!-- Window Theme -->
@@ -507,7 +507,7 @@
                           <property name="setting_label">Assign Window Theme</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.window_theme_name)]</property>
-                          <property name="setting_description">Choose the theme Mando will use for custom windows. Choices are Light, Medium and Dark</property>
+                          <property name="setting_description">Choose the theme mando will use for custom windows. Choices are Light, Medium and Dark</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=window_theme_choice&amp;type=theme)</onclick>
                       </item>
                       <item>
@@ -515,7 +515,7 @@
                           <property name="setting_label">Assign Window Theme Opacity</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.window_theme_opacity_name)]</property>
-                          <property name="setting_description">Choose the Opacity Mando will use for custom window themes. Choose between 10% - 100%</property>
+                          <property name="setting_description">Choose the Opacity mando will use for custom window themes. Choose between 10% - 100%</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=window_theme_choice&amp;type=opacity)</onclick>
                       </item>
         <!-- Watched Indicators -->
@@ -531,7 +531,7 @@
                           <property name="setting_label">Watched Status Provider</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.watched_indicators_name)]</property>
-                          <property name="setting_description">Watched ticks, resume bars, scrobble, Next Episodes, and In Progress lists. MDBList, Mando (local), Simkl, or Trakt (authorise under Meta Accounts).</property>
+                          <property name="setting_description">Watched ticks, resume bars, scrobble, Next Episodes, and In Progress lists. MDBList, mando (local), Simkl, or Trakt (authorise under Meta Accounts).</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=watched_indicators)</onclick>
                       </item>
         <!-- MDBList Cache -->
@@ -547,7 +547,7 @@
                           <property name="setting_label">Resync Interval (mins)</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.mdblist.sync_interval)]</property>
-                          <property name="setting_description">Choose how often Mando polls MDBList for watched status and progress changes</property>
+                          <property name="setting_description">Choose how often mando polls MDBList for watched status and progress changes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=mdblist.sync_interval)</onclick>
                       </item>
                       <item>
@@ -590,7 +590,7 @@
                           <property name="setting_label">Resync Interval (mins)</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.simkl.sync_interval)]</property>
-                          <property name="setting_description">Choose how often Mando polls your Simkl service for any changes</property>
+                          <property name="setting_description">Choose how often mando polls your Simkl service for any changes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=simkl.sync_interval)</onclick>
                       </item>
                       <item>
@@ -599,7 +599,7 @@
                           <property name="setting_label">Refresh Widgets After Simkl Sync</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.simkl.refresh_widgets)]</property>
-                          <property name="setting_description">Enable this and Mando will refresh widgets after performing a Simkl Sync if there were any changes</property>
+                          <property name="setting_description">Enable this and mando will refresh widgets after performing a Simkl Sync if there were any changes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=simkl.refresh_widgets)</onclick>
                       </item>
                       <item>
@@ -633,7 +633,7 @@
                           <property name="setting_label">Resync Interval (mins)</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.sync_interval)]</property>
-                          <property name="setting_description">Choose how often Mando polls your Trakt service for any changes</property>
+                          <property name="setting_description">Choose how often mando polls your Trakt service for any changes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=trakt.sync_interval)</onclick>
                       </item>
                       <item>
@@ -642,7 +642,7 @@
                           <property name="setting_label">Refresh Widgets After Trakt Sync</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.refresh_widgets)]</property>
-                          <property name="setting_description">Enable this and Mando will refresh widgets after performing a Trakt Sync if there were any changes</property>
+                          <property name="setting_description">Enable this and mando will refresh widgets after performing a Trakt Sync if there were any changes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=trakt.refresh_widgets)</onclick>
                       </item>
                       <item>
@@ -812,7 +812,7 @@
                           <property name="setting_label">Movies</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_movie_name)]</property>
-                          <property name="setting_description">Choose the Open Action when a Movie is selected in Mando. Choices Are None, Open Extras, Open Movie Set, Both. "Both" will open the Movie Set if available or open Extras</property>
+                          <property name="setting_description">Choose the Open Action when a Movie is selected in mando. Choices Are None, Open Extras, Open Movie Set, Both. "Both" will open the Movie Set if available or open Extras</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=media_open_action_movie)</onclick>
                       </item>
                       <item>
@@ -820,7 +820,7 @@
                           <property name="setting_label">TV Shows</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_tvshow_name)]</property>
-                          <property name="setting_description">Choose the Open Action when a TV Show is selected in Mando. Choices Are None or Open Extras</property>
+                          <property name="setting_description">Choose the Open Action when a TV Show is selected in mando. Choices Are None or Open Extras</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=media_open_action_tvshow)</onclick>
                       </item>
         <!-- RPDb Ratings Posters -->
@@ -889,7 +889,7 @@
                           <property name="setting_label">Choose Maximum Similar Titles Results</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ai_model.limit)]</property>
-                          <property name="setting_description">Choose the maximum number of AI Similar Results returned by Mando</property>
+                          <property name="setting_description">Choose the maximum number of AI Similar Results returned by mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=ai_model.limit)</onclick>
                       </item>
 <!-- CONTENT 30 -->
@@ -905,7 +905,7 @@
                           <property name="setting_label">Paginate Lists When Available</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.paginate.lists_name)]</property>
-                          <property name="setting_description">Enable this and Mando will attempt to paginate lists when possible. This is mainly applicable to personal lists</property>
+                          <property name="setting_description">Enable this and mando will attempt to paginate lists when possible. This is mainly applicable to personal lists</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=paginate.lists)</onclick>
                       </item>
                       <item>
@@ -914,7 +914,7 @@
                           <property name="setting_label">    - Addon Item Limit</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.paginate.limit_addon)]</property>
-                          <property name="setting_description">Choose the limit of pagination when within Mando</property>
+                          <property name="setting_description">Choose the limit of pagination when within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=paginate.limit_addon)</onclick>
                       </item>
                       <item>
@@ -923,7 +923,7 @@
                           <property name="setting_label">    - Widgets Item Limit</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.paginate.limit_widgets)]</property>
-                          <property name="setting_description">Choose the limit of pagination for Mando widgets</property>
+                          <property name="setting_description">Choose the limit of pagination for mando widgets</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=paginate.limit_widgets)</onclick>
                       </item>
                       <item>
@@ -931,7 +931,7 @@
                           <property name="setting_label">Enable Jump To Navigation</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.paginate.jump_to)]</property>
-                          <property name="setting_description">Enable this and Mando include a "Jump To..." item at the end of each page of paginated personal lists. You can use this to jump to a specific page in the list</property>
+                          <property name="setting_description">Enable this and mando include a "Jump To..." item at the end of each page of paginated personal lists. You can use this to jump to a specific page in the list</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=paginate.jump_to)</onclick>
                       </item>
                       <item>
@@ -939,7 +939,7 @@
                           <property name="setting_label">Ignore Articles when Sorting Lists</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ignore_articles)]</property>
-                          <property name="setting_description">Enable this and Mando will ignore leading words like "The", "A" when sorting lists</property>
+                          <property name="setting_description">Enable this and mando will ignore leading words like "The", "A" when sorting lists</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=ignore_articles)</onclick>
                       </item>
                       <item>
@@ -987,7 +987,7 @@
                           <property name="setting_label">Show Special Episodes When Available</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.show_specials)]</property>
-                          <property name="setting_description">Enable this and Mando will show TV Show Special Episodes</property>
+                          <property name="setting_description">Enable this and mando will show TV Show Special Episodes</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=show_specials)</onclick>
                       </item>
                       <item>
@@ -995,7 +995,7 @@
                           <property name="setting_label">Use Season Names When Available</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.use_season_name)]</property>
-                          <property name="setting_description">Enable this and Mando will use the name of a season when availbale.</property>
+                          <property name="setting_description">Enable this and mando will use the name of a season when availbale.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=use_season_name)</onclick>
                       </item>
                       <item>
@@ -1003,7 +1003,7 @@
                           <property name="setting_label">Flatten TV Show Seasons</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.default_all_episodes_name)]</property>
-                          <property name="setting_description">Choose the times when Mando will load all episodes of a TV Show when browsed into</property>
+                          <property name="setting_description">Choose the times when mando will load all episodes of a TV Show when browsed into</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=default_all_episodes)</onclick>
                       </item>
                       <item>
@@ -1011,7 +1011,7 @@
                           <property name="setting_label">Avoid Episode Spoilers</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.avoid_episode_spoilers)]</property>
-                          <property name="setting_description">Enable this and Mando will hide episode thumb and episode synopsis within Mando</property>
+                          <property name="setting_description">Enable this and mando will hide episode thumb and episode synopsis within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=avoid_episode_spoilers)</onclick>
                       </item>
                       <item>
@@ -1019,7 +1019,7 @@
                           <property name="setting_label">Include Anime in TV Show Watched Progress</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.include_anime_tvshow)]</property>
-                          <property name="setting_description">Enable this and Mando will include Anime content in your Watched, Progress, Progress Episodes and Next Episodes menus in the main TV Show menu</property>
+                          <property name="setting_description">Enable this and mando will include Anime content in your Watched, Progress, Progress Episodes and Next Episodes menus in the main TV Show menu</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=include_anime_tvshow)</onclick>
                       </item>
                       <item>
@@ -1027,7 +1027,7 @@
                           <property name="setting_label">Include Unaired Media in Trakt Watchlists</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.show_unaired_watchlist)]</property>
-                          <property name="setting_description">Enable this and Mando will display any unaired media in your Trakt Movie/TV Show Watchlists. Disable this and any unaired Media will be hidden</property>
+                          <property name="setting_description">Enable this and mando will display any unaired media in your Trakt Movie/TV Show Watchlists. Disable this and any unaired Media will be hidden</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=show_unaired_watchlist)</onclick>
                       </item>
                       <item>
@@ -1035,7 +1035,7 @@
                           <property name="setting_label">Include Adult Results from Media Searches</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.meta_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will attempt to filter out adult content from Movie, TV Show and People searches. Success is based purely on the accuracy of TMDbs database. Expect that some adult results may come through and plan accordingly</property>
+                          <property name="setting_description">Enable this and mando will attempt to filter out adult content from Movie, TV Show and People searches. Success is based purely on the accuracy of TMDbs database. Expect that some adult results may come through and plan accordingly</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=meta_filter)</onclick>
                       </item>
                       <item>
@@ -1043,7 +1043,7 @@
                           <property name="setting_label">Control Viewtypes within Addon</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.use_viewtypes)]</property>
-                          <property name="setting_description">Enable this and Mando will control view types used within the addon. This can be disabled if the skin you are using has a helper that provides a "lock view" type function. If enabled, views can be set in Tools->Set Views within the addon</property>
+                          <property name="setting_description">Enable this and mando will control view types used within the addon. This can be disabled if the skin you are using has a helper that provides a "lock view" type function. If enabled, views can be set in Tools->Set Views within the addon</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=use_viewtypes)</onclick>
                       </item>
                       <item>
@@ -1240,7 +1240,7 @@
                           <property name="setting_label">Show List Author</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.personal_list.show_author)]</property>
-                          <property name="setting_description">Enable this and Mando will display the Author of the Personal List</property>
+                          <property name="setting_description">Enable this and mando will display the Author of the Personal List</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=personal_list.show_author)</onclick>
                       </item>
                       <item>
@@ -1248,7 +1248,7 @@
                           <property name="setting_label">Sort Unseen Lists to Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.personal_list.sort_unseen_to_top)]</property>
-                          <property name="setting_description">Enable this and Mando will sort all unseen Personal Lists to the top</property>
+                          <property name="setting_description">Enable this and mando will sort all unseen Personal Lists to the top</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=personal_list.sort_unseen_to_top)</onclick>
                       </item>
                       <item>
@@ -1256,7 +1256,7 @@
                           <property name="setting_label">Highlight Unseen Lists</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.personal_list.highlight_unseen)]</property>
-                          <property name="setting_description">Enable this and Mando will highlight Unseen Personal Lists using the chosen highlight</property>
+                          <property name="setting_description">Enable this and mando will highlight Unseen Personal Lists using the chosen highlight</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=personal_list.highlight_unseen)</onclick>
                       </item>
                       <item>
@@ -1280,7 +1280,7 @@
                           <property name="setting_label">Refresh Widgets on Timer</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_refresh_timer_name)]</property>
-                          <property name="setting_description">Choose whether Mando refreshes widgets based on a set timer. You should set a value here if you are using random widgets from Mando, and wish for their contents to update between Kodi starts</property>
+                          <property name="setting_description">Choose whether mando refreshes widgets based on a set timer. You should set a value here if you are using random widgets from mando, and wish for their contents to update between Kodi starts</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=widget_refresh_timer_choice)</onclick>
                       </item>
                       <item>
@@ -1289,7 +1289,7 @@
                           <property name="setting_label">    - Show Notification after Refresh</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_refresh_notification)]</property>
-                          <property name="setting_description">Enable this and Mando will show a notification whenever widgets are refreshed by the timer</property>
+                          <property name="setting_description">Enable this and mando will show a notification whenever widgets are refreshed by the timer</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_refresh_notification)</onclick>
                       </item>
                       <item>
@@ -1297,7 +1297,7 @@
                           <property name="setting_label">Hide Watched Items in Widgets</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_watched)]</property>
-                          <property name="setting_description">Enable this and watched items will be hidden in Mando widgets</property>
+                          <property name="setting_description">Enable this and watched items will be hidden in mando widgets</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched)</onclick>
                       </item>
                       <item>
@@ -1305,7 +1305,7 @@
                           <property name="setting_label">Hide Next Page Item in Widgets</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_next_page)]</property>
-                          <property name="setting_description">Enable this and the "Next Page" item will be hidden in Mando widgets</property>
+                          <property name="setting_description">Enable this and the "Next Page" item will be hidden in mando widgets</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_next_page)</onclick>
                       </item>
         <!-- RPDb Ratings Posters -->
@@ -1379,7 +1379,7 @@
                           <property name="setting_label">Single Episode Display Format - Within Addon</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.single_ep_display_name)]</property>
-                          <property name="setting_description">Choose the display format Mando uses when naming single episodes within the addon. Applicable for lists like Next Episodes, In Progress Episodes etc</property>
+                          <property name="setting_description">Choose the display format mando uses when naming single episodes within the addon. Applicable for lists like Next Episodes, In Progress Episodes etc</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=single_ep_display)</onclick>
                       </item>
                       <item>
@@ -1387,7 +1387,7 @@
                           <property name="setting_label">Single Episode Display Format - Widgets</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.single_ep_display_widget_name)]</property>
-                          <property name="setting_description">Choose the display format Mando uses when naming single episodes for widgets. Applicable for lists like Next Episodes, In Progress Episodes etc</property>
+                          <property name="setting_description">Choose the display format mando uses when naming single episodes for widgets. Applicable for lists like Next Episodes, In Progress Episodes etc</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=single_ep_display_widget)</onclick>
                       </item>
                       <item>
@@ -1448,10 +1448,10 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(40)</visible>
-                          <property name="setting_label">Include Trakt Watchlist/Mando Favorites</property>
+                          <property name="setting_label">Include Trakt Watchlist/mando Favorites</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.nextep.include_unwatched_name)]</property>
-                          <property name="setting_description">Choose which lists are included within Mandos Next Episodes. You can include your Trakt Watchlist, your Mando Favorites, or both. They will show with a DARKGOLDENROD highlight</property>
+                          <property name="setting_description">Choose which lists are included within mandos Next Episodes. You can include your Trakt Watchlist, your mando Favorites, or both. They will show with a DARKGOLDENROD highlight</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=nextep.include_unwatched)</onclick>
                       </item>
                       <item>
@@ -1590,7 +1590,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Trakt account and use it within Mando</property>
+                          <property name="setting_description">Authorise your Trakt account and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=trakt.trakt_authenticate)</onclick>
                       </item>
                       <item>
@@ -1608,7 +1608,7 @@
                           <property name="setting_label">Client ID Key</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.client)]</property>
-                          <property name="setting_description">Enter the Client ID from your app at trakt.tv/oauth/applications (or leave the Mando default)</property>
+                          <property name="setting_description">Enter the Client ID from your app at trakt.tv/oauth/applications (or leave the mando default)</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=trakt.client)</onclick>
                       </item>
                       <item>
@@ -1716,7 +1716,7 @@
                           <property name="setting_label">Authorise Account</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your TMDb account and use it within Mando for Lists</property>
+                          <property name="setting_description">Authorise your TMDb account and use it within mando for Lists</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=tmdblist_api.authenticate)</onclick>
                       </item>
                       <item>
@@ -1740,7 +1740,7 @@
                           <property name="setting_label">API Key</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.omdb_api)]</property>
-                          <property name="setting_description">Enter here your OMDb API key. This will allow you to utilize extra ratings information in Mandos Extras window</property>
+                          <property name="setting_description">Enter here your OMDb API key. This will allow you to utilize extra ratings information in mandos Extras window</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=omdb_api)</onclick>
                       </item>
         <!-- RPDb -->
@@ -1779,7 +1779,7 @@
                           <property name="setting_label">API Key</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.google_api)]</property>
-                          <property name="setting_description">Enter here your Gemini/Gemma AI API key. This will allow you to utilize the features within Mando that use AI, such as Browse AI Similar</property>
+                          <property name="setting_description">Enter here your Gemini/Gemma AI API key. This will allow you to utilize the features within mando that use AI, such as Browse AI Similar</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=google_api)</onclick>
                       </item>
         <!-- GROQ -->
@@ -1794,7 +1794,7 @@
                           <property name="setting_label">API Key</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.groq_api)]</property>
-                          <property name="setting_description">Enter here your Groq AI API key. This will allow you to utilize the features within Mando that use AI, such as Browse AI Similar</property>
+                          <property name="setting_description">Enter here your Groq AI API key. This will allow you to utilize the features within mando that use AI, such as Browse AI Similar</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=groq_api)</onclick>
                       </item>
 <!-- STREAMING ACCOUNTS 60 -->
@@ -1810,7 +1810,7 @@
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.external)]</property>
-                          <property name="setting_description">Enable this to use external scrapers. No support is provided when you choose to use external scrapers within Mando</property>
+                          <property name="setting_description">Enable this to use external scrapers. No support is provided when you choose to use external scrapers within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.external)</onclick>
                       </item>
                       <item>
@@ -1819,7 +1819,7 @@
                           <property name="setting_label">Choose External Scrapers Module</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.external_scraper.name)]</property>
-                          <property name="setting_description">Choose the external scraper module to use within Mando. No support is provided when you choose to use external scrapers within Mando</property>
+                          <property name="setting_description">Choose the external scraper module to use within mando. No support is provided when you choose to use external scrapers within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_choice)</onclick>
                       </item>
                       <item>
@@ -1846,7 +1846,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your All Debrid account and use it within Mando</property>
+                          <property name="setting_description">Authorise your All Debrid account and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=alldebrid.authenticate)</onclick>
                       </item>
                       <item>
@@ -1876,7 +1876,7 @@
                           <property name="setting_label">Check Cached Status (External Scrapers)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ad.cache_check)]</property>
-                          <property name="setting_description">All Debrid does not expose cached status for external scrapers. When enabled, Mando filters external scraper torrents using a third-party cache check. The scrape may take longer and you will see fewer links.</property>
+                          <property name="setting_description">All Debrid does not expose cached status for external scrapers. When enabled, mando filters external scraper torrents using a third-party cache check. The scrape may take longer and you will see fewer links.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=ad.cache_check)</onclick>
                       </item>
                       <item>
@@ -1896,7 +1896,7 @@
                           <property name="setting_label">Search Cloud Storage</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.ad_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your All Debrid Cloud for media</property>
+                          <property name="setting_description">Enable this and mando will search your All Debrid Cloud for media</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.ad_cloud)</onclick>
                       </item>
                       <item>
@@ -1907,7 +1907,7 @@
                           <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ad_cloud.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your All Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching functions on your All Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=ad_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -1918,7 +1918,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.ad_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search for results in your All Debrid Cloud before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search for results in your All Debrid Cloud before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.ad_cloud)</onclick>
                       </item>
                       <item>
@@ -1930,7 +1930,7 @@
                           <property name="setting_label">    - Autoplay Cloud Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.ad_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from the All Debrid Cloud</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from the All Debrid Cloud</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.ad_cloud)</onclick>
                       </item>
                       <item>
@@ -1941,7 +1941,7 @@
                           <property name="setting_label">    - Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_adcloud_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort the results from your All Debrid Cloud to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort the results from your All Debrid Cloud to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_adcloud_first)</onclick>
                       </item>
                       <item>
@@ -2004,7 +2004,7 @@
                           <property name="setting_label">Filter Languages</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.filter_lang)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra language filtering on your EasyNews results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra language filtering on your EasyNews results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.filter_lang)</onclick>
                       </item>
                       <item>
@@ -2046,7 +2046,7 @@
                           <property name="setting_label">Refresh Credentials Each Request</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.refresh_credentials)]</property>
-                          <property name="setting_description">Reload your EasyNews username and password from Mando settings before every Solr search and before resolving or downloading a file. Kodi normally keeps the login in memory for the session; enable this if you change your EasyNews password on the website, edit credentials in settings, or share a profile and want the next search to use the updated login without restarting Kodi. Expect a small extra delay per request when enabled</property>
+                          <property name="setting_description">Reload your EasyNews username and password from mando settings before every Solr search and before resolving or downloading a file. Kodi normally keeps the login in memory for the session; enable this if you change your EasyNews password on the website, edit credentials in settings, or share a profile and want the next search to use the updated login without restarting Kodi. Expect a small extra delay per request when enabled</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.refresh_credentials)</onclick>
                       </item>
                       <item>
@@ -2087,7 +2087,7 @@
                           <property name="setting_label">    - Autoplay Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.easynews)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from EasyNews</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from EasyNews</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.easynews)</onclick>
                       </item>
                       <item>
@@ -2113,7 +2113,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Offcloud account with a QR code and use it within Mando</property>
+                          <property name="setting_description">Authorise your Offcloud account with a QR code and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=offcloud.authenticate)</onclick>
                       </item>
                       <item>
@@ -2143,7 +2143,7 @@
                           <property name="setting_label">Check Cached Status (External Scrapers)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.oc.cache_check)]</property>
-                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Offcloud account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <property name="setting_description">When enabled, mando checks whether external torrent results are cached on your Offcloud account before listing them. You may see fewer links, but those shown should be instant.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=oc.cache_check)</onclick>
                       </item>
                       <item>
@@ -2185,7 +2185,7 @@
                           <property name="setting_label">Search Cloud Storage</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.oc_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your Offcloud cloud for media</property>
+                          <property name="setting_description">Enable this and mando will search your Offcloud cloud for media</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.oc_cloud)</onclick>
                       </item>
                       <item>
@@ -2196,7 +2196,7 @@
                           <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.oc_cloud.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching on your Offcloud cloud results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching on your Offcloud cloud results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=oc_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -2207,7 +2207,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.oc_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your Offcloud cloud before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search your Offcloud cloud before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.oc_cloud)</onclick>
                       </item>
                       <item>
@@ -2218,7 +2218,7 @@
                           <property name="setting_label">    - Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_occloud_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort Offcloud cloud results to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort Offcloud cloud results to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_occloud_first)</onclick>
                       </item>
                       <item>
@@ -2244,7 +2244,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Premiumize account and use it within Mando</property>
+                          <property name="setting_description">Authorise your Premiumize account and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=premiumize.authenticate)</onclick>
                       </item>
                       <item>
@@ -2274,7 +2274,7 @@
                           <property name="setting_label">Check Cached Status (External Scrapers)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.pm.cache_check)]</property>
-                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your Premiumize account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <property name="setting_description">When enabled, mando checks whether external torrent results are cached on your Premiumize account before listing them. You may see fewer links, but those shown should be instant.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=pm.cache_check)</onclick>
                       </item>
                       <item>
@@ -2306,7 +2306,7 @@
                           <property name="setting_label">Search Cloud Storage</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.pm_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your Premiumize Cloud for media</property>
+                          <property name="setting_description">Enable this and mando will search your Premiumize Cloud for media</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.pm_cloud)</onclick>
                       </item>
                       <item>
@@ -2317,7 +2317,7 @@
                           <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.pm_cloud.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your Premiumize Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching functions on your Premiumize Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=pm_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -2328,7 +2328,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.pm_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search for results in your Premiumize Cloud before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search for results in your Premiumize Cloud before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.pm_cloud)</onclick>
                       </item>
                       <item>
@@ -2340,7 +2340,7 @@
                           <property name="setting_label">    - Autoplay Cloud Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.pm_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from the Premiumize Cloud</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from the Premiumize Cloud</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.pm_cloud)</onclick>
                       </item>
                       <item>
@@ -2351,7 +2351,7 @@
                           <property name="setting_label">    - Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_pmcloud_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort the results from your Premiumize Cloud to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort the results from your Premiumize Cloud to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_pmcloud_first)</onclick>
                       </item>
                       <item>
@@ -2377,7 +2377,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Real Debrid account and use it within Mando</property>
+                          <property name="setting_description">Authorise your Real Debrid account and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=real_debrid.authenticate)</onclick>
                       </item>
                       <item>
@@ -2407,7 +2407,7 @@
                           <property name="setting_label">Check Cached Status (External Scrapers)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.cache_check)]</property>
-                          <property name="setting_description">Real Debrid does not expose cached status for external scrapers. When enabled, Mando filters external scraper torrents using third-party cache checks. The scrape may take longer and you will see fewer links.</property>
+                          <property name="setting_description">Real Debrid does not expose cached status for external scrapers. When enabled, mando filters external scraper torrents using third-party cache checks. The scrape may take longer and you will see fewer links.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd.cache_check)</onclick>
                       </item>
                       <item>
@@ -2427,7 +2427,7 @@
                           <property name="setting_label">Search Cloud Storage</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.rd_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your Real Debrid Cloud for media</property>
+                          <property name="setting_description">Enable this and mando will search your Real Debrid Cloud for media</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.rd_cloud)</onclick>
                       </item>
                       <item>
@@ -2438,7 +2438,7 @@
                           <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd_cloud.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your Real Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching functions on your Real Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -2449,7 +2449,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.rd_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search for results in your Real Debrid Cloud before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search for results in your Real Debrid Cloud before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.rd_cloud)</onclick>
                       </item>
                       <item>
@@ -2461,7 +2461,7 @@
                           <property name="setting_label">    - Autoplay Cloud Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.rd_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from the Real Debrid Cloud</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from the Real Debrid Cloud</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.rd_cloud)</onclick>
                       </item>
                       <item>
@@ -2472,7 +2472,7 @@
                           <property name="setting_label">    - Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_rdcloud_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort the results from your Real Debrid Cloud to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort the results from your Real Debrid Cloud to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_rdcloud_first)</onclick>
                       </item>
                       <item>
@@ -2492,7 +2492,7 @@
                           <property name="setting_label">Use alternate url</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.alternate_base_url)]</property>
-                          <property name="setting_description">Enable this and Mando will use an alternate base url for RD. This may circumvent any blocks being performed</property>
+                          <property name="setting_description">Enable this and mando will use an alternate base url for RD. This may circumvent any blocks being performed</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd.alternate_base_url)</onclick>
                       </item>
                       <item>
@@ -2502,7 +2502,7 @@
                           <property name="setting_label">Free active download slot</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.free_active_slot)]</property>
-                          <property name="setting_description">When enabled, Mando removes one active Real Debrid torrent before adding a new one if you already have 5 active downloads (RD's usual limit). This can prevent failed resolves when slots are full, but may delete a transfer you started elsewhere — including in the RD website or another app. Leave disabled unless you often hit resolve failures due to too many active downloads.</property>
+                          <property name="setting_description">When enabled, mando removes one active Real Debrid torrent before adding a new one if you already have 5 active downloads (RD's usual limit). This can prevent failed resolves when slots are full, but may delete a transfer you started elsewhere — including in the RD website or another app. Leave disabled unless you often hit resolve failures due to too many active downloads.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd.free_active_slot)</onclick>
                       </item>
         <!-- TorBox -->
@@ -2518,7 +2518,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your TorBox account with a QR code and use it within Mando</property>
+                          <property name="setting_description">Authorise your TorBox account with a QR code and use it within mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=torbox.authenticate)</onclick>
                       </item>
                       <item>
@@ -2548,7 +2548,7 @@
                           <property name="setting_label">Check Cached Status (External Scrapers)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.tb.cache_check)]</property>
-                          <property name="setting_description">When enabled, Mando checks whether external torrent results are cached on your TorBox account before listing them. You may see fewer links, but those shown should be instant.</property>
+                          <property name="setting_description">When enabled, mando checks whether external torrent results are cached on your TorBox account before listing them. You may see fewer links, but those shown should be instant.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb.cache_check)</onclick>
                       </item>
                       <item>
@@ -2590,7 +2590,7 @@
                           <property name="setting_label">Search Cloud Storage</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.tb_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search your TorBox Cloud for media before external scrapers run.</property>
+                          <property name="setting_description">Enable this and mando will search your TorBox Cloud for media before external scrapers run.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.tb_cloud)</onclick>
                       </item>
                       <item>
@@ -2601,7 +2601,7 @@
                           <property name="setting_label">    - Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.tb_cloud.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your TorBox Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching functions on your TorBox Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb_cloud.title_filter)</onclick>
                       </item>
                       <item>
@@ -2612,7 +2612,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.tb_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will search for results in your TorBox Cloud before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search for results in your TorBox Cloud before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.tb_cloud)</onclick>
                       </item>
                       <item>
@@ -2624,7 +2624,7 @@
                           <property name="setting_label">    - Autoplay Cloud Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.tb_cloud)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from the TorBox Cloud</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from the TorBox Cloud</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.tb_cloud)</onclick>
                       </item>
                       <item>
@@ -2635,7 +2635,7 @@
                           <property name="setting_label">    - Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_tbcloud_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort the results from your TorBox Cloud to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort the results from your TorBox Cloud to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_tbcloud_first)</onclick>
                       </item>
                       <item>
@@ -2682,7 +2682,7 @@
                           <property name="setting_label">    - Active base URL</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.aiostreams.base_url)]</property>
-                          <property name="setting_description">The base URL Mando uses for /api/v1/search on this scrape. Updates when you change Instance or Custom URL. API calls go to this host plus /api/v1/search.</property>
+                          <property name="setting_description">The base URL mando uses for /api/v1/search on this scrape. Updates when you change Instance or Custom URL. API calls go to this host plus /api/v1/search.</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
@@ -2791,7 +2791,7 @@
                           <property name="setting_label">Filter Results by Name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.folders.title_filter)]</property>
-                          <property name="setting_description">Enable this and Mando will perform extra name matching functions on your local media folders results. Will help to limit incorrect results, but may also filter some relevant results</property>
+                          <property name="setting_description">Enable this and mando will perform extra name matching functions on your local media folders results. Will help to limit incorrect results, but may also filter some relevant results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=folders.title_filter)</onclick>
                       </item>
                       <item>
@@ -2800,7 +2800,7 @@
                           <property name="setting_label">Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.folders)]</property>
-                          <property name="setting_description">Enable this and Mando will search for results from your local media folders before checking other enabled scrapers</property>
+                          <property name="setting_description">Enable this and mando will search for results from your local media folders before checking other enabled scrapers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.folders)</onclick>
                       </item>
                       <item>
@@ -2810,7 +2810,7 @@
                           <property name="setting_label">    - Autoplay Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay.folders)]</property>
-                          <property name="setting_description">Enable this and Mando will Autoplay the top result found from Local Folders</property>
+                          <property name="setting_description">Enable this and mando will Autoplay the top result found from Local Folders</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay.folders)</onclick>
                       </item>
                       <item>
@@ -2819,7 +2819,7 @@
                           <property name="setting_label">Show Results at Top</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_folders_first)]</property>
-                          <property name="setting_description">Enable this and Mando will sort the results from your local media folders to the top of all results</property>
+                          <property name="setting_description">Enable this and mando will sort the results from your local media folders to the top of all results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_folders_first)</onclick>
                       </item>
                       <item>
@@ -2828,7 +2828,7 @@
                           <property name="setting_label">Ignore Quality and Size Filters</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.folders_ignore_filters)]</property>
-                          <property name="setting_description">Enable this and Mando will ignore any Quality or Size filters when processing local media folders results</property>
+                          <property name="setting_description">Enable this and mando will ignore any Quality or Size filters when processing local media folders results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.folders_ignore_filters)</onclick>
                       </item>
                       <item>
@@ -2853,7 +2853,7 @@
                           <property name="setting_label">Scraper Timeout</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.timeout)]</property>
-                          <property name="setting_description">Choose the amount of time Mando will allow all scrapers to search for results</property>
+                          <property name="setting_description">Choose the amount of time mando will allow all scrapers to search for results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=results.timeout)</onclick>
                       </item>
                       <item>
@@ -2861,7 +2861,7 @@
                           <property name="setting_label">Results Display Format</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.list_format)]</property>
-                          <property name="setting_description">Choose the format in which Mando will display the results of a source search. Lists, Rows and WideList are provided</property>
+                          <property name="setting_description">Choose the format in which mando will display the results of a source search. Lists, Rows and WideList are provided</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=results_format_choice)</onclick>
                       </item>
         <!-- Rescrape -->
@@ -2891,7 +2891,7 @@
                           <property name="setting_label">Results Sorting</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.sort_order_display)]</property>
-                          <property name="setting_description">Choose the priority ordering performed by Mando before displaying source results</property>
+                          <property name="setting_description">Choose the priority ordering performed by mando before displaying source results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=results_sorting_choice)</onclick>
                       </item>
                       <item>
@@ -2908,7 +2908,7 @@
                           <property name="setting_label">    - Internet Speed (Mbit/s)</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.line_speed)]</property>
-                          <property name="setting_description">Enter here your internet line speed. It is a good idea to choose a value slightly below your true internet speed, although Mando will still reduce this value by 10% before filtering results by size</property>
+                          <property name="setting_description">Enter here your internet line speed. It is a good idea to choose a value slightly below your true internet speed, although mando will still reduce this value by 10% before filtering results by size</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=results.line_speed)</onclick>
                       </item>
                       <item>
@@ -2953,7 +2953,7 @@
                           <property name="setting_label">    - Include Results with Unknown Size</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.size_unknown)]</property>
-                          <property name="setting_description">Enable this and Mando will include results where the size of the file is unknown</property>
+                          <property name="setting_description">Enable this and mando will include results where the size of the file is unknown</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.size_unknown)</onclick>
                       </item>
                       <item>
@@ -2961,7 +2961,7 @@
                           <property name="setting_label">Use Weighted Value for Size Sorting</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.size_sort_weighted)]</property>
-                          <property name="setting_description">Enable this and Mando will weight HEVC file sizes as being equal to 2x a non-HEVC file size when sorting results</property>
+                          <property name="setting_description">Enable this and mando will weight HEVC file sizes as being equal to 2x a non-HEVC file size when sorting results</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=results.size_sort_weighted)</onclick>
                       </item>
                       <item>
@@ -2977,7 +2977,7 @@
                           <property name="setting_label">Uncached Results Minimum Seeders</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.uncached_min_seeders)]</property>
-                          <property name="setting_description">Enter here the Minimum Seeders a result must have to be displayed by Mando</property>
+                          <property name="setting_description">Enter here the Minimum Seeders a result must have to be displayed by mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=results.uncached_min_seeders)</onclick>
                       </item>
                       <item>
@@ -2985,7 +2985,7 @@
                           <property name="setting_label">Limit Results Per Quality</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.limit_number_quality_name)]</property>
-                          <property name="setting_description">Choose whether Mando limits the number of results shown. If a number is selected, each Quality in the results will be limited to that number of results. For example, if you choose 20 Per Quality, then Mando will display 20x4K results, 20x1080p results etc</property>
+                          <property name="setting_description">Choose whether mando limits the number of results shown. If a number is selected, each Quality in the results will be limited to that number of results. For example, if you choose 20 Per Quality, then mando will display 20x4K results, 20x1080p results etc</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=limit_number_quality_choice)</onclick>
                       </item>
                       <item>
@@ -2993,7 +2993,7 @@
                           <property name="setting_label">Limit Results Total</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.results.limit_number_total_name)]</property>
-                          <property name="setting_description">Choose whether Mando limits the number of results shown</property>
+                          <property name="setting_description">Choose whether mando limits the number of results shown</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=limit_number_total_choice)</onclick>
                       </item>
                       <item>
@@ -3293,7 +3293,7 @@
                           <property name="setting_label">Automatically Resume Playback</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.auto_resume_movie_name)]</property>
-                          <property name="setting_description">Choose when Mando will automatically resume playback of an in-progress Movie</property>
+                          <property name="setting_description">Choose when mando will automatically resume playback of an in-progress Movie</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=auto_resume_movie)</onclick>
                       </item>
                       <item>
@@ -3301,7 +3301,7 @@
                           <property name="setting_label">Show Credits Stinger Alert</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.stinger_alert.show)]</property>
-                          <property name="setting_description">Enable this and Mando will show an alert towards the end of a movie if it has during-credits or after-credits stingers</property>
+                          <property name="setting_description">Enable this and mando will show an alert towards the end of a movie if it has during-credits or after-credits stingers</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=stinger_alert.show)</onclick>
                       </item>
                       <item>
@@ -3310,7 +3310,7 @@
                           <property name="setting_label">    - Show Alert After (%) Playback</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.stinger_alert.window_percentage)]</property>
-                          <property name="setting_description">Choose when Mando will show the Credit Stingers Alert</property>
+                          <property name="setting_description">Choose when mando will show the Credit Stingers Alert</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=stinger_alert.window_percentage)</onclick>
                       </item>
                       <item>
@@ -3378,7 +3378,7 @@
                           <property name="setting_label">Autoscrape Next Episode</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoscrape_next_episode)]</property>
-                          <property name="setting_description">Enable this and Mando will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>
+                          <property name="setting_description">Enable this and mando will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoscrape_next_episode)</onclick>
                       </item>
                       <item>
@@ -3387,7 +3387,7 @@
                           <property name="setting_label">    - Show Notification After (%) Playback</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoscrape_next_window_percentage)]</property>
-                          <property name="setting_description">Choose when Mando will show the Next Episode Alert</property>
+                          <property name="setting_description">Choose when mando will show the Next Episode Alert</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=autoscrape_next_window_percentage)</onclick>
                       </item>
                       <item>
@@ -3405,7 +3405,7 @@
                           <property name="setting_label">    - Confirm Before Autoscrape?</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoscrape_confirm)]</property>
-                          <property name="setting_description">Enable this and Mando will confirm you wish to autoscrape the next episode towards the end of the current episode's runtime</property>
+                          <property name="setting_description">Enable this and mando will confirm you wish to autoscrape the next episode towards the end of the current episode's runtime</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoscrape_confirm)</onclick>
                       </item>
                       <item>
@@ -3414,7 +3414,7 @@
                           <property name="setting_label">Autoplay Next Episode</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay_next_episode)]</property>
-                          <property name="setting_description">Enable this and Mando will automatically play the next episode of a TV Show at the end of the episode currently being watched</property>
+                          <property name="setting_description">Enable this and mando will automatically play the next episode of a TV Show at the end of the episode currently being watched</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay_next_episode)</onclick>
                       </item>
                       <item>
@@ -3442,7 +3442,7 @@
                           <property name="setting_label">    - Show Alert After (%) Playback</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay_next_window_percentage)]</property>
-                          <property name="setting_description">Choose when Mando will show the Next Episode Alert</property>
+                          <property name="setting_description">Choose when mando will show the Next Episode Alert</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=autoplay_next_window_percentage)</onclick>
                       </item>
                       <item>
@@ -3460,7 +3460,7 @@
                           <property name="setting_label">    - Check Still Watching After... (0=Off)</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay_watching_check)]</property>
-                          <property name="setting_description">Choose after how many auto played episodes Mando will ask if you are still watching. Set to 0 to disable</property>
+                          <property name="setting_description">Choose after how many auto played episodes mando will ask if you are still watching. Set to 0 to disable</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=autoplay_watching_check)</onclick>
                       </item>
                       <item>
@@ -3468,7 +3468,7 @@
                           <property name="setting_label">Automatically Resume Playback</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.auto_resume_episode_name)]</property>
-                          <property name="setting_description">Choose when Mando will automatically resume playback of an in-progress Episode</property>
+                          <property name="setting_description">Choose when mando will automatically resume playback of an in-progress Episode</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=auto_resume_episode)</onclick>
                       </item>
         <!-- Playback Utilities -->
@@ -3483,7 +3483,7 @@
                           <property name="setting_label">Limit Resolve Attempts to Selected Result</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.playback.limit_resolve)]</property>
-                          <property name="setting_description">Enable this and Mando will limit the playback attempts to only the source result chosen. If disabled, Mando will potentially try 15 results of similar properties to your chosen source result until it is able to successfully resolve and playback</property>
+                          <property name="setting_description">Enable this and mando will limit the playback attempts to only the source result chosen. If disabled, mando will potentially try 15 results of similar properties to your chosen source result until it is able to successfully resolve and playback</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=playback.limit_resolve)</onclick>
                       </item>
                       <item>
@@ -3493,7 +3493,7 @@
                           <property name="setting_label">EasyNews Playback Method</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.playback_method_name)]</property>
-                          <property name="setting_description">Choose the method for Mando to use to attempt optimal EasyNews playback. RETRY will retry once the link if it fails to resolve (slow). NO SEEK will tell Kodi the stream is not seekable. This results in quick and consistent resolving of the stream, but you will be unable to seek the stream outside of the cached data. Both is to use both methods. None is to use none of the methods.</property>
+                          <property name="setting_description">Choose the method for mando to use to attempt optimal EasyNews playback. RETRY will retry once the link if it fails to resolve (slow). NO SEEK will tell Kodi the stream is not seekable. This results in quick and consistent resolving of the stream, but you will be unable to seek the stream outside of the cached data. Both is to use both methods. None is to use none of the methods.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=easynews.playback_method)</onclick>
                       </item>
                       <item>
@@ -3515,7 +3515,7 @@
                           <property name="setting_label">    - Exclude NO SEEK Playback for My Services</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.playback_method_limited)]</property>
-                          <property name="setting_description">Enable this and Mando will not use the NO SEEK EasyNews Playback Method when resolving regular files from the My Services->EasyNews location</property>
+                          <property name="setting_description">Enable this and mando will not use the NO SEEK EasyNews Playback Method when resolving regular files from the My Services->EasyNews location</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.playback_method_limited)</onclick>
                       </item>
                       <item>
@@ -3523,7 +3523,7 @@
                           <property name="setting_label">Check Volume Before Start of Playback</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.playback.volumecheck_enabled)]</property>
-                          <property name="setting_description">Enable this and Mando will attempt to check the current level of volume within Kodi, and adjust it downwards if it is exceeding a set level</property>
+                          <property name="setting_description">Enable this and mando will attempt to check the current level of volume within Kodi, and adjust it downwards if it is exceeding a set level</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=playback.volumecheck_enabled)</onclick>
                       </item>
                       <item>
@@ -3574,7 +3574,7 @@
                           <property name="setting_label">    - Subtitle Language</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.playback.submaker_language_name)]</property>
-                          <property name="setting_description">Preferred subtitle language for local embedded subs, SubMaker, and OpenSubtitles. Choose Forced Only (Local Subs) to enable forced embedded tracks only — SubMaker and OpenSubtitles still use English when that option is selected. For other languages, local subs try Mando first, then Kodi Settings &gt; Player &gt; Language, then enable subs without forcing a track</property>
+                          <property name="setting_description">Preferred subtitle language for local embedded subs, SubMaker, and OpenSubtitles. Choose Forced Only (Local Subs) to enable forced embedded tracks only — SubMaker and OpenSubtitles still use English when that option is selected. For other languages, local subs try mando first, then Kodi Settings &gt; Player &gt; Language, then enable subs without forcing a track</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=playback.submaker_language)</onclick>
                       </item>
                       <item>
@@ -3646,7 +3646,7 @@
                           <property name="setting_label">    - Revoke OpenSubtitles</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Clear your saved OpenSubtitles username, password, and login token from Mando</property>
+                          <property name="setting_description">Clear your saved OpenSubtitles username, password, and login token from mando</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=opensubs_revoke)</onclick>
                       </item>
                       <item>
@@ -3654,7 +3654,7 @@
                           <property name="setting_label">    - Custom API Key (optional)</property>
                           <property name="setting_type">string</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.playback.opensubs_api_key)]</property>
-                          <property name="setting_description">Mando includes a built-in OpenSubtitles API key. Enter your own consumer key here only if you use a private OpenSubtitles consumer app</property>
+                          <property name="setting_description">mando includes a built-in OpenSubtitles API key. Enter your own consumer key here only if you use a private OpenSubtitles consumer app</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=playback.opensubs_api_key)</onclick>
                       </item>
                 </content>

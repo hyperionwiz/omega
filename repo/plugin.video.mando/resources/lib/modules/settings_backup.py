@@ -47,7 +47,7 @@ def import_settings(params):
 	except Exception as e:
 		return kodi_utils.ok_dialog(heading='Import failed', text='Could not read that file.[CR][CR]%s' % e)
 	if not inventory['databases']:
-		return kodi_utils.ok_dialog(heading='Import settings', text='That zip does not contain Mando settings.')
+		return kodi_utils.ok_dialog(heading='Import settings', text='That zip does not contain mando settings.')
 	confirm = _import_confirm_text(path, manifest, inventory)
 	if not kodi_utils.confirm_dialog(heading='Import settings', text=confirm, ok_label='Import', cancel_label='Cancel', default_control=10, scroll=True):
 		return
@@ -75,7 +75,7 @@ def _pick_import_zip(default_dir):
 	if not os.path.isfile(tpath):
 		return None
 	if not tpath.lower().endswith('.zip'):
-		kodi_utils.ok_dialog(heading='Import settings', text='Please choose a Mando settings backup (.zip).')
+		kodi_utils.ok_dialog(heading='Import settings', text='Please choose a mando settings backup (.zip).')
 		return None
 	return tpath
 
@@ -143,7 +143,7 @@ def _read_manifest(archive):
 	except Exception as e:
 		raise ValueError('Invalid or missing manifest.json (%s)' % e)
 	if manifest.get('type') != 'mando_settings':
-		raise ValueError('This zip is not a Mando settings backup.')
+		raise ValueError('This zip is not a mando settings backup.')
 	if int(manifest.get('format', 0)) != SETTINGS_BACKUP_FORMAT:
 		raise ValueError('Unsupported backup format (%s).' % manifest.get('format'))
 	return manifest
@@ -177,9 +177,9 @@ def _export_preview_text(filename, inventory):
 def _import_confirm_text(path, manifest, inventory):
 	lines = [
 		'[B]%s[/B]' % os.path.basename(path),
-		'From Mando %s (%s)' % (manifest.get('addon_version') or 'unknown', (manifest.get('exported') or 'unknown')[:10]),
+		'From mando %s (%s)' % (manifest.get('addon_version') or 'unknown', (manifest.get('exported') or 'unknown')[:10]),
 		'',
-		'This replaces your current Mando settings, menus, and lists.',
+		'This replaces your current mando settings, menus, and lists.',
 		'Favorites and watch history are not changed.',
 	]
 	if inventory['images']:

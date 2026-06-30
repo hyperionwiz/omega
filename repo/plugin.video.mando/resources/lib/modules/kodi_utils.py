@@ -205,10 +205,10 @@ def addon_fanart():
 		or 'special://home/addons/plugin.video.mando/resources/media/fanart.jpg'
 	)
 
-MEDIA_GITHUB_USER = 'kodiwind'
-MEDIA_GITHUB_REPO = 'proximus'
+MEDIA_GITHUB_USER = 'The-Red-Wizard'
+MEDIA_GITHUB_REPO = 'TheRedWizard.github.io'
 MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/%s/%s/main/packages/media' % (MEDIA_GITHUB_USER, MEDIA_GITHUB_REPO)
-LEGACY_MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/kodiwind/proximus.github.io/main/packages/media'
+LEGACY_MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/TheRedWizard/TheRedWizard.github.io/main/packages/media'
 
 def media_github_credentials():
 	return MEDIA_GITHUB_USER, MEDIA_GITHUB_REPO
@@ -750,7 +750,7 @@ def finish_addon_xml_sync():
 
 def restart_addon_for_addon_xml_change(notify=True):
 	if notify:
-		notification('Refreshing addon.xml. Restarting Mando.', 8000)
+		notification('Refreshing addon.xml. Restarting mando.', 8000)
 	execute_builtin('ActivateWindow(Home)', True)
 	update_local_addons()
 	disable_enable_addon()
@@ -766,9 +766,9 @@ def reuse_language_invoker_check(force=False):
 			return False
 		changed, _invoker_changed = sync_addon_xml_from_settings()
 		if not changed:
-			logger('Mando', 'AddonXMLCheck - addon.xml sync failed')
+			logger('mando', 'AddonXMLCheck - addon.xml sync failed')
 			return False
-		logger('Mando', 'AddonXMLCheck - Change Detected. Restarting Mando')
+		logger('mando', 'AddonXMLCheck - Change Detected. Restarting mando')
 		finish_addon_xml_sync()
 		restart_addon_for_addon_xml_change(notify=not force)
 		return True
@@ -910,7 +910,7 @@ LIST_ITEM_NOT_IN_LIST = 'Item not in list'
 def notification(line1, time=5000, icon=None, settle_ms=0):
 	# Brief delay helps Kodi show the toast after select/confirm dialogs close (rapid calls can drop it otherwise).
 	if settle_ms: sleep(settle_ms)
-	kodi_dialog().notification('Mando', line1, icon or addon_icon(), time)
+	kodi_dialog().notification('mando', line1, icon or addon_icon(), time)
 
 def player_check(mode, params):
 	from modules.settings import playback_key

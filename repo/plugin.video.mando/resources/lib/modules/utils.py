@@ -373,11 +373,11 @@ def make_qrcode(url):
 		if not path_exists(art_path):
 			import os
 			if not os.path.exists(art_path):
-				logger('Mando', 'make_qrcode: missing after save %s' % art_path)
+				logger('mando', 'make_qrcode: missing after save %s' % art_path)
 				return
 		return translate_path(art_path)
 	except Exception as e:
-		logger('Mando', 'make_qrcode failed: %s' % e)
+		logger('mando', 'make_qrcode failed: %s' % e)
 		return
 
 def make_tinyurl(url):

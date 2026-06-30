@@ -54,7 +54,7 @@ def _pick_import_file(default_dir):
 	if not os.path.isfile(tpath):
 		return None
 	if not tpath.lower().endswith('.json'):
-		kodi_utils.ok_dialog(heading='Import favorites & history', text='Please choose a Mando backup (.json).')
+		kodi_utils.ok_dialog(heading='Import favorites & history', text='Please choose a mando backup (.json).')
 		return None
 	return tpath
 

@@ -494,7 +494,7 @@ def subtitle_seconds_remaining_before_end(total_time, imdb_id, season=None, epis
 			if not quiet:
 				try: label = os.path.basename(ku.translate_path(sub_path) if sub_path.startswith('special://') else sub_path)
 				except: label = sub_path or 'unknown'
-				ku.logger('Mando', '%s (local): %s remaining=%ss' % (log_label, label, remaining))
+				ku.logger('mando', '%s (local): %s remaining=%ss' % (log_label, label, remaining))
 			return remaining
 	if not fetch or not imdb_id or not st.subs_alert_fetch_configured(): return None
 	fetched = fetch_subtitle_for_alert_timing(imdb_id, season, episode, year, playing_filename)
@@ -503,7 +503,7 @@ def subtitle_seconds_remaining_before_end(total_time, imdb_id, season=None, epis
 	if remaining is not None and not quiet:
 		try: label = os.path.basename(ku.translate_path(fetched) if fetched.startswith('special://') else fetched)
 		except: label = fetched or 'unknown'
-		ku.logger('Mando', '%s (fetched): %s remaining=%ss' % (log_label, label, remaining))
+		ku.logger('mando', '%s (fetched): %s remaining=%ss' % (log_label, label, remaining))
 	return remaining
 
 def remember_active_subtitle_path(path):

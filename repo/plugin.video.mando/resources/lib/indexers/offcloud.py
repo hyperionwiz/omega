@@ -204,7 +204,7 @@ def oc_account_info():
 		try: cloud_limit = '{:,}'.format(int(cloud_limit))
 		except Exception: cloud_limit = str(cloud_limit)
 		append('[B]Cloud Limit[/B]: %s' % cloud_limit)
-		append('[I]Can Download and Cloud Limit are set by your Offcloud plan (offcloud.com), not in Mando.[/I]')
+		append('[I]Can Download and Cloud Limit are set by your Offcloud plan (offcloud.com), not in mando.[/I]')
 		return kodi_utils.show_text('OFFCLOUD', '\n\n'.join(body), font_size='large')
 	except Exception:
 		kodi_utils.hide_busy_dialog()

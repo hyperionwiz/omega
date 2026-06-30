@@ -214,7 +214,7 @@ class PremiumizeAPI:
 		return url + '|' + urlencode(self.headers())
 
 	def headers(self):
-		return {'User-Agent': 'Mando', 'Authorization': 'Bearer %s' % self.token}
+		return {'User-Agent': 'mando', 'Authorization': 'Bearer %s' % self.token}
 
 	def _get(self, url, data={}):
 		if self.token in ('empty_setting', ''): return None
