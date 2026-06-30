@@ -17,7 +17,7 @@ class AllDebridAPI:
 		self.token = get_setting('mando.ad.token', 'empty_setting')
 		self.break_auth_loop = False
 		self.base_url = 'https://api.alldebrid.com/v4/'
-		self.user_agent = 'mando'
+		self.user_agent = 'Mando'
 
 	def auth(self):
 		self.token = ''

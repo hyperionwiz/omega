@@ -589,7 +589,7 @@ def get_in_progress_movies(dummy_arg, page_no):
 		_refresh_mdblist_movie_progress()
 		data = _movie_progress_list(dbcon)
 		if data: source = 'mdblist'
-	logger('mando', 'get_in_progress_movies: %s item(s) from %s' % (len(data), source))
+	logger('Mando', 'get_in_progress_movies: %s item(s) from %s' % (len(data), source))
 	return _sort_progress_list(data)
 
 def get_in_progress_tvshows(dummy_arg, page_no):
@@ -604,7 +604,7 @@ def get_in_progress_tvshows(dummy_arg, page_no):
 		_refresh_mdblist_tvshow_watched()
 		source = 'mdblist'
 	results = active_tvshows_information('progress')
-	logger('mando', 'get_in_progress_tvshows: %s item(s) from %s' % (len(results), source))
+	logger('Mando', 'get_in_progress_tvshows: %s item(s) from %s' % (len(results), source))
 	if settings.lists_sort_order('progress') == 0: results = sort_for_article(results, 'title', settings.ignore_articles())
 	else: results = sorted(results, key=lambda x: x['last_played'], reverse=True)
 	return results
@@ -622,7 +622,7 @@ def get_in_progress_episodes():
 		_refresh_mdblist_episode_progress()
 		episode_list = _episode_progress_list(dbcon)
 		if episode_list: source = 'mdblist'
-	logger('mando', 'get_in_progress_episodes: %s item(s) from %s' % (len(episode_list), source))
+	logger('Mando', 'get_in_progress_episodes: %s item(s) from %s' % (len(episode_list), source))
 	if settings.lists_sort_order('progress') == 0: episode_list = sort_for_article(episode_list, 'title', settings.ignore_articles())
 	else: episode_list.sort(key=lambda k: k['date'], reverse=True)
 	return episode_list

@@ -761,7 +761,7 @@ def _resolve_watched_provider():
 def watched_provider_options():
 	options = {}
 	if mdblist_user_active(): options['3'] = 'MDBList'
-	options['0'] = 'mando'
+	options['0'] = 'Mando'
 	if simkl_user_active(): options['2'] = 'Simkl'
 	if trakt_user_active(): options['1'] = 'Trakt'
 	return options

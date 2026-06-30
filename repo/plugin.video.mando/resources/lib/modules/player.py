@@ -409,7 +409,7 @@ class MandoPlayer(xbmc.Player):
 			return False
 
 	def _log_nextep(self, message):
-		try: ku.logger('mando', message)
+		try: ku.logger('Mando', message)
 		except: pass
 
 	def _intro_skip_play_type_label(self):
@@ -421,7 +421,7 @@ class MandoPlayer(xbmc.Player):
 		return 'manual'
 
 	def _log_intro_skip(self, message):
-		try: ku.logger('mando', '%s (play_type=%s)' % (message, self._intro_skip_play_type_label()))
+		try: ku.logger('Mando', '%s (play_type=%s)' % (message, self._intro_skip_play_type_label()))
 		except: pass
 
 	def _defer_nextep_info(self):
@@ -531,7 +531,7 @@ class MandoPlayer(xbmc.Player):
 					except: pass
 				EpisodeTools(meta, nextep_settings).auto_nextep()
 			except Exception as exc:
-				ku.logger('mando', 'Next episode prep failed: %s' % exc)
+				ku.logger('Mando', 'Next episode prep failed: %s' % exc)
 			finally:
 				ku.clear_property(PROP_NEXTEP_PENDING)
 		Thread(target=_work, daemon=True).start()
@@ -618,9 +618,9 @@ class MandoPlayer(xbmc.Player):
 		try:
 			from modules.sources import schedule_nextep_stashed_play
 			if not schedule_nextep_stashed_play(stash):
-				ku.logger('mando', 'Autoplay next episode play failed: could not schedule resolve')
+				ku.logger('Mando', 'Autoplay next episode play failed: could not schedule resolve')
 		except Exception as exc:
-			ku.logger('mando', 'Autoplay next episode play failed: %s' % exc)
+			ku.logger('Mando', 'Autoplay next episode play failed: %s' % exc)
 		return
 
 	def run_next_ep(self):

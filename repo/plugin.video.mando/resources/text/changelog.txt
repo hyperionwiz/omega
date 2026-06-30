@@ -1,3 +1,6 @@
+[COLOR gold][B]Version 1.5.8[/B][/COLOR]
+- Fixed [B]TMDb Helper[/B] (and other external players): [B]autoplay=true[/B] / [B]autoplay=false[/B] in the playback URL is now honoured regardless of Mando global [B]Auto Play[/B]. [B]Mando - Auto Play[/B] resolves the top result; [B]Mando - Source Select[/B] always opens the source list. In-addon [B]Play[/B] without an [B]autoplay[/B] URL flag still follows [B]Playback > Auto Play[/B] as before.
+
 [COLOR gold][B]Version 1.5.7[/B][/COLOR]
 - Fixed [B]Skip Intro[/B] [B]Prompt[/B]: the 10-second countdown timing out no longer counts as [B]No[/B] — the prompt can appear again while the intro is still playing. [B]Yes[/B] now seeks immediately (same monitor pass) and verifies the player position on Android; failed or rejected seeks log to [B]kodi.log[/B]. [B]Yes[/B] shortly after the intro end still works via the grace window (previously blocked by an early past-segment check).
 - Fixed [B]Next Episodes[/B] widgets sometimes listing episodes you had already watched: [B]Last Watched[/B] mode picked a random watched row per show (broken [B]GROUP BY[/B] query) instead of the most recently played episode; [B]Last Aired[/B] mode could surface the next slot after your highest watched episode even when that slot was already marked watched; watched checks now normalise season/episode types so Trakt/local rows match reliably.
@@ -27,17 +30,17 @@
 - [B]Playback Options[/B]: [B]Select Source[/B], [B]Rescrape & Select Source[/B], and other scrape paths that pass [B]Auto Play[/B] off now open the source list instead of jumping straight into playback when [B]Autoplay Cloud Result[/B] (debrid) or [B]Autoplay Result[/B] (EasyNews, AIOStreams, Local Media Folders) is enabled under [B]Sources Accounts[/B]. No change if those prescrape autoplay toggles are off. Normal [B]Play[/B] and prescrape autoplay when enabled are unchanged; cloud scraping is unchanged.
 
 [COLOR gold][B]Version 1.5.1[/B][/COLOR]
-- Fixed [B]Open mando Settings…[/B] from [B]Configure[/B] / [B]Add-on settings[/B] when opened outside the add-on (add-on list context menu or sideblade): settings bootstrap and language invoker handling now match [B]Tools > Settings[/B].
-- [B]Shortcut Folders[/B] and main menu edit: [B]Move[/B] is hidden when the folder or menu has only one item (nothing to reorder). If move is triggered anyway, mando exits quietly instead of showing a misleading [B]Cancelled[/B] notification.
+- Fixed [B]Open Mando Settings…[/B] from [B]Configure[/B] / [B]Add-on settings[/B] when opened outside the add-on (add-on list context menu or sideblade): settings bootstrap and language invoker handling now match [B]Tools > Settings[/B].
+- [B]Shortcut Folders[/B] and main menu edit: [B]Move[/B] is hidden when the folder or menu has only one item (nothing to reorder). If move is triggered anyway, Mando exits quietly instead of showing a misleading [B]Cancelled[/B] notification.
 - Fixed [B]People[/B] and [B]EasyNews Images[/B] search history not updating after a new search until you left and re-opened the history list: refresh the history view when the results window closes, and stop caching search history folders to disc.
-- [B]Sources Accounts[/B]: clearer [B]Check Cached Status (External Scrapers)[/B] help for [B]All Debrid[/B] and [B]Real Debrid[/B] — neither exposes cached status for external scrapers; when enabled, mando filters torrents via third-party cache check(s). The scrape may take longer and you will see fewer links.
+- [B]Sources Accounts[/B]: clearer [B]Check Cached Status (External Scrapers)[/B] help for [B]All Debrid[/B] and [B]Real Debrid[/B] — neither exposes cached status for external scrapers; when enabled, Mando filters torrents via third-party cache check(s). The scrape may take longer and you will see fewer links.
 
 [COLOR gold][B]Version 1.5.0[/B][/COLOR]
 - [B]Autoplay[/B] / [B]Autoscrape Next Episode[/B]: removed the extra [B]Next Up: Scraping[/B] toast at background prep start. [B]Autoscrape[/B] shows one [B]Next Episode Ready[/B] alert when results are ready (before the sources list); [B]Autoplay[/B] keeps one [B]Next Up[/B] alert or the autoplay dialog. Background scrape start is still logged for diagnostics.
 - [B]Autoscrape Next Episode[/B]: background prep starts earlier (minimum 90s scrape headroom) so slow external scrapes can finish before the pre-credits alert when [B]Results > Timeout[/B] is low. [B]Subtitles Info[/B] waits briefly for the alert-timing subtitle fetch before falling back to percentage; [B]Chapter Info[/B] refreshes when chapter markers become available. Next-episode timing, prep schedule, and ready-state are logged to [B]kodi.log[/B] for diagnosis.
 - [B]Autoplay[/B] / [B]Autoscrape Next Episode[/B]: [B]Subtitles Info[/B] alert timing now alerts at last dialogue ([B]Subtitle credits entry[/B]) when credits run after the last spoken line, otherwise at least 20 seconds before EOF; background prep starts [B]pop_at + pipeline[/B] earlier so scrape finishes before the alert.
 - Fixed [B]Random Shortcut Folders[/B]: opening a random folder (or using one as a widget) no longer spins forever when it contains random movie/TV lists such as [B]Movies Random Genres[/B] or [B]Movies Random Decades[/B]. Lists added via [B]Add Content[/B] now keep their random behaviour; widget paths that omit the [B][RANDOM][/B] suffix still resolve the folder.
-- [B]MDBList[/B] / [B]Simkl[/B]: when [B]service.mdblist-scrobbler[/B] or [B]script.simkl[/B] is installed, enabled, and authorised, mando no longer duplicates playback scrobble/progress API calls during watch (same deferral pattern as [B]Trakt[/B] with [B]script.trakt[/B]). Manual manager actions, list sync, and background monitors are unchanged.
+- [B]MDBList[/B] / [B]Simkl[/B]: when [B]service.mdblist-scrobbler[/B] or [B]script.simkl[/B] is installed, enabled, and authorised, Mando no longer duplicates playback scrobble/progress API calls during watch (same deferral pattern as [B]Trakt[/B] with [B]script.trakt[/B]). Manual manager actions, list sync, and background monitors are unchanged.
 
 [COLOR gold][B]Version 1.4.9[/B][/COLOR]
 - Fixed [B]Force MDBList Sync[/B] crashing with a Python error during watched sync, which left [B]Watched[/B] and [B]In Progress[/B] menus empty even when MDBList lists worked.
@@ -47,15 +50,15 @@
 - [B]Clear Trakt Cache[/B] now shows a [B]Trakt Cache Cleared[/B] notification like [B]Clear Simkl Cache[/B] and [B]Clear MDBList Cache[/B] (no duplicate generic [B]Success[/B] toast).
 
 [COLOR gold][B]Version 1.4.8[/B][/COLOR]
-- [B]Subtitles Info[/B] alert timing: when an alert uses [B]Subtitles Info[/B], mando silently downloads a subtitle file in the background ([B]SubMaker[/B] first, [B]OpenSubtitles[/B] fallback when configured) — see [B]Playback > Subtitles[/B]. Targets just before credits for [B]Autoplay[/B]/[B]Autoscrape Next Episode[/B] and [B]Credit Stingers[/B]; background scrape starts earlier so results are ready before the alert. [B]Auto Enable Subtitles[/B] is separate: on-screen subs only. [B]SubMaker Manifest URL[/B] is always shown under [B]Subtitles[/B] (no need to turn on auto-enable first). [B]Prefer Local Subs[/B] and [B]Subtitle Language[/B] apply to local, SubMaker, and OpenSubtitles sources.
+- [B]Subtitles Info[/B] alert timing: when an alert uses [B]Subtitles Info[/B], Mando silently downloads a subtitle file in the background ([B]SubMaker[/B] first, [B]OpenSubtitles[/B] fallback when configured) — see [B]Playback > Subtitles[/B]. Targets just before credits for [B]Autoplay[/B]/[B]Autoscrape Next Episode[/B] and [B]Credit Stingers[/B]; background scrape starts earlier so results are ready before the alert. [B]Auto Enable Subtitles[/B] is separate: on-screen subs only. [B]SubMaker Manifest URL[/B] is always shown under [B]Subtitles[/B] (no need to turn on auto-enable first). [B]Prefer Local Subs[/B] and [B]Subtitle Language[/B] apply to local, SubMaker, and OpenSubtitles sources.
 - [B]Credit Stingers[/B] (movies): alert fires about three minutes earlier than the configured timing source so the heads-up lands sooner (typical gap vs next-episode percentage on ~1 hour titles).
 - [B]Autoplay[/B] / [B]Autoscrape Next Episode[/B]: increased background scrape headroom ([B]Results > Timeout[/B] plus 30 seconds, plus dialog time when applicable) so scrape and confirm dialogs can finish before the pre-credits alert on slower setups.
-- [B]OpenSubtitles[/B]: optional subtitle provider under [B]Playback > Subtitles[/B] — free [B]opensubtitles.com[/B] account (username and password; mando includes the OpenSubtitles API key, with an optional field for your own consumer key). Choose [B]OpenSubtitles[/B] as [B]Auto Enable Subtitle Source[/B] for downloaded on-screen subs during playback, or use it as the fallback for [B]Subtitles Info[/B] alert timing when [B]SubMaker[/B] is unavailable. [B]Check OpenSubtitles Account[/B] shows your remaining 24h download quota (about 20 downloads on free accounts); [B]Revoke OpenSubtitles[/B] clears saved username, password, and login token.
-- Fixed [B]Settings Manager[/B] boolean toggles sometimes showing the label with no on/off control when the saved value was [B]Off[/B]. Opening [B]mando Settings[/B] refreshes values from [B]settings.db[/B] so toggles match your saved choices.
+- [B]OpenSubtitles[/B]: optional subtitle provider under [B]Playback > Subtitles[/B] — free [B]opensubtitles.com[/B] account (username and password; Mando includes the OpenSubtitles API key, with an optional field for your own consumer key). Choose [B]OpenSubtitles[/B] as [B]Auto Enable Subtitle Source[/B] for downloaded on-screen subs during playback, or use it as the fallback for [B]Subtitles Info[/B] alert timing when [B]SubMaker[/B] is unavailable. [B]Check OpenSubtitles Account[/B] shows your remaining 24h download quota (about 20 downloads on free accounts); [B]Revoke OpenSubtitles[/B] clears saved username, password, and login token.
+- Fixed [B]Settings Manager[/B] boolean toggles sometimes showing the label with no on/off control when the saved value was [B]Off[/B]. Opening [B]Mando Settings[/B] refreshes values from [B]settings.db[/B] so toggles match your saved choices.
 
 [COLOR gold][B]Version 1.4.7[/B][/COLOR]
 - [B]SubMaker[/B]: skip [B]Sub Toolbox[/B] HTML entries, match [B]eng[/B] (and other ISO codes) to your chosen language name, and reject non-subtitle downloads so playback and [B]Subtitles Info[/B] timing use a real .srt file. [B]Manifest URL[/B] is trimmed on save and read (avoids trailing-space 404s).
-- [B]Language Invoker[/B]: Simpler style [B]AddonXMLCheck[/B] on service startup and manual toggle — your saved setting is written to [B]addon.xml[/B], then mando restarts with a short toast ([B]Restarting mando[/B]; no post-update confirm dialog, no [B]Load Profile[/B], no full skin reload). [B]Tools > Toggle Language Invoker[/B] keeps a confirm when you change it yourself; turning invoker back [B]On[/B] still warns about device instability.
+- [B]Language Invoker[/B]: Simpler style [B]AddonXMLCheck[/B] on service startup and manual toggle — your saved setting is written to [B]addon.xml[/B], then Mando restarts with a short toast ([B]Restarting Mando[/B]; no post-update confirm dialog, no [B]Load Profile[/B], no full skin reload). [B]Tools > Toggle Language Invoker[/B] keeps a confirm when you change it yourself; turning invoker back [B]On[/B] still warns about device instability.
 - Faster boot after the first sync: [B]SyncSettings[/B] skips the heavy [B]settings.db[/B] pass when nothing changed; [B]BootstrapSettings[/B] runs only when window properties, migration, or deferred setup need it. A repo upgrade still runs a full sync once, then returns to the quiet path.
 - Settings DB upgrade widget refresh: [B]ReloadSkin[/B] after migration runs on Windows only when new user-facing settings rows were added (internal [B]migration.*[/B] keys alone no longer trigger it). Android TV gets [B]UpdateLibrary[/B] without a full skin reload.
 
@@ -64,20 +67,20 @@
 
 [COLOR gold][B]Version 1.4.5[/B][/COLOR]
 - Playback alerts ([B]Credit Stingers[/B], [B]Autoplay Next Episode[/B], [B]Autoscrape Next Episode[/B]): [B]Alert Timing Source[/B] dropdown replaces the chapter-only toggle - [B]Off[/B], [B]Chapter Info[/B], or [B]Subtitles Info[/B]. [B]Subtitles Info[/B] reads timing from active subtitle files (Kodi player path, [B]A4KSubtitles[/B] temp, [B]SubMaker[/B], sidecar .srt, and other downloads during playback). Existing [B]Off[/B]/[B]Chapter[/B] settings are preserved on upgrade.
-- Improved background service shutdown during repo update (especially on Windows): cancels pending widget refresh alarms and avoids loading the main addon while Kodi disables mando for an update.
+- Improved background service shutdown during repo update (especially on Windows): cancels pending widget refresh alarms and avoids loading the main addon while Kodi disables Mando for an update.
 - Fixed [B]Shortcut Folders[/B]: opening a shortcut folder no longer errors (folder name was dropped from the navigation URL).
 - Fixed [B]custom menu editor[/B]: remove and reorder now use the item position (menu names are no longer in folder URLs) and the menu reloads after a change instead of showing [B]Success[/B] with no update.
 - [B]Language Invoker[/B]: after an update, addon.xml is restored from your saved setting during service startup with a confirm dialog and Kodi profile reload - not from home-screen widgets. No disable/enable cycle or widget refresh on that path. Manual toggle uses the same profile reload.
 
 [COLOR gold][B]Version 1.4.4[/B][/COLOR]
-- [B]Tools > Import & Export[/B]: separate zip backup/restore for mando settings (custom menus, personal lists, discover lists, list images, and all addon settings).
+- [B]Tools > Import & Export[/B]: separate zip backup/restore for Mando settings (custom menus, personal lists, discover lists, list images, and all addon settings).
 - Kodi favorites import/export: copy or merge the profile [B]Favourites.xml[/B] file (export is a literal copy; import offers merge by action or full replace with backup of the current file); warns that favorites only work for the add-on or library path that created them; restart Kodi to refresh the [B]Favorites[/B] menu.
-- [B]Tools > Import & Export[/B]: [B]mando Favorites & History[/B] JSON backup/restore (renamed from [B]Favorites & Progress[/B]) - exports favorites plus local in-progress and watched rows when [B]Watched Indicators[/B] is [B]mando[/B]; import merge keeps furthest progress, newer watched dates, and local-only items; replace clears each section present in the file; older backups without watched still import.
+- [B]Tools > Import & Export[/B]: [B]Mando Favorites & History[/B] JSON backup/restore (renamed from [B]Favorites & Progress[/B]) - exports favorites plus local in-progress and watched rows when [B]Watched Indicators[/B] is [B]Mando[/B]; import merge keeps furthest progress, newer watched dates, and local-only items; replace clears each section present in the file; older backups without watched still import.
 - [B]Import & Export[/B] browse: cancelling folder or file browse no longer continues to confirm; export and import folder browse open at your default; after a successful export you can save the chosen folder as your default; [B]Import & Export Directory[/B] under [B]Settings > General[/B]; default backup folder is addon profile [B]Import Export[/B] (special://profile/.../Import Export/) on all platforms when unset; settings backup preview/import text clarifies that [B]settings.db[/B] includes debrids, EasyNews, and TMDb lists as well as Trakt, Simkl, and MDBList.
 - Fixed auth QR codes sometimes missing or blank on device authorise dialogs (Trakt, Simkl, MDBList, debrids, EasyNews, TMDb lists, log uploader).
 - Fixed [B]Custom Sort to Top[/B]: [B]HDR[/B] preference no longer matches [B]HDrip[/B] releases ([B]HDrip[/B] was treated as [B]HDR[/B] because of substring matching in source info tags).
 - Fixed [B]Tools > Set Views[/B]: saving a view no longer errors (view name was dropped from the save action URL).
-- [B]Language Invoker[/B]: after an update or settings import, your saved choice is written back into addon.xml the first time you open mando (disable/enable when the value changes). Widgets refresh lightly only - not a full skin reload.
+- [B]Language Invoker[/B]: after an update or settings import, your saved choice is written back into addon.xml the first time you open Mando (disable/enable when the value changes). Widgets refresh lightly only - not a full skin reload.
 
 [COLOR gold][B]Version 1.4.3[/B][/COLOR]
 - Improved browse menu navigation: [B]Back[/B] and [B]Exit[/B] return to the correct parent menu ([B]Movies[/B], [B]TV Shows[/B], [B]Anime[/B], [B]My Lists[/B], [B]MDBList[/B], [B]Trakt[/B], [B]TMDb[/B], genres, and more) with list view preserved.
@@ -137,14 +140,14 @@
 - [B]Playback[/B]: failed dialog notes when an external source was unchecked (cache check was off) and may not be on your debrid.
 
 [COLOR gold][B]Version 1.3.4[/B][/COLOR]
-- [B]Simkl[/B]: PIN OAuth under [B]Meta Accounts[/B]; optional [B]Watched Status Provider[/B] prompt on authorise (Trakt or Simkl); revoke falls back to the other service or [B]mando[/B] when the revoked account was the active provider.
+- [B]Simkl[/B]: PIN OAuth under [B]Meta Accounts[/B]; optional [B]Watched Status Provider[/B] prompt on authorise (Trakt or Simkl); revoke falls back to the other service or [B]Mando[/B] when the revoked account was the active provider.
 - [B]Simkl[/B] lists (parallel to Trakt): [B]Plan to Watch[/B], [B]Watching[/B], [B]Completed[/B], [B]On Hold[/B], [B]Dropped[/B] under [B]My Content[/B]; [B]Random Simkl Lists[/B]; [B]Simkl Lists Manager[/B] on context menu and [B]Options[/B].
 - [B]Simkl[/B] sync: background [B]SimklMonitor[/B], [B]simklcache.db[/B], scrobble/progress/watched when Simkl is the [B]Watched Status Provider[/B]; [B]Clear Simkl Cache[/B] in maintenance.
-- [B]Watched Status Provider[/B] picker: lists [B]mando[/B], [B]Simkl[/B], and [B]Trakt[/B] alphabetically (values unchanged).
+- [B]Watched Status Provider[/B] picker: lists [B]Mando[/B], [B]Simkl[/B], and [B]Trakt[/B] alphabetically (values unchanged).
 - Context menu: [B]TMDb Lists Manager[/B] appears above [B]Personal Lists Manager[/B]; existing order migrates on upgrade.
 - [B]Trakt Cache[/B]: [B]Force Trakt Sync[/B] for a full re-sync (parallel to [B]Force Simkl Sync[/B]).
 - [B]Most Watched[/B]: when Simkl is the [B]Watched Status Provider[/B], [B]Movies[/B]/[B]TV[/B]/[B]Anime Most Watched[/B] use Simkl trending charts; otherwise Trakt (unchanged).
-- [B]Tools > mando Import & Export[/B]: scrollable preview dialogs for long backup summaries; progress sections name the active Trakt or Simkl provider when local progress is skipped.
+- [B]Tools > Mando Import & Export[/B]: scrollable preview dialogs for long backup summaries; progress sections name the active Trakt or Simkl provider when local progress is skipped.
 - [B]Anime Providers[/B]: fixed empty lists when browsing [B]Anime[/B] by streaming provider.
 
 [COLOR gold][B]Version 1.3.0 - 1.3.3[/B][/COLOR]
@@ -181,12 +184,12 @@
 - [B]Sources Browse[/B]: limited to pack results only (single-file torrents use click-to-play); empty pack lists fall back to the same resolve path as clicking the source; one-file packs play without an extra picker step.
 
 [COLOR gold][B]Version 1.2.9h[/B][/COLOR]
-- [B]Tools[/B]: [B]mando Favorites & Progress Import & Export[/B] - backup mando favorites and local progress to JSON; import with merge (keep furthest progress, keep local-only items) or replace per section in the file.
-- [B]Settings: Import & Export Directory[/B] under [B]General[/B], default folder for mando favorites and progress backup file browse. On Android, folder browse for non-empty download/backup paths starts at local root so parent navigation is not blocked (a Kodi browser quirk).
+- [B]Tools[/B]: [B]Mando Favorites & Progress Import & Export[/B] - backup Mando favorites and local progress to JSON; import with merge (keep furthest progress, keep local-only items) or replace per section in the file.
+- [B]Settings: Import & Export Directory[/B] under [B]General[/B], default folder for Mando favorites and progress backup file browse. On Android, folder browse for non-empty download/backup paths starts at local root so parent navigation is not blocked (a Kodi browser quirk).
 - [B]Add to Cloud[/B]: Real-Debrid and AllDebrid now show [B]No URL Found for Add to Cloud[/B] (matching [B]Download Pack[/B]) when the magnet has nothing to send, instead of [B]Failed[/B].
 - [B]Resolve lock[/B]: fixed [B]Resolve or playback in progress[/B] blocking new play attempts after cancelling resume, backing out of resolve, or other early exit from playback (busy flag was not always cleared).
 - [B]Resolve lock[/B]: stale resolve busy flag is cleared automatically when nothing is playing and no stream is opening.
-- [B]Playback[/B]: debrid / cloud direct links no longer reopen at Kodi's saved URL resume point (near end of file); mando [B]StartPercent[/B] resume is still used when set.
+- [B]Playback[/B]: debrid / cloud direct links no longer reopen at Kodi's saved URL resume point (near end of file); Mando [B]StartPercent[/B] resume is still used when set.
 - [B]Playback[/B]: failed resolve/play from source search now shows a [B]Playback Failed[/B] dialog instead of failing silently (closes progress window first; uses Kodi native OK dialog so it is not blocked by the resolve UI thread).
 - [B]Prescrape[/B] ([B]Check Before Full Search[/B]): choosing [B]Run External Scraper Search[/B] no longer shows a second OK confirm - the list row is the action; external scrapers start immediately.
 
@@ -216,7 +219,7 @@
 
 [COLOR gold][B]Version 1.2.9c[/B][/COLOR]
 - External cache check: per-provider toggles under each Debrid account (Real-Debrid, TorBox, Premiumize, Offcloud). TorBox/Offcloud include-uncached moved to their Debrid sections. Existing settings migrate automatically. Premiumize cache check wired for external scrapers.
-- Fixed [B]Movies In Progress[/B] empty when using Trakt watched indicators: playback progress is saved locally on stop, and Trakt sync no longer wipes those rows while waiting for Trakt to catch up. If mando has no progress rows, the list refreshes from Trakt when authorised.
+- Fixed [B]Movies In Progress[/B] empty when using Trakt watched indicators: playback progress is saved locally on stop, and Trakt sync no longer wipes those rows while waiting for Trakt to catch up. If Mando has no progress rows, the list refreshes from Trakt when authorised.
 
 [COLOR gold][B]Version 1.2.9b[/B][/COLOR]
 - [B]Filter Results by Name[/B]: EasyNews and [B]Local Folders[/B] use exact show-title match before SxxExx (e.g. Wings no longer matches Behind The Wings). Debrid cloud scrapers, use S/E match plus optional title filter; turn off for S/E-only recall.
@@ -233,10 +236,10 @@
 
 [COLOR gold][B]Version 1.2.9[/B][/COLOR]
 - Fixed scrape progress window staying open after a search returns no results (including unreleased episodes).
-- When a source search finds nothing, now shows a mando style [B]No results found[/B] dialog after the scrape progress window closes, with the Kodi dialog as a fallback if the skin window cannot open.
+- When a source search finds nothing, now shows a Mando style [B]No results found[/B] dialog after the scrape progress window closes, with the Kodi dialog as a fallback if the skin window cannot open.
 
 [COLOR gold][B]Version 1.2.8[/B][/COLOR]
-- Fixed playback progress / Trakt scrobbling (and Simkl, MDbList, etc.) not updating for TorBox and TorBox Cloud sources: v1.2.7 played those links with a bare Kodi player, skipping mando’s playback monitor and script.trakt.ids.
+- Fixed playback progress / Trakt scrobbling (and Simkl, MDbList, etc.) not updating for TorBox and TorBox Cloud sources: v1.2.7 played those links with a bare Kodi player, skipping Mando’s playback monitor and script.trakt.ids.
 
 [COLOR gold][B]Version 1.2.7[/B][/COLOR]
 - Service (AM Lite): optional wait for Account Manager Lite Trakt sync only when script.module.acctmgr is installed; runs in the background so startup is not blocked. Fixes “Unknown addon id script.module.acctmgr” log spam and scrape/playback failing to start when AM Lite is not installed (regression from v1.2.6).
@@ -260,7 +263,7 @@
 [COLOR gold][B]Version 1.2.5[/B][/COLOR]
 - Fixed [B]Results > Choose Rescrape Actions[/B] crashing (KeyError) after [B]Start Full Scrape[/B] was added: order labels and the [B]Set Order[/B] dialog now support six priority slots (0–5).
 - Fixed progress bar stuck on [B]EXTERNAL[/B] after debrid/EasyNews scrapers finish: the [B]External[/B] scrapers module name was treated as a pending internal provider, so the dialog waited for the full [B]Results Timeout[/B] even when no torrent hosts were still running.
-- Fixed External scraper phase taking much longer than mando v1.1.8: since v1.2.2, Debrid Cloud scrapers blocked the Coco/Magneto/Gears External module until every cloud API call finished (v1.2.4 added up to 25s more). Cloud scrapers still start first when enabled, but External runs in parallel again like v1.1.8.
+- Fixed External scraper phase taking much longer than Mando v1.1.8: since v1.2.2, Debrid Cloud scrapers blocked the Coco/Magneto/Gears External module until every cloud API call finished (v1.2.4 added up to 25s more). Cloud scrapers still start first when enabled, but External runs in parallel again like v1.1.8.
 
 [COLOR gold][B]Version 1.2.4[/B][/COLOR]
 - TorBox Cloud: cloud search now respects the Results Timeout budget and skips non-matching folders earlier, so a large TorBox library no longer blocks the entire source search when nothing matches.
@@ -271,11 +274,11 @@
 [COLOR gold][B]Version 1.2.3[/B][/COLOR]
 - Fixed skin widgets (e.g. [B]Movies > Trending[/B]) staying empty after a settings DB upgrade: widget calls no longer block on settings bootstrap, failed Trakt list fetches are not cached, and widgets are silently reloaded with [B]ReloadSkin[/B] only when sync_settings actually migrates or repairs an existing [B]settings.db[/B] (not on every boot).
 - Fixed slow startup and browsing after the v1.2.2 boot-crash fix: settings reads no longer hit SQLite on every call once properties are loaded, the database is not synced twice on boot, path-existence checks are skipped on the read path, and default-settings metadata is cached in memory.
-- Fixed widget and skin list loads hanging after 5 seconds (or failing) after opening mando: the font/skin background thread now runs only in the service process, not in the plugin invoker where it blocked every widget exit.
+- Fixed widget and skin list loads hanging after 5 seconds (or failing) after opening Mando: the font/skin background thread now runs only in the service process, not in the plugin invoker where it blocked every widget exit.
 - Fixed widgets staying empty after the above change: widget calls no longer bulk-load settings into window properties (which could fail silently); they read from a warmed in-memory DB cache instead when properties are not yet loaded.
 
 [COLOR gold][B]Version 1.2.2[/B][/COLOR]
-- Fixed Kodi boot crash after upgrading from older versions when legacy [B]settings.db[/B] contained invalid values. On boot the service migrates/sanitizes the database first, then loads settings into window properties after the GUI is up (so widgets and skin labels work). Skin/XML updates still run when mando is first opened.
+- Fixed Kodi boot crash after upgrading from older versions when legacy [B]settings.db[/B] contained invalid values. On boot the service migrates/sanitizes the database first, then loads settings into window properties after the GUI is up (so widgets and skin labels work). Skin/XML updates still run when Mando is first opened.
 
 [COLOR gold][B]Version 1.2.1[/B][/COLOR]
 - Fixed prescrape regression: [B]Start Full Scrape[/B] no longer appears when only EasyNews or debrid cloud results are shown unless [B]Check Before Full Search[/B] is enabled or external scrapers still need to run. Debrid cloud still runs before external scrapers when the provider is enabled.
@@ -370,7 +373,7 @@
 [COLOR gold][B]Version 1.0.6[/B][/COLOR]
 - Fixed TorBox Cloud Storage files not playing. This was broken in FenLightAM.
 - Added [B]Send URL to WebDL[/B] to [B]My Services > TorBox[/B].
-- Default mando fanart changed from local to special path.
+- Default Mando fanart changed from local to special path.
 
 [COLOR gold][B]Version 1.0.5[/B][/COLOR]
 - A few small fixes.

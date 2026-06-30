@@ -38,7 +38,7 @@ def persist_nextep_play_stash(stash):
 			pickle.dump(stash, handle, protocol=2)
 		return True
 	except Exception as exc:
-		kodi_utils.logger('mando', 'Autoplay next episode stash persist failed: %s' % exc)
+		kodi_utils.logger('Mando', 'Autoplay next episode stash persist failed: %s' % exc)
 		return False
 
 def consume_persisted_nextep_play_stash():
@@ -51,7 +51,7 @@ def consume_persisted_nextep_play_stash():
 		os.remove(path)
 		return stash
 	except Exception as exc:
-		kodi_utils.logger('mando', 'Autoplay next episode stash load failed: %s' % exc)
+		kodi_utils.logger('Mando', 'Autoplay next episode stash load failed: %s' % exc)
 		try: os.remove(path)
 		except: pass
 		return None
@@ -61,7 +61,7 @@ def schedule_nextep_stashed_play(stash):
 		return False
 	try:
 		meta = stash.get('meta') or {}
-		kodi_utils.logger('mando', 'Autoplay next episode play: scheduled resolve for %s S%02dE%02d' % (
+		kodi_utils.logger('Mando', 'Autoplay next episode play: scheduled resolve for %s S%02dE%02d' % (
 			meta.get('title', ''), meta.get('season', 0), meta.get('episode', 0)))
 	except:
 		pass
@@ -160,10 +160,13 @@ class Sources():
 	def _random_playback(self):
 		return any((self.random, self.random_continual, self.play_type == 'random_continual'))
 
+	def _explicit_autoplay_request(self):
+		return 'autoplay' in self.params and self.params.get('autoplay', 'false') == 'true'
+
 	def _effective_autoplay(self):
 		if not self.autoplay:
 			return False
-		if self.cloud_prescrape_autoplay or self._random_playback():
+		if self._explicit_autoplay_request() or self.cloud_prescrape_autoplay or self._random_playback():
 			return True
 		return settings.auto_play(self.media_type)
 
@@ -174,7 +177,7 @@ class Sources():
 		if params_get('nextep_stash_play') == 'true':
 			stash = consume_persisted_nextep_play_stash()
 			if not stash:
-				kodi_utils.logger('mando', 'Autoplay next episode play: no persisted stash')
+				kodi_utils.logger('Mando', 'Autoplay next episode play: no persisted stash')
 				return
 			self.params = dict(stash.get('params') or {})
 			self.params['background'] = 'false'
@@ -242,7 +245,7 @@ class Sources():
 				return
 		if getattr(self, '_nextep_stash_results', None):
 			try:
-				kodi_utils.logger('mando', 'Autoplay next episode play: starting resolve for %s S%02dE%02d' % (
+				kodi_utils.logger('Mando', 'Autoplay next episode play: starting resolve for %s S%02dE%02d' % (
 					self.meta.get('title', ''), self.season, self.episode))
 			except:
 				pass
@@ -332,7 +335,7 @@ class Sources():
 					if not self.progress_dialog and not self.background:
 						self._make_progress_dialog()
 					self._refresh_results_settings()
-				if not settings.auto_play(self.media_type) and not self.cloud_prescrape_autoplay and not self._random_playback():
+				if not settings.auto_play(self.media_type) and not self.cloud_prescrape_autoplay and not self._random_playback() and not self._explicit_autoplay_request():
 					self.autoplay = False
 				self.prescrape = False
 				self._release_empty_prescrape_cloud_scrapers()
@@ -824,7 +827,7 @@ class Sources():
 		if prescrape_autoplay:
 			self.cloud_prescrape_autoplay = True
 			self._last_cloud_autoplay_results = list(prescrape_autoplay)
-			kodi_utils.logger('mando', 'Autoplay prescrape: %s hit(s) from %s' % (len(prescrape_autoplay), prescrape_autoplay[0].get('scrape_provider', '')))
+			kodi_utils.logger('Mando', 'Autoplay prescrape: %s hit(s) from %s' % (len(prescrape_autoplay), prescrape_autoplay[0].get('scrape_provider', '')))
 			self._prepare_cloud_autoplay_resolve()
 			return self.play_file(prescrape_autoplay)
 		self.cloud_prescrape_autoplay = False
@@ -1089,7 +1092,7 @@ class Sources():
 
 	def _no_results(self):
 		self._close_progress_before_modal()
-		heading = self.meta.get('rootname', '') or self.meta.get('title', '') or 'mando'
+		heading = self.meta.get('rootname', '') or self.meta.get('title', '') or 'Mando'
 		return self._show_modal_message(heading, 'No results found.', '[B]Next Up:[/B] No Results')
 
 	def get_search_title(self):
@@ -1811,7 +1814,7 @@ class Sources():
 			if self.cancel_all_playback or self._resolve_user_cancelled:
 				self._finish_resolve_cancel()
 			elif not self.playback_successful or not url:
-				kodi_utils.logger('mando', 'Resolve queue failed: success=%s url=%s dialog=%s' % (
+				kodi_utils.logger('Mando', 'Resolve queue failed: success=%s url=%s dialog=%s' % (
 					self.playback_successful, bool(url), bool(self.progress_dialog)))
 				self.playback_failed_action()
 		finally:
@@ -1880,7 +1883,7 @@ class Sources():
 
 	def _log_nextep_scrape_started(self):
 		try:
-			kodi_utils.logger('mando', 'Next episode background scrape started: %s S%02dE%02d (%s)' % (
+			kodi_utils.logger('Mando', 'Next episode background scrape started: %s S%02dE%02d (%s)' % (
 				self.meta.get('title'), self.meta.get('season'), self.meta.get('episode'), self.play_type))
 		except: pass
 
@@ -1929,7 +1932,7 @@ class Sources():
 	def _notify_autoscrape_ready(self, remaining, window_time):
 		if getattr(self, '_autoscrape_ready_notified', False): return
 		self._autoscrape_ready_notified = True
-		kodi_utils.logger('mando', 'Autoscrape next episode ready: %s S%02dE%02d remaining=%ss alert_window=%ss' % (
+		kodi_utils.logger('Mando', 'Autoscrape next episode ready: %s S%02dE%02d remaining=%ss alert_window=%ss' % (
 			self.meta.get('title'), self.meta.get('season'), self.meta.get('episode'), remaining, window_time))
 		kodi_utils.notification('[B]Next Episode Ready:[/B] %s S%02dE%02d' \
 				% (self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')), 6500, self.meta.get('poster'))
@@ -1970,14 +1973,14 @@ class Sources():
 
 	def _stash_nextep_autoplay_play(self, results):
 		if not results:
-			kodi_utils.logger('mando', 'Autoplay next episode scrape ready: no results for %s S%02dE%02d' % (
+			kodi_utils.logger('Mando', 'Autoplay next episode scrape ready: no results for %s S%02dE%02d' % (
 				self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')))
 			return
 		if stash_nextep_autoplay_results(results, self.meta, self.nextep_settings, self.params):
-			kodi_utils.logger('mando', 'Autoplay next episode scrape ready: %s S%02dE%02d (%s results)' % (
+			kodi_utils.logger('Mando', 'Autoplay next episode scrape ready: %s S%02dE%02d (%s results)' % (
 				self.meta.get('title'), self.meta.get('season'), self.meta.get('episode'), len(results)))
 		else:
-			kodi_utils.logger('mando', 'Autoplay next episode stash failed: %s S%02dE%02d' % (
+			kodi_utils.logger('Mando', 'Autoplay next episode stash failed: %s S%02dE%02d' % (
 				self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')))
 
 	def continue_resolve_check(self):
@@ -2062,12 +2065,12 @@ class Sources():
 			if remaining_time is None and not still_active:
 				idle_grace += 1
 				if idle_grace >= 5:
-					kodi_utils.logger('mando', 'Autoplay next episode alert: playback ended before window (window=%ss)' % window_time)
+					kodi_utils.logger('Mando', 'Autoplay next episode alert: playback ended before window (window=%ss)' % window_time)
 					return False
 			kodi_utils.sleep(1000)
 		if not continue_nextep:
 			return False
-		kodi_utils.logger('mando', 'Autoplay next episode alert: remaining=%ss window=%ss method=%s' % (
+		kodi_utils.logger('Mando', 'Autoplay next episode alert: remaining=%ss window=%ss method=%s' % (
 			self._nextep_alert_remaining(player), window_time, 'window' if use_window else 'notification'))
 		action = None if use_window else 'close'
 		if use_window:
@@ -2100,7 +2103,7 @@ class Sources():
 			return
 		results = self.get_sources()
 		if not results:
-			kodi_utils.logger('mando', 'Autoscrape next episode: no results for %s S%02dE%02d' % (
+			kodi_utils.logger('Mando', 'Autoscrape next episode: no results for %s S%02dE%02d' % (
 				self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')))
 			return
 		window_time = self.nextep_settings.get('window_time', 0) if self.nextep_settings else 0
@@ -2110,7 +2113,7 @@ class Sources():
 			if self._should_autoscrape_stop_notify(remaining, window_time):
 				self._notify_autoscrape_ready(remaining, window_time)
 			else:
-				kodi_utils.logger('mando', 'Autoscrape next episode ready (stopped during scrape): %s S%02dE%02d remaining=%ss alert_window=%ss' % (
+				kodi_utils.logger('Mando', 'Autoscrape next episode ready (stopped during scrape): %s S%02dE%02d remaining=%ss alert_window=%ss' % (
 					self.meta.get('title'), self.meta.get('season'), self.meta.get('episode'), remaining, window_time))
 			return self.display_results(results)
 		if remaining is not None and remaining <= int(window_time):

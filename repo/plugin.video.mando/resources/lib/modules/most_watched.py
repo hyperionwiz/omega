@@ -50,7 +50,7 @@ def _most_watched_page(action, page_no):
 	if most_watched_provider() == 'simkl':
 		data = _simkl_page(action, page_no)
 		if data: return data
-		kodi_utils.logger('mando', 'Most Watched: Simkl empty for %s page %s, falling back to Trakt' % (action, page_no))
+		kodi_utils.logger('Mando', 'Most Watched: Simkl empty for %s page %s, falling back to Trakt' % (action, page_no))
 	return _trakt_page(action, page_no)
 
 def movies_most_watched(page_no):

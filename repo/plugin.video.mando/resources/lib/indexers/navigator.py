@@ -9,7 +9,7 @@ class Navigator:
 	def __init__(self, params):
 		self.params = params
 		self.params_get = self.params.get
-		self.category_name = self.params_get('name', 'mando')
+		self.category_name = self.params_get('name', 'Mando')
 		self.list_name = self.params_get('action', 'RootList')
 		self.is_external = k.external()
 		self.make_listitem = lambda: k.make_listitem(False)
@@ -53,7 +53,7 @@ class Navigator:
 		can_move = len(browse_list) > 1
 		results = sorted(list(_process()), key=lambda k: k[1])
 		if not results and browse_list:
-			k.logger('mando', 'menu build empty for %s (%s items expected)' % (self.list_name, len(browse_list)))
+			k.logger('Mando', 'menu build empty for %s (%s items expected)' % (self.list_name, len(browse_list)))
 		handle = int(sys.argv[1])
 		if results:
 			k.add_items(handle, [i[0] for i in results])
@@ -353,10 +353,10 @@ class Navigator:
 		self.end_directory()
 
 	def import_export(self):
-		self.add({'mode': 'settings_backup.import_settings', 'isFolder': 'false'}, 'Import mando Settings', 'settings')
-		self.add({'mode': 'settings_backup.export_settings', 'isFolder': 'false'}, 'Export mando Settings', 'settings')
-		self.add({'mode': 'local_backup.import_data', 'isFolder': 'false'}, 'Import mando Favorites & History', 'folder')
-		self.add({'mode': 'local_backup.export_data', 'isFolder': 'false'}, 'Export mando Favorites & History', 'folder')
+		self.add({'mode': 'settings_backup.import_settings', 'isFolder': 'false'}, 'Import Mando Settings', 'settings')
+		self.add({'mode': 'settings_backup.export_settings', 'isFolder': 'false'}, 'Export Mando Settings', 'settings')
+		self.add({'mode': 'local_backup.import_data', 'isFolder': 'false'}, 'Import Mando Favorites & History', 'folder')
+		self.add({'mode': 'local_backup.export_data', 'isFolder': 'false'}, 'Export Mando Favorites & History', 'folder')
 		self.add({'mode': 'kodi_favorites.import_favorites', 'isFolder': 'false'}, 'Import Kodi Favorites', 'favorites')
 		self.add({'mode': 'kodi_favorites.export_favorites', 'isFolder': 'false'}, 'Export Kodi Favorites', 'favorites')
 		self.end_directory()
@@ -729,7 +729,7 @@ class Navigator:
 
 	def _safe_add(self, url_params, list_name, iconImage='folder', original_image=False, cm_items=[]):
 		try: self.add(url_params, list_name, iconImage, original_image, cm_items)
-		except Exception as e: k.logger('mando', 'my_lists add failed [%s]: %s' % (list_name, e))
+		except Exception as e: k.logger('Mando', 'my_lists add failed [%s]: %s' % (list_name, e))
 
 	def add(self, url_params, list_name, iconImage='folder', original_image=False, cm_items=[]):
 		isFolder = url_params.get('isFolder', 'true') == 'true'
