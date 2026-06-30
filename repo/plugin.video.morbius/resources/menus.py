@@ -41,7 +41,7 @@ def main_menu():
     
     all_d=[]
     
-    aa=addDir3('[B][COLOR mediumslateblue]Morbius RD Movies[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/main1_movies4k.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Morbius RD Movies',search_db='')
+    aa=addDir3('[B][COLOR mediumslateblue]Morbius RD Movies[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/main1_movies4k.txt',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Morbius RD Movies',search_db='')
     all_d.append(aa)  
     aa=addDir3('[B][COLOR mediumslateblue]Morbius Movies by year[/COLOR][/B]', 'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/xmls/builds/Morbius/movie-years-tmdb.xml',189,'https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/icon2.png','https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Docs/Artwork/morbius/fanart.jpg','Morbius Movies by year',search_db='')
     all_d.append(aa)

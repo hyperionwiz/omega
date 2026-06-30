@@ -106,7 +106,7 @@
         </assets>
         <news>[COLOR gold]Check the Changelog in Tools &gt; Changelog &amp; Log Utils[/COLOR]</news>
     </extension>
-</addon><addon id="plugin.video.morbius" name="Morbius" version="3.6.4" provider-name="The Hood">
+</addon><addon id="plugin.video.morbius" name="Morbius" version="3.6.4a" provider-name="The Hood">
   <requires>
 	<import addon="script.module.requests" /> 
   </requires>
