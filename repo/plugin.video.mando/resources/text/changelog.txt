@@ -1,3 +1,10 @@
+[COLOR gold][B]Version 1.6.6[/B][/COLOR]
+- Fixed [B]Random Lists[/B] dynamic list names (browse paths and widgets): [B]random.build_*[/B] folder URLs again include [B]name=[/B] so Mando can set the matching [B]Window.Property[/B] for [B]$INFO[Window.Property(mando.[NAME OF LIST])][/B]. Legacy paths saved without [B]name=[/B] (since [B]1.4.3[/B]) still resolve the property key from list [B]mode[/B]/[B]action[/B] when possible.
+- Fixed [B]Trakt[/B] watched sync clearing local TV/movie watched rows when Trakt returns no data or the API request fails (e.g. server error during widget refresh after an update); the last good cache is kept instead.
+
+[COLOR gold][B]Version 1.6.5[/B][/COLOR]
+- Fixed [B]Random Lists[/B] dynamic widget labels (e.g. [B]Random Because You Watched[/B], random genres/providers): browse and widget paths again include the list [B]name[/B] so Mando can set the matching [B]Window.Property[/B] for [B]$INFO[Window.Property(mando.[NAME OF LIST])][/B]. Widgets saved from [B]Random Lists[/B] since [B]1.4.3[/B] may need recreating once so the path includes [B]name=[/B].
+
 [COLOR gold][B]Version 1.6.4[/B][/COLOR]
 - [B]External Scrapers[/B]: switching [B]Search Mode[/B] from [B]Series (Fallback by Slot Order)[/B] to [B]Parallel (All Enabled Slots)[/B] shows a reminder about shared volunteer-run indexers and responsible use ([B]Keep Series[/B] is the default button).
 
