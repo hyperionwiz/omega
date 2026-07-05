@@ -191,7 +191,10 @@ def addon_path():
 	return get_property('mando.addon_path') or addon_info('path')
 
 def addon_profile():
-	return get_property('mando.addon_profile') or translate_path(addon_info('profile'))
+	try:
+		return translate_path(addon_info('profile'))
+	except:
+		return get_property('mando.addon_profile') or ''
 
 def addon_icon():
 	return get_property('mando.addon_icon') or translate_path(addon_info('icon'))
