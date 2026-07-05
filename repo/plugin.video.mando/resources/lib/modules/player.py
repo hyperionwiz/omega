@@ -13,6 +13,7 @@ PROP_RESOLVE_CANCEL = 'mando.resolve_cancelled'
 PROP_PLAY_OPENING = 'mando.play_opening'
 PROP_NEXTEP_PENDING = 'mando.nextep_pending'
 PROP_NEXTEP_PREP_SCHEDULED = 'mando.nextep_prep_scheduled'
+PROP_NEXTEP_PREP_DECLINED = 'mando.nextep_prep_declined'
 # Movies-only: fire stingers alert ~3 min before other alert sources would (typical 90% vs 95% gap on ~1 hr).
 _STINGER_EARLY_OFFSET_SEC = 180
 _NEXTEP_SUB_FETCH_DEFER_SEC = 45
@@ -452,7 +453,14 @@ class MandoPlayer(xbmc.Player):
 		if started and (time.time() - started) > _NEXTEP_SUB_FETCH_DEFER_SEC: return False
 		return True
 
+	def decline_nextep_prep(self, reason=''):
+		ku.set_property(PROP_NEXTEP_PREP_DECLINED, 'true')
+		if reason:
+			self._log_nextep('Next episode prep declined: %s' % reason)
+
 	def _should_prep_next_ep(self):
+		if ku.get_property(PROP_NEXTEP_PREP_DECLINED) == 'true':
+			return False
 		if ku.get_property(PROP_NEXTEP_PENDING) == 'true':
 			return False
 		if ku.get_property(PROP_NEXTEP_PREP_SCHEDULED) == 'true':
@@ -534,16 +542,13 @@ class MandoPlayer(xbmc.Player):
 		ku.set_property(PROP_NEXTEP_PENDING, 'true')
 		meta = dict(self.meta) if getattr(self, 'meta', None) else {}
 		nextep_settings = dict(self.nextep_settings) if getattr(self, 'nextep_settings', None) else None
-		playing_item = dict(getattr(self, 'playing_item', None) or {})
-		if playing_item.get('scrape_provider') == 'folders':
-			meta['playing_scrape_provider'] = 'folders'
 		def _work():
 			try:
 				from modules.episode_tools import EpisodeTools
 				if not self.media_marked:
 					try: self.media_watched_marker(force_watched=True)
 					except: pass
-				EpisodeTools(meta, nextep_settings, playing_item=playing_item).auto_nextep()
+				EpisodeTools(meta, nextep_settings).auto_nextep()
 			except Exception as exc:
 				ku.logger('Mando', 'Next episode prep failed: %s' % exc)
 			finally:
@@ -938,6 +943,7 @@ class MandoPlayer(xbmc.Player):
 			self._playback_started_at = time.time()
 			ku.clear_property(PROP_NEXTEP_PENDING)
 			ku.clear_property(PROP_NEXTEP_PREP_SCHEDULED)
+			ku.clear_property(PROP_NEXTEP_PREP_DECLINED)
 			self._nextep_alert_pending_logged = False
 			self.playing_item = self.sources_object.playing_item
 			self._intro_skip_active = False
