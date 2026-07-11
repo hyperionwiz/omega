@@ -16,6 +16,9 @@ PROP_NEXTEP_PREP_SCHEDULED = 'mando.nextep_prep_scheduled'
 PROP_NEXTEP_PREP_DECLINED = 'mando.nextep_prep_declined'
 PROP_AUTOSCRAPE_NEXTEP_READY = 'mando.autoscrape_nextep_ready'
 PROP_NEXTEP_AUTOPLAY_CANCELLED = 'mando.nextep_autoplay_cancelled'
+PROP_NEXTEP_NATURAL_END = 'mando.nextep_natural_end'
+PROP_ACTIVE_PLAYBACK_KEY = 'mando.active_playback_key'
+_NEXTEP_NATURAL_END_SEC = 15
 # Movies-only: fire stingers alert ~3 min before other alert sources would (typical 90% vs 95% gap on ~1 hr).
 _STINGER_EARLY_OFFSET_SEC = 180
 _NEXTEP_SUB_FETCH_DEFER_SEC = 45
@@ -79,8 +82,10 @@ class MandoPlayer(xbmc.Player):
 				try:
 					if self.sources_object:
 						self.sources_object._release_resolve_busy()
+						self.sources_object._release_sources_busy()
 				except:
 					pass
+				self._register_active_playback()
 				self.monitor()
 			else:
 				self.sources_object.playback_successful = self.playback_successful
@@ -192,6 +197,7 @@ class MandoPlayer(xbmc.Player):
 		ku.close_all_dialog()
 
 	def monitor(self):
+		playback_superseded = False
 		try:
 			ensure_dialog_dead, total_check_time = False, 0
 			if self.media_type == 'episode':
@@ -225,6 +231,9 @@ class MandoPlayer(xbmc.Player):
 				except:
 					self.showSubtitles(True)
 			while self.isPlayingVideo():
+				if not self._owns_active_playback():
+					playback_superseded = True
+					break
 				try:
 					if not ensure_dialog_dead:
 						ensure_dialog_dead = True
@@ -277,14 +286,34 @@ class MandoPlayer(xbmc.Player):
 						if self.current_point >= final_chapter: self.run_movie_stingers()
 				except: pass
 				if not self.subs_searched: self.run_subtitles()
+			try:
+				_remaining = None
+				if getattr(self, 'total_time', None) not in (None, '', 0, 0.0) and getattr(self, 'curr_time', None) not in (None, ''):
+					_remaining = round(float(self.total_time) - float(self.curr_time))
+				natural_end = (not playback_superseded and _remaining is not None and _remaining <= _NEXTEP_NATURAL_END_SEC)
+				if self.autoscrape_nextep and not playback_superseded:
+					if natural_end:
+						ku.set_property(PROP_NEXTEP_NATURAL_END, 'true')
+					else:
+						ku.set_property(PROP_NEXTEP_NATURAL_END, 'false')
+						try:
+							from modules.sources import mark_nextep_autoplay_cancelled
+							mark_nextep_autoplay_cancelled()
+							self._log_nextep('Autoscrape next episode: cancelled (playback stopped early)')
+						except:
+							pass
+				elif natural_end:
+					ku.set_property(PROP_NEXTEP_NATURAL_END, 'true')
+			except:
+				pass
 			autoplay_stash_scheduled = False
-			if self.autoplay_nextep:
+			if not playback_superseded and self.autoplay_nextep:
 				try:
-					from modules.sources import clear_nextep_autoplay_stash, clear_orphan_nextep_play_stash, nextep_autoplay_cancelled, peek_nextep_autoplay_stash, schedule_nextep_stashed_play, take_nextep_autoplay_stash
-					if nextep_autoplay_cancelled():
+					from modules.sources import clear_nextep_autoplay_stash, clear_orphan_nextep_play_stash, nextep_autoplay_cancelled, nextep_end_play_superseded, peek_nextep_autoplay_stash, schedule_nextep_stashed_play, take_nextep_autoplay_stash
+					if nextep_autoplay_cancelled() or nextep_end_play_superseded():
 						clear_nextep_autoplay_stash()
 						clear_orphan_nextep_play_stash()
-						self._log_nextep('Autoplay next episode: skipped at episode end (user cancelled)')
+						self._log_nextep('Autoplay next episode: skipped at episode end (superseded by user playback)')
 					elif getattr(self, '_nextep_stash_play_scheduled', False):
 						autoplay_stash_scheduled = True
 					elif getattr(self, '_nextep_alert_shown', False):
@@ -298,8 +327,9 @@ class MandoPlayer(xbmc.Player):
 				except: pass
 			if not autoplay_stash_scheduled:
 				ku.hide_busy_dialog()
-			if not self.media_marked: self.media_watched_marker()
+			if not playback_superseded and not self.media_marked: self.media_watched_marker()
 			self.clear_playback_properties(clear_navigation=False)
+			self._release_active_playback()
 		except:
 			ku.hide_busy_dialog()
 			self.sources_object.playback_successful = False
@@ -346,6 +376,7 @@ class MandoPlayer(xbmc.Player):
 			director, writer, country = self.meta_get('director', ''), self.meta_get('writer', ''), self.meta_get('country', '')
 			cast = self.meta_get('short_cast', []) or self.meta_get('cast', []) or []
 			listitem.setLabel(self.title)
+			fresh_start = False
 			if self.media_type == 'movie':
 				plot = self.meta_get('plot')
 				listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'clearlogo': clearlogo})
@@ -368,10 +399,19 @@ class MandoPlayer(xbmc.Player):
 				info_tag.setStudios(studio), info_tag.setIMDBNumber(self.imdb_id), info_tag.setGenres(genre), info_tag.setWriters(writer)
 				info_tag.setDirectors(director), info_tag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
 				info_tag.setCast([ku.kodi_actor()(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in cast])
-				info_tag.setFilenameAndPath(self.url)
+				fresh_start = self._nextep_aio_en_fresh_start()
+				if fresh_start:
+					self.playback_percent = 0.0
+					try:
+						info_tag.setFilenameAndPath('%s S%02dE%02d %s' % (
+							self.title or '', int(self.season), int(self.episode), (self.playing_filename or '')[:120]))
+					except:
+						info_tag.setFilenameAndPath(self.url)
+				else:
+					info_tag.setFilenameAndPath(self.url)
 			self.set_resume_point(listitem)
 			if self.url and str(self.url).startswith('http'):
-				self._disable_kodi_url_resume(listitem, keep_start_percent=True)
+				self._disable_kodi_url_resume(listitem, keep_start_percent=not fresh_start)
 			self.set_playback_properties()
 		return listitem
 
@@ -480,8 +520,44 @@ class MandoPlayer(xbmc.Player):
 		if reason:
 			self._log_nextep('Next episode prep declined: %s' % reason)
 
+	def _playback_meta_key(self):
+		if getattr(self, 'is_generic', False):
+			return None
+		try:
+			return '%s_%s_%s' % (self.tmdb_id, int(self.season), int(self.episode))
+		except:
+			return None
+
+	def _owns_active_playback(self):
+		try:
+			if not self.isPlayingVideo():
+				return False
+			active = ku.get_property(PROP_ACTIVE_PLAYBACK_KEY)
+			mine = self._playback_meta_key()
+			if not active or not mine:
+				return True
+			return active == mine
+		except:
+			return False
+
+	def _register_active_playback(self):
+		key = self._playback_meta_key()
+		if key:
+			ku.set_property(PROP_ACTIVE_PLAYBACK_KEY, key)
+
+	def _release_active_playback(self):
+		key = self._playback_meta_key()
+		if key and ku.get_property(PROP_ACTIVE_PLAYBACK_KEY) == key:
+			ku.clear_property(PROP_ACTIVE_PLAYBACK_KEY)
+
 	def _should_prep_next_ep(self):
+		if not self._owns_active_playback():
+			return False
+		if getattr(self, '_nextep_stash_play_scheduled', False):
+			return False
 		if ku.get_property(PROP_NEXTEP_PREP_DECLINED) == 'true':
+			return False
+		if getattr(self, '_nextep_prep_attempted', False):
 			return False
 		if ku.get_property(PROP_NEXTEP_AUTOPLAY_CANCELLED) == 'true':
 			return False
@@ -569,6 +645,7 @@ class MandoPlayer(xbmc.Player):
 		self._log_nextep('Next episode prep scheduled: %s S%02dE%02d play_type=%s remaining=%ss start_prep=%ss' % (
 			self.meta_get('title', ''), self.meta_get('season', 0), self.meta_get('episode', 0),
 			self.nextep_settings.get('play_type', ''), remaining, getattr(self, 'start_prep', '')))
+		self._nextep_prep_attempted = True
 		ku.set_property(PROP_NEXTEP_PREP_SCHEDULED, 'true')
 		ku.set_property(PROP_NEXTEP_PENDING, 'true')
 		meta = dict(self.meta) if getattr(self, 'meta', None) else {}
@@ -589,6 +666,7 @@ class MandoPlayer(xbmc.Player):
 
 	def _maybe_log_nextep_alert_pending(self):
 		if not self.autoplay_nextep or getattr(self, '_nextep_alert_shown', False): return
+		if not self._owns_active_playback(): return
 		if getattr(self, '_nextep_alert_pending_logged', False): return
 		if ku.get_property('mando.nextep_scrape_ready') != 'true': return
 		try:
@@ -608,9 +686,15 @@ class MandoPlayer(xbmc.Player):
 	def _should_show_autoplay_nextep_alert(self):
 		if not self.autoplay_nextep or not getattr(self, 'nextep_settings', None): return False
 		if getattr(self, '_nextep_alert_shown', False): return False
+		if not self._owns_active_playback():
+			return False
 		try:
-			from modules.sources import nextep_autoplay_cancelled
+			from modules.sources import nextep_autoplay_cancelled, peek_nextep_autoplay_stash, nextep_alert_handled, PROP_NEXTEP_SCRAPE_KEY
 			if nextep_autoplay_cancelled(): return False
+			key = ku.get_property(PROP_NEXTEP_SCRAPE_KEY)
+			if nextep_alert_handled(key):
+				self._nextep_alert_shown = True
+				return False
 		except:
 			pass
 		if ku.get_property('mando.nextep_scrape_ready') != 'true': return False
@@ -628,6 +712,7 @@ class MandoPlayer(xbmc.Player):
 
 	def _try_autoscrape_nextep_ready_notify(self):
 		if not self.autoscrape_nextep or getattr(self, '_autoscrape_ready_notified', False): return
+		if not self._owns_active_playback(): return
 		if not ku.get_property(PROP_AUTOSCRAPE_NEXTEP_READY): return
 		if not getattr(self, 'nextep_settings', None): return
 		try:
@@ -645,6 +730,7 @@ class MandoPlayer(xbmc.Player):
 		except:
 			pass
 		ku.clear_property(PROP_AUTOSCRAPE_NEXTEP_READY)
+		ku.set_property(ku.PROP_AUTOSCRAPE_TOAST_SHOWN, 'true')
 		title = meta.get('title') or self.meta_get('title', '')
 		season = meta.get('season', self.season)
 		episode = meta.get('episode', self.episode)
@@ -655,11 +741,13 @@ class MandoPlayer(xbmc.Player):
 	def _try_autoplay_early_stash_play(self):
 		if not self.autoplay_nextep or not getattr(self, '_nextep_close_wait', False):
 			return
+		if not self._owns_active_playback():
+			return
 		if getattr(self, '_nextep_stash_play_scheduled', False) or not getattr(self, '_nextep_alert_shown', False):
 			return
 		try:
-			from modules.sources import nextep_autoplay_cancelled, peek_nextep_autoplay_stash, schedule_nextep_stashed_play, take_nextep_autoplay_stash
-			if nextep_autoplay_cancelled() or not peek_nextep_autoplay_stash():
+			from modules.sources import nextep_autoplay_cancelled, nextep_end_play_superseded, peek_nextep_autoplay_stash, schedule_nextep_stashed_play, take_nextep_autoplay_stash
+			if nextep_autoplay_cancelled() or nextep_end_play_superseded() or not peek_nextep_autoplay_stash():
 				return
 		except:
 			return
@@ -678,11 +766,15 @@ class MandoPlayer(xbmc.Player):
 
 	def _try_autoplay_nextep_alert(self):
 		if not self._should_show_autoplay_nextep_alert(): return
-		self._nextep_alert_shown = True
 		try:
-			from modules.sources import peek_nextep_autoplay_stash, take_nextep_autoplay_stash
+			from modules.sources import peek_nextep_autoplay_stash, take_nextep_autoplay_stash, claim_nextep_alert_handled, PROP_NEXTEP_SCRAPE_KEY
 		except:
 			return
+		stash_key = ku.get_property(PROP_NEXTEP_SCRAPE_KEY)
+		if not claim_nextep_alert_handled(stash_key):
+			self._nextep_alert_shown = True
+			return
+		self._nextep_alert_shown = True
 		stash = peek_nextep_autoplay_stash()
 		if not stash: return
 		settings = self.nextep_settings
@@ -732,7 +824,9 @@ class MandoPlayer(xbmc.Player):
 		if not stash: return
 		try:
 			from modules.sources import schedule_nextep_stashed_play
-			if not schedule_nextep_stashed_play(stash):
+			if schedule_nextep_stashed_play(stash):
+				self._nextep_stash_play_scheduled = True
+			else:
 				ku.logger('Mando', 'Autoplay next episode play failed: could not schedule resolve')
 		except Exception as exc:
 			ku.logger('Mando', 'Autoplay next episode play failed: %s' % exc)
@@ -763,6 +857,15 @@ class MandoPlayer(xbmc.Player):
 
 	def set_resume_point(self, listitem):
 		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))
+
+	def _nextep_aio_en_fresh_start(self):
+		try:
+			sources = self.sources_object
+			if not sources or not getattr(sources, '_nextep_aio_en_fresh_start', None):
+				return False
+			return sources._nextep_aio_en_fresh_start(getattr(self, 'playing_item', None))
+		except:
+			return False
 
 	def _disable_kodi_url_resume(self, listitem, keep_start_percent=False):
 		# Kodi stores resume by stream URL/filename; debrid links reuse the same name and can reopen near EOF.
@@ -1031,11 +1134,14 @@ class MandoPlayer(xbmc.Player):
 			self._subtitle_alert_fetch_started = False
 			self._subtitle_alert_fetch_done = False
 			self._playback_started_at = time.time()
+			self._nextep_prep_attempted = False
 			ku.clear_property(PROP_NEXTEP_PENDING)
 			ku.clear_property(PROP_NEXTEP_PREP_SCHEDULED)
 			ku.clear_property(PROP_NEXTEP_PREP_DECLINED)
+			ku.clear_property(PROP_NEXTEP_NATURAL_END)
 			ku.clear_property(PROP_AUTOSCRAPE_NEXTEP_READY)
 			ku.clear_property(PROP_NEXTEP_AUTOPLAY_CANCELLED)
+			ku.clear_property(ku.PROP_AUTOSCRAPE_TOAST_SHOWN)
 			self._autoscrape_ready_notified = False
 			self._nextep_alert_pending_logged = False
 			self._nextep_close_wait = False

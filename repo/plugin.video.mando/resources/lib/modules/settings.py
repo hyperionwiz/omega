@@ -511,6 +511,9 @@ def aiostreams_active():
 	if get_setting('mando.provider.aiostreams', 'false') == 'true': return aiostreams_authorized()
 	return False
 
+def aiostreams_preserve_order():
+	return get_setting('mando.aiostreams.preserve_order', 'true') == 'true'
+
 def extras_enable_extra_ratings():
 	return get_setting('mando.extras.enable_extra_ratings', 'true') == 'true'
 
@@ -954,6 +957,16 @@ def fallback_watched_provider_on_revoke(revoked_index):
 
 def watched_indicators():
 	return _resolve_watched_provider()
+
+def provider_sync_refresh_widgets(provider_index):
+	"""Refresh home widgets after a provider sync only when that provider owns watched/progress indicators."""
+	if watched_indicators() != provider_index:
+		return False
+	keys = {1: 'trakt.refresh_widgets', 2: 'simkl.refresh_widgets', 3: 'mdblist.refresh_widgets'}
+	key = keys.get(provider_index)
+	if not key:
+		return False
+	return get_setting('mando.%s' % key, 'false') == 'true'
 
 def most_watched_provider():
 	return 'simkl' if watched_indicators() == 2 else 'trakt'

@@ -58,7 +58,6 @@ class EpisodeTools:
 							'episode': episode, 'premiered': premiered, 'plot': ep_data['plot']})
 			url_params = {'media_type': 'episode', 'tmdb_id': self.meta_get('tmdb_id'), 'tvshowtitle': self.meta_get('rootname'), 'season': season, 'playcount': playcount,
 						'episode': episode, 'background': 'true', 'nextep_settings': self.nextep_settings, 'play_type': play_type, 'watch_count': watch_count}
-			if play_type == 'autoscrape_nextep': url_params['prescrape'] = 'false'
 			if custom_title: url_params['custom_title'] = custom_title
 			if 'custom_year' in self.meta: url_params['custom_year'] = self.meta_get('custom_year')
 		except Exception as exc:
@@ -125,7 +124,9 @@ class EpisodeTools:
 	def auto_nextep(self):
 		url_params = self.next_episode_info()
 		if url_params == 'error': return kodi_utils.notification('Next Episode Error', 3000)
-		elif url_params == 'no_next_episode': return
+		elif url_params == 'no_next_episode':
+			kodi_utils.set_property('mando.nextep_prep_declined', 'true')
+			return
 		return Sources().playback_prep(url_params)
 
 	def add_playback_key(self, url_params):
@@ -164,9 +165,9 @@ def build_next_episode_manager():
 	item_list = sorted(list_items, key=lambda k: (title_key(k['sort_title'], ignore_articles())), reverse=False)
 	item_list = [i['listitem'] for i in item_list]
 	kodi_utils.add_items(handle, item_list)
-	kodi_utils.set_content(handle, 'files')
+	kodi_utils.set_content(handle, kodi_utils.MENU_FOLDER_CONTENT)
 	kodi_utils.end_directory(handle, cacheToDisc=False)
-	kodi_utils.set_view_mode('view.main', 'files', False)
+	kodi_utils.set_view_mode('view.main', kodi_utils.MENU_FOLDER_CONTENT, False)
 
 def single_last_watched_episodes(data):
 	seen = set()
