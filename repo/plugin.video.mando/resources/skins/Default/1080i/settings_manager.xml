@@ -260,6 +260,18 @@
                     <control type="group">
                         <visible>String.IsEqual(ListItem.Property(setting_type),separator)</visible>
                         <control type="label">
+                            <visible>Control.HasFocus(2100)</visible>
+                            <left>40</left>
+                            <width>630</width>
+                            <height>85</height>
+                            <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
+                            <font>font12</font> <!-- MANDO_26 -->
+                            <textcolor>FF1F2020</textcolor>
+                            <aligny>center</aligny>
+                            <align>center</align>
+                        </control>
+                        <control type="label">
+                            <visible>!Control.HasFocus(2100)</visible>
                             <left>40</left>
                             <width>630</width>
                             <height>85</height>
@@ -270,6 +282,15 @@
                             <align>center</align>
                         </control>
                         <control type="image">
+                            <visible>Control.HasFocus(2100)</visible>
+                            <top>70</top>
+                            <left>30</left>
+                            <height>2</height>
+                            <width>1100</width>
+                            <texture colordiffuse="FF1F2020">mando_common/white.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>!Control.HasFocus(2100)</visible>
                             <top>70</top>
                             <left>30</left>
                             <height>2</height>
@@ -3750,6 +3771,15 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.playback.submaker_prefer_local)]</property>
                           <property name="setting_description">When SubMaker or OpenSubtitles is the source, check for local subtitles first and keep them if already active instead of downloading</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=playback.submaker_prefer_local)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(80)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.playback.auto_enable_subs),true)</visible>
+                          <property name="setting_label">    - Show Notifications</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.playback.subs_show_notifications)]</property>
+                          <property name="setting_description">Show subtitle toasts during playback ([B]Local subtitles found[/B], [B]Cached subtitles found[/B], [B]Downloaded subtitles found[/B], and errors such as [B]No subtitles found[/B]). Off still enables subtitles — only hides the notifications</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=playback.subs_show_notifications)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>

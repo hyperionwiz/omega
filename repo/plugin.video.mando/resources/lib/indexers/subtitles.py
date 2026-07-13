@@ -456,7 +456,7 @@ def _download_submaker_content(download_fn, subs, language, release_context=None
 def _get(url, stream=False, retry=False, quiet=False):
 	response = requests.get(url, stream=stream, timeout=timeout)
 	if retry and response.status_code in (403, 429):
-		if not quiet:
+		if not quiet and st.subs_show_notifications():
 			ku.notification('SubMaker rate limited. Retrying in 10 secs...', 3500)
 		ku.sleep(10000)
 		return _get(url, stream=stream, quiet=quiet)
@@ -499,6 +499,8 @@ def subtitle_notify_poster(meta, media_type='movie'):
 def _subtitle_playback_active(player=None):
 	try:
 		if player is not None:
+			if hasattr(player, '_owns_active_playback') and not player._owns_active_playback():
+				return False
 			return player.isPlayingVideo() or player.isPlaying()
 	except:
 		pass
@@ -507,12 +509,26 @@ def _subtitle_playback_active(player=None):
 	except:
 		return False
 
+def _subtitle_path_already_active(player, path):
+	if not path or not player:
+		return False
+	try:
+		if ku.get_property(_ACTIVE_SUB_PROP) != path:
+			return False
+		active = player.getSubtitles() or ''
+		base = os.path.basename(path)
+		return path in active or (base and base in active)
+	except:
+		return False
+
 def _subtitle_user_notify(message, poster=None, settle_ms=150, player=None):
+	if not st.subs_show_notifications(): return
 	if player is not None and not _subtitle_playback_active(player):
 		return
 	ku.notification(message, icon=poster, settle_ms=settle_ms)
 
-def _notify_subtitles_ready(poster=None, local=False, is_episode=False, player=None):
+def _notify_subtitles_ready(poster=None, local=False, cached=False, is_episode=False, player=None):
+	if not st.subs_show_notifications(): return
 	if player is not None and not _subtitle_playback_active(player):
 		return
 	for _ in range(40):
@@ -521,7 +537,12 @@ def _notify_subtitles_ready(poster=None, local=False, is_episode=False, player=N
 	if player is not None and not _subtitle_playback_active(player):
 		return
 	settle_ms = 500 if is_episode else 200
-	message = 'Local subtitles found' if local else 'Downloaded subtitles found'
+	if local:
+		message = 'Local subtitles found'
+	elif cached:
+		message = 'Cached subtitles found'
+	else:
+		message = 'Downloaded subtitles found'
 	ku.notification(message, icon=poster, settle_ms=settle_ms)
 
 def _enable_forced_local_subtitles(player, poster=None, notify=True, is_episode=False):
@@ -672,6 +693,43 @@ def _opensubs_cache_lookup_names(imdb_id, season, episode, release_context):
 	legacy = _opensubs_alert_filename(imdb_id, season, episode)
 	if legacy != tagged: return [tagged, legacy]
 	return [tagged]
+
+def _subtitle_cache_file_usable(path):
+	try:
+		with ku.open_file(path) as file:
+			content = file.read()
+		return bool(_prepare_subtitle_file_content(content))
+	except:
+		return False
+
+def _subtitle_is_prior_playback_cache(path, player=None):
+	"""True when the subtitle file predates the current play attempt (true disk reuse)."""
+	if not path:
+		return False
+	try:
+		native = ku.translate_path(path) if str(path).startswith('special://') else path
+		if not os.path.isfile(native):
+			return False
+		started = getattr(player, '_playback_started_at', None) if player is not None else None
+		if started is None:
+			return True
+		return os.path.getmtime(native) < (started - 5)
+	except:
+		return True
+
+def _existing_release_tagged_subtitle_cache(imdb_id, season, episode, playing_filename=None, playing_item=None):
+	release_context = playback_release_context(playing_filename, playing_item, season, episode) if (playing_filename or playing_item) else None
+	if st.submaker_manifest_configured():
+		for name in _subtitle_cache_lookup_names(imdb_id, season, episode, release_context):
+			path = '%s%s' % ('special://temp/', name)
+			if _subtitle_cache_file_usable(path):
+				return path
+	if st.opensubs_configured():
+		for name in _opensubs_cache_lookup_names(imdb_id, season, episode, release_context):
+			path = '%s%s' % ('special://temp/', name)
+			if _subtitle_cache_file_usable(path):
+				return path
+	return None
 
 def _alert_temp_paths(imdb_id, season, episode, playing_filename=None, playing_item=None):
 	if not imdb_id: return []
@@ -899,6 +957,10 @@ def _subs_alert_fetch_order():
 
 def _fetch_submaker_alert_subtitle(imdb_id, season, episode, year=None, playing_filename=None, playing_item=None):
 	if not st.submaker_manifest_configured(): return None
+	cached = _existing_release_tagged_subtitle_cache(imdb_id, season, episode, playing_filename, playing_item)
+	if cached:
+		remember_active_subtitle_path(cached)
+		return cached
 	release_context = playback_release_context(playing_filename, playing_item, season, episode)
 	search_filename = _alert_sub_filename(imdb_id, season, episode, release_context)
 	final_path = '%s%s' % ('special://temp/', search_filename)
@@ -965,16 +1027,19 @@ def clear_subtitles_cache():
 	clear_active_subtitle_path()
 	return removed
 
-def _apply_external_subtitle(player, path, poster=None, notify=True, is_episode=False):
+def _apply_external_subtitle(player, path, poster=None, notify=True, cached=False, is_episode=False):
 	if not path: return False
 	if not _subtitle_playback_active(player):
 		return False
+	already_active = _subtitle_path_already_active(player, path)
 	try: player.setSubtitles(path)
 	except: return False
 	if st.auto_enable_subs():
 		try: player.showSubtitles(True)
 		except: pass
-	if notify: _notify_subtitles_ready(poster=poster, local=False, is_episode=is_episode, player=player)
+	if notify and not already_active:
+		notify_cached = cached and _subtitle_is_prior_playback_cache(path, player)
+		_notify_subtitles_ready(poster=poster, cached=notify_cached, is_episode=is_episode, player=player)
 	return True
 
 class Subtitles(xbmc.Player):
@@ -1053,7 +1118,7 @@ class Subtitles(xbmc.Player):
 		subtitle = self._downloaded_subs()
 		if subtitle:
 			remember_active_subtitle_path(subtitle)
-			return _apply_external_subtitle(self._player, subtitle, poster=self.poster, is_episode=self.is_episode)
+			return _apply_external_subtitle(self._player, subtitle, poster=self.poster, is_episode=self.is_episode, cached=True)
 		subtitle = self._searched_subs()
 		if subtitle:
 			remember_active_subtitle_path(subtitle)
@@ -1073,6 +1138,10 @@ class OpenSubtitlesSubs(xbmc.Player):
 			if self._video_file_subs(): return
 		if not st.opensubs_configured():
 			return _subtitle_user_notify('OpenSubtitles username and password required', poster=poster, settle_ms=500 if self.is_episode else 200, player=self._player)
+		cached = _existing_release_tagged_subtitle_cache(imdb_id, season, episode, playing_filename, playing_item)
+		if cached:
+			remember_active_subtitle_path(cached)
+			return _apply_external_subtitle(self._player, cached, poster=poster, is_episode=self.is_episode, cached=True)
 		try:
 			from apis.opensubs_api import fetch_alert_subtitle
 			path = fetch_alert_subtitle(imdb_id, season, episode, year, playing_filename, playing_item, log_pick=True)

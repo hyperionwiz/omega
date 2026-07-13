@@ -294,6 +294,9 @@ def subs_language_preferences():
 def submaker_prefer_local():
 	return get_setting('mando.playback.submaker_prefer_local', 'true') == 'true'
 
+def subs_show_notifications():
+	return get_setting('mando.playback.subs_show_notifications', 'true') == 'true'
+
 def stingers_show():
 	return get_setting('mando.stinger_alert.show', 'false') == 'true'
 
