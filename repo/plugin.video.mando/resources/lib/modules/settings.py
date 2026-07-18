@@ -485,6 +485,13 @@ def single_ep_display_format(is_external):
 	else: setting, default = 'mando.single_ep_display', ''
 	return int(get_setting(setting, default))
 
+def calendar_display_format(is_external):
+	if is_external:
+		setting, default = 'mando.trakt.calendar_display_widget', '1'
+	else:
+		setting, default = 'mando.trakt.calendar_display', '0'
+	return int(get_setting(setting, default))
+
 def easynews_active():
 	if get_setting('mando.provider.easynews', 'false') == 'true': easynews_status = easynews_authorized()
 	else: easynews_status = False
