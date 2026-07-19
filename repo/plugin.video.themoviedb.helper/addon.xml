@@ -1,68 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="4.10.14"
-name="TheMovieDb Helper"
+version="6.16.2"
+name="TMDb Helper"
 provider-name="jurialmunkey">
 <requires>
-  <import addon="xbmc.python" version="3.0.0"/>
+  <import addon="xbmc.python" version="3.0.1"/>
   <import addon="script.module.requests" version="2.9.1"/>
   <import addon="script.module.pil" version="1.1.7"/>
   <import addon="script.module.addon.signals" version="0.0.6" />
+  <import addon="script.module.jurialmunkey" version="0.2.35" />
+  <import addon="script.module.infotagger" version="0.0.5" />
+  <import addon="script.module.qrcode" version="6.1.0" />
 </requires>
-<extension point="xbmc.python.pluginsource" library="plugin.py">
+<extension point="xbmc.python.pluginsource" library="resources/plugin.py">
   <provides>video</provides>
 </extension>
-<extension point="xbmc.python.script" library="script.py" />
-<extension point="xbmc.service" library="service.py" />
-<extension point="kodi.context.item">
-  <menu id="kodi.core.main">
-    <item library="context.py" args="playusing">
-      <label>$ADDON[plugin.video.themoviedb.helper 32322]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.playusing))</visible>
-    </item>
-    <item library="context.py" args="related">
-      <label>$ADDON[plugin.video.themoviedb.helper 32235]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.related))</visible>
-    </item>
-    <item library="context.py" args="addlibrary">
-      <label>$LOCALIZE[20444]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.addlibrary))</visible>
-    </item>
-    <item library="context.py" args="trakt">
-      <label>$ADDON[plugin.video.themoviedb.helper 32295]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.trakt))</visible>
-    </item>
-    <item library="context.py" args="refresh">
-      <label>$ADDON[plugin.video.themoviedb.helper 32233]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.refresh))</visible>
-    </item>
-    <item library="context.py" args="artwork">
-      <label>$ADDON[plugin.video.themoviedb.helper 32222]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.artwork))</visible>
-    </item>
-    <item library="context.py" args="sorting">
-      <label>$ADDON[plugin.video.themoviedb.helper 32309]</label>
-      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.sorting))</visible>
-    </item>
-  </menu>
-</extension>
+<extension point="xbmc.python.script" library="resources/script.py" />
+<extension point="xbmc.service" library="resources/service.py" />
+<extension point="xbmc.python.module" library="resources/modules"/>
 <extension point="xbmc.addon.metadata">
   <reuselanguageinvoker>false</reuselanguageinvoker>
-  <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
-  <summary lang="es_ES">TheMovieDb Helper - ¡Ahora con soporte para Trakt!</summary>
-  <summary lang="fr_FR">TheMovieDb Helper - Maintenant avec support Trakt!</summary>
-  <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
-  <description lang="es_ES">TheMovieDb Helper proporciona detalles sobre películas, programas de televisión y actores de TMDb. Los usuarios pueden acceder a una variedad de listas desde TMDb y Trakt.</description>
-  <description lang="fr_FR">TheMovieDb Helper fournit des détails sur les films, les émissions de télévision et acteurs de TMDb. Les utilisateurs peuvent accéder à une variété de listes TMDb et Trakt.</description>
-  <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
-  <disclaimer lang="es_ES">Proporcionado por TheMovieDb y Trakt</disclaimer>
-  <disclaimer lang="fr_FR">Fourni par TheMovieDb et Trakt.</disclaimer>
+  <summary lang="de_DE">TMDb Helfer</summary>
+  <summary lang="en_GB">TMDb Helper</summary>
+  <summary lang="es_ES">Asistente TMDb</summary>
+  <summary lang="zh_CN">TMDb 助手</summary>
+  <description lang="de_DE">TMDb Helper liefert Details über Filme, Fernsehsendungen und Schauspieler aus TMDb. Benutzer können auf eine Vielzahl von Listen aus TMDb TVDb MDbList und Trakt zugreifen.</description>
+  <description lang="en_GB">TMDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb TVDb MDbList and Trakt.</description>
+  <description lang="es_ES">TMDb Helper proporciona detalles sobre películas, series y actores de TMDb. Los usuarios pueden acceder a una variedad de listas de TMDb, TVDb, MDbList y Trakt.</description>
+  <description lang="pl_PL">TMDb Helper dostarcza szczegółowych informacji o filmach, serialach i aktorach z serwisu TMDb. Użytkownicy mają dostęp do szeregu list z serwisów TMDb, TVDb, MDbList i Trakt.</description>
+  <description lang="sv_SE">TMDb Helper tillhandahåller information om filmer, tv-serier och skådespelare från TMDb. Användare kan få tillgång till en mängd olika listor från TMDb, TVDb, MDbList och Trakt.</description>
+  <description lang="zh_CN">TMDb 助手从 TMDb（影视数据库） 获取电影、电视剧及演员的详细信息。用户可访问来自 TMDb、TVDb、MDbList 和 Trakt 的各类影视列表。</description>
+  <disclaimer lang="de_DE">Daten bereitgestellt von TMDb TVDb MDbList OMDb FanartTV und Trakt. Einige der Informationen werden von TheTVDB.com bereitgestellt. Bitte erwäge sie zu unterstützen. https://thetvdb.com/subscribe</disclaimer>
+  <disclaimer lang="en_GB">Data provided by TMDb TVDb MDbList OMDb FanartTV and Trakt. Some of the information is provided by TheTVDB.com. Please consider supporting them. https://thetvdb.com/subscribe</disclaimer>
+  <disclaimer lang="es_ES">Datos proporcionados por TMDb, TVDb, MDbList, OMDb, FanartTV y Trakt. Parte de la información es suministrada por TheTVDB.com. Por favor, considera apoyarles. https://thetvdb.com/subscribe</disclaimer>
+  <disclaimer lang="pl_PL">Dane dostarczane przez TMDb TVDb MDbList OMDb FanartTV i Trakt. Niektóre informacje pochodzą z serwisu TheTVDB.com. Prosimy o rozważenie wsparcia tych serwisów. https://thetvdb.com/subscribe</disclaimer>
+  <disclaimer lang="sv_SE">Data tillhandahållen av TMDb TVDb MDbList OMDb FanartTV och Trakt. En del av informationen tillhandahålls av TheTVDB.com. Stöd dem gärna. https://thetvdb.com/subscribe</disclaimer>
+  <disclaimer lang="zh_CN">数据由 TMDb、TVDb、MDbList、OMDb、FanartTV 和 Trakt 提供。部分信息由 TheTVDB.com 提供，建议您支持他们。订阅链接：https://thetvdb.com/subscribe</disclaimer>
   <license>GPL-3.0-or-later</license>
   <website>https://github.com/jurialmunkey/plugin.video.themoviedb.helper</website>
   <forum>https://forum.kodi.tv/showthread.php?tid=345847</forum>
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
+    <clearlogo>clearlogo.png</clearlogo>
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
