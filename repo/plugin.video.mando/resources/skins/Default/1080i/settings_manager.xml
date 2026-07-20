@@ -852,16 +852,34 @@
                           <property name="setting_label">Movies</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_movie_name)]</property>
-                          <property name="setting_description">Choose the Open Action when a Movie is selected in Mando. Choices Are None, Open Extras, Open Movie Set, Both. "Both" will open the Movie Set if available or open Extras</property>
+                          <property name="setting_description">Choose the Open Action when a Movie is selected in Mando. Choices Are None, Open Extras, Open Movie Set, Both. "Both" will open the Movie Set if available or open Extras.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=media_open_action_movie)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(20)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.media_open_action_movie),0)</visible>
+                          <property name="setting_label">Skip on In-Progress Movies</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_skip_inprogress_movie)]</property>
+                          <property name="setting_description">Choose this and the Movies Open Action (Extras / Movie Set) is skipped for in-progress movies, resuming playback directly. Extras and Movie Set remain available in the context menu.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=media_open_action_skip_inprogress_movie)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(20)</visible>
                           <property name="setting_label">TV Shows</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_tvshow_name)]</property>
-                          <property name="setting_description">Choose the Open Action when a TV Show is selected in Mando. Choices Are None or Open Extras</property>
+                          <property name="setting_description">Choose the Open Action when a TV Show is selected in Mando. Choices Are None or Open Extras.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=media_open_action_tvshow)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(20)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.media_open_action_tvshow),0)</visible>
+                          <property name="setting_label">Skip on In-Progress Shows</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.media_open_action_skip_inprogress_tvshow)]</property>
+                          <property name="setting_description">Choose this and the TV Shows Open Action (Extras) is skipped when the show has an in-progress episode, opening seasons/episodes instead. Partially watched shows without a resume point are unchanged. Extras remains available in the context menu.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=media_open_action_skip_inprogress_tvshow)</onclick>
                       </item>
         <!-- RPDb Ratings Posters -->
                       <item>
@@ -1548,6 +1566,14 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.calendar_display_widget_name)]</property>
                           <property name="setting_description">Choose the display format Mando uses when naming episodes in the Trakt Calendar for widgets</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=trakt.calendar_display_widget)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(40)</visible>
+                          <property name="setting_label">Calendar Date Labels</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.trakt.calendar_date_labels_name)]</property>
+                          <property name="setting_description">Choose how Mando labels the airdate of episodes in the Trakt Calendar. Words uses Today, Tomorrow and weekday names. The date formats always show the full date, keeping the list in plain chronological order.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=trakt.calendar_date_labels)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(40)</visible>
@@ -3949,15 +3975,6 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay_watching_check)]</property>
                           <property name="setting_description">Choose after how many autoplayed episodes Mando will ask if you are still watching. Set to 0 to disable</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_numeric&amp;setting_id=autoplay_watching_check)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(80)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.auto_play_episode),true) + String.IsEqual(Window(10000).Property(mando.autoplay_next_episode),true) + Integer.IsGreater(Window(10000).Property(mando.autoplay_watching_check),0)</visible>
-                          <property name="setting_label">    - Use Still Watching with Continual Random Play</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.autoplay_random_continual_watching_check)]</property>
-                          <property name="setting_description">When off, Continual Random Play does not use Check Still Watching After X (including during no-results skip chains). Autoplay Next Episode is unchanged</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=autoplay_random_continual_watching_check)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>
