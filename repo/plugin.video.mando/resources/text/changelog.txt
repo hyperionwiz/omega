@@ -1,3 +1,9 @@
+[COLOR gold][B]Version 2.0.3[/B][/COLOR]
+- [B]Skip Intro[/B]: [B]Off[/B] = off; [B]Auto[/B] = skip without asking whenever Skip Intro applies (autoplay, source select, first or later episode; self-started plays when that option is on); [B]Prompt[/B] = ask first (Yes skips; No or ignore/timeout does not). Clearer description for [B]Also On Plays You Start Yourself[/B].
+
+[COLOR gold][B]Version 2.0.2[/B][/COLOR]
+- [B]Performance[/B]: movie and TV show lists reuse one metacache SQLite connection per worker thread when building listitems (fewer open/close cycles; thank you Tikipeter).
+
 [COLOR gold][B]Version 2.0.1[/B][/COLOR]
 - [B]Settings[/B]: [B]Watched Status Provider[/B] and Trakt/Simkl/MDBList sync tools (interval, refresh widgets, force sync, clear cache) move from General to [B]Meta Accounts[/B] — provider at the top; sync/cache under each service when authorised.
 - [B]Simkl[/B]: status lists (Plan to Watch / Watching / etc.) sort by title again when Title is the active sort — list fetch no longer uses [I]ids_only[/I], which omitted titles and left lists in API order.
