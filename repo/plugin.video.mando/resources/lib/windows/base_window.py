@@ -286,7 +286,7 @@ class FontUtils:
 		return False
 
 	def match_font(self, size, bold, fallback):
-		font_tag = 'MANDO_%s%s' % (size, '_BOLD' if bold else '')
+		font_tag = 'REDLIGHT_%s%s' % (size, '_BOLD' if bold else '')
 		size_range = range(int(size * 0.75), int(size * 1.25))
 		compatibility_range = range(int(size * 0.50), int(size * 1.50))
 		compatibility_fonts = [i['name'] for i in self.skin_font_info if i['name'] == fallback and i['size'] in compatibility_range]
@@ -430,7 +430,7 @@ class ExtrasUtils:
 				        <control type="label">
 				            <width min="30" max="1160">auto</width>
 				            <height>20</height>
-				            <font>font14</font> <!-- MANDO_33 -->
+				            <font>font14</font> <!-- REDLIGHT_33 -->
 				            <textcolor>FFCCCCCC</textcolor>
 				            <label>{heading_label}</label>
 				            <visible>!Control.HasFocus({container_no})</visible>
@@ -438,7 +438,7 @@ class ExtrasUtils:
 				        <control type="label">
 				            <width min="30" max="1160">auto</width>
 				            <height>20</height>
-				            <font>font14</font> <!-- MANDO_33 -->
+				            <font>font14</font> <!-- REDLIGHT_33 -->
 				            <textcolor>FFCCCCCC</textcolor>
 				            <label>{highlight_label}</label>
 				            <visible>Control.HasFocus({container_no})</visible>
@@ -533,7 +533,7 @@ class ExtrasUtils:
 				        <control type="label">
 				            <width max="1160">auto</width>
 				            <height>20</height>
-				            <font>font14</font> <!-- MANDO_33 -->
+				            <font>font14</font> <!-- REDLIGHT_33 -->
 				            <textcolor>FFCCCCCC</textcolor>
 				            <align>left</align>
 				            <aligny>bottom</aligny>
@@ -559,7 +559,7 @@ class ExtrasUtils:
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- MANDO_26 -->
+				                    <font>font12</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FFCCCCCC</textcolor>
@@ -578,7 +578,7 @@ class ExtrasUtils:
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- MANDO_26 -->
+				                    <font>font12</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FF1F2020</textcolor>
@@ -629,7 +629,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -649,7 +649,7 @@ class ExtrasUtils:
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- MANDO_30 -->
+                            <font>font13</font> <!-- REDLIGHT_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFCCCCCC</textcolor>
@@ -662,7 +662,7 @@ class ExtrasUtils:
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- MANDO_30 -->
+                            <font>font13</font> <!-- REDLIGHT_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FF1F2020</textcolor>
@@ -709,7 +709,7 @@ class ExtrasUtils:
                         <left>1590</left>
                         <width max="300">auto</width>
                         <height>20</height>
-                        <font>font37</font> <!-- MANDO_38 -->
+                        <font>font37</font> <!-- REDLIGHT_38 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -720,7 +720,7 @@ class ExtrasUtils:
                         <left>1540</left>
                         <width max="350">auto</width>
                         <height>20</height>
-                        <font>font10</font> <!-- MANDO_21 -->
+                        <font>font10</font> <!-- REDLIGHT_21 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -742,7 +742,7 @@ class ExtrasUtils:
                     <control type="label">
                         <width max="600">auto</width>
                         <height>20</height>
-                        <font>font10</font> <!-- MANDO_21 -->
+                        <font>font10</font> <!-- REDLIGHT_21 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>bottom</aligny>
@@ -775,7 +775,7 @@ class ExtrasUtils:
                         <left>70</left>
                         <width max="1130">auto</width>
                         <height>30</height>
-                        <font>font60</font> <!-- MANDO_60_BOLD -->
+                        <font>font60</font> <!-- REDLIGHT_60_BOLD -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>center</align>
                         <aligny>bottom</aligny>
@@ -784,327 +784,326 @@ class ExtrasUtils:
                     </control>
                 </control>
             </control>
-            <control type="group">
+            <!-- Title/logo stay fixed. Genre/ratings + action buttons scroll with the lists (no focus-linked fade/slide — those break mouse). -->
+            <control type="grouplist">
                 <top>295</top>
-                <left>50</left>
+                <left>35</left>
+                <width>1190</width>
+                <height>785</height>
+                <orientation>vertical</orientation>
+                <scrolltime tween="sine">500</scrolltime>
+                <itemgap>-300</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
                 <control type="group">
-                    <animation effect="slide" end="0,25" time="0" condition="String.IsEqual(Window.Property(display_extra_ratings),false)">Conditional</animation>
-                    <control type="label">
-                        <width max="1150">auto</width>
-                        <height>25</height>
-                        <font>font14</font> <!-- MANDO_33 -->
-                        <textcolor>FFCCCCCC</textcolor>
-                        <align>center</align>
-                        <label>[I]$INFO[Window.Property(genre)][/I]</label>
+                    <height>730</height>
+                    <control type="group">
+                        <left>15</left>
+                        <control type="group">
+                            <animation effect="slide" end="0,25" time="0" condition="String.IsEqual(Window.Property(display_extra_ratings),false)">Conditional</animation>
+                            <control type="label">
+                                <width max="1150">auto</width>
+                                <height>25</height>
+                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <textcolor>FFCCCCCC</textcolor>
+                                <align>center</align>
+                                <label>[I]$INFO[Window.Property(genre)][/I]</label>
+                            </control>
+                            <control type="grouplist">
+                                <top>55</top>
+                                <width max="1150">auto</width>
+                                <orientation>horizontal</orientation>
+                                <itemgap>10</itemgap>
+                                <align>center</align>
+                                <control type="image" id="203">
+                                    <width>45</width>
+                                    <height>45</height>
+                                    <aspectratio>keep</aspectratio>
+                                    <align>center</align>
+                                    <aligny>center</aligny>
+                                </control>
+                                <control type="label" id="2001">
+                                    <width max="1026">auto</width>
+                                    <height>32</height>
+                                    <font>font13</font> <!-- REDLIGHT_30 -->
+                                    <textcolor>FFCCCCCC</textcolor>
+                                    <align>left</align>
+                                </control>
+                            </control>
+                            <control type="label" id="3001">
+                                <top>105</top>
+                                <width max="1150">auto</width>
+                                <height>25</height>
+                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <textcolor>FFCCCCCC</textcolor>
+                                <align>center</align>
+                            </control>
+                            <control type="grouplist">
+                                <top>165</top>
+                                <width max="1110">auto</width>
+                                <orientation>horizontal</orientation>
+                                <itemgap>30</itemgap>
+                                <align>center</align>
+                                <control type="grouplist">
+                                    <width>130</width>
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>0</itemgap>
+                                    <align>center</align>
+                                    <visible>String.IsEqual(Window.Property(metascore_rating),true)</visible>
+                                    <control type="image" id="4101">
+                                        <width>52</width>
+                                        <height>32</height>
+                                        <aspectratio>keep</aspectratio>
+                                        <align>right</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                    <control type="label" id="4001">
+                                        <width max="75">auto</width>
+                                        <height>32</height>
+                                        <font>font13</font> <!-- REDLIGHT_30 -->
+                                        <textcolor>FFCCCCCC</textcolor>
+                                        <align>left</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                </control>
+                                <control type="grouplist">
+                                    <width>130</width>
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>0</itemgap>
+                                    <align>center</align>
+                                    <visible>String.IsEqual(Window.Property(tomatometer_rating),true)</visible>
+                                    <control type="image" id="4102">
+                                        <width>52</width>
+                                        <height>32</height>
+                                        <aspectratio>keep</aspectratio>
+                                        <align>right</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                    <control type="label" id="4002">
+                                        <width max="75">auto</width>
+                                        <height>32</height>
+                                        <font>font13</font> <!-- REDLIGHT_30 -->
+                                        <textcolor>FFCCCCCC</textcolor>
+                                        <align>left</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                </control>
+                                <control type="grouplist">
+                                    <width>130</width>
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>0</itemgap>
+                                    <align>center</align>
+                                    <visible>String.IsEqual(Window.Property(tomatousermeter_rating),true)</visible>
+                                    <control type="image" id="4103">
+                                        <width>52</width>
+                                        <height>32</height>
+                                        <aspectratio>keep</aspectratio>
+                                        <align>right</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                    <control type="label" id="4003">
+                                        <width max="75">auto</width>
+                                        <height>32</height>
+                                        <font>font13</font> <!-- REDLIGHT_30 -->
+                                        <textcolor>FFCCCCCC</textcolor>
+                                        <align>left</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                </control>
+                                <control type="grouplist">
+                                    <width>130</width>
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>10</itemgap>
+                                    <align>center</align>
+                                    <visible>String.IsEqual(Window.Property(imdb_rating),true)</visible>
+                                    <control type="image" id="4104">
+                                        <width>52</width>
+                                        <height>32</height>
+                                        <aspectratio>keep</aspectratio>
+                                        <align>right</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                    <control type="label" id="4004">
+                                        <width max="75">auto</width>
+                                        <height>32</height>
+                                        <font>font13</font> <!-- REDLIGHT_30 -->
+                                        <textcolor>FFCCCCCC</textcolor>
+                                        <align>left</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                </control>
+                                <control type="grouplist">
+                                    <width>130</width>
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>0</itemgap>
+                                    <align>center</align>
+                                    <visible>String.IsEqual(Window.Property(tmdb_rating),true)</visible>
+                                    <control type="image" id="4105">
+                                        <width>52</width>
+                                        <height>32</height>
+                                        <aspectratio>keep</aspectratio>
+                                        <align>right</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                    <control type="label" id="4005">
+                                        <width max="75">auto</width>
+                                        <height>32</height>
+                                        <font>font13</font> <!-- REDLIGHT_30 -->
+                                        <textcolor>FFCCCCCC</textcolor>
+                                        <align>left</align>
+                                        <aligny>center</aligny>
+                                    </control>
+                                </control>
+                            </control>
+                        </control>
                     </control>
-                    <control type="grouplist">
-                        <top>55</top>
-                        <width max="1150">auto</width>
-                        <orientation>horizontal</orientation>
-                        <itemgap>10</itemgap>
-                        <align>center</align>
-                        <control type="image" id="203">
-                            <width>45</width>
-                            <height>45</height>
-                            <aspectratio>keep</aspectratio>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="label" id="2001">
-                            <width max="1026">auto</width>
-                            <height>32</height>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <align>left</align>
-                        </control>
-                    </control>
-                    <control type="label" id="3001">
-                        <top>105</top>
-                        <width max="1150">auto</width>
-                        <height>25</height>
-                        <font>font14</font> <!-- MANDO_33 -->
-                        <textcolor>FFCCCCCC</textcolor>
-                        <align>center</align>
-                    </control>
-                    <control type="grouplist">
-                        <top>165</top>
-                        <width max="1110">auto</width>
-                        <orientation>horizontal</orientation>
-                        <itemgap>30</itemgap>
-                        <align>center</align>
-                        <control type="grouplist">
-                            <width>130</width>
-                            <orientation>horizontal</orientation>
-                            <itemgap>0</itemgap>
-                            <align>center</align>
-                            <visible>String.IsEqual(Window.Property(metascore_rating),true)</visible>
-                            <control type="image" id="4101">
-                                <width>52</width>
-                                <height>32</height>
-                                <aspectratio>keep</aspectratio>
-                                <align>right</align>
-                                <aligny>center</aligny>
-                            </control>
-                            <control type="label" id="4001">
-                                <width max="75">auto</width>
-                                <height>32</height>
-                                <font>font13</font> <!-- MANDO_30 -->
+                    <control type="group">
+                        <top>225</top>
+                        <control type="group">
+                            <control type="button" id="10">
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>13</onleft>
+                                <onright>11</onright>
+                                <onup>{last_container}</onup>
+                                <ondown>14</ondown>
+                                <label>$INFO[Window.Property(button10.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
                                 <textcolor>FFCCCCCC</textcolor>
-                                <align>left</align>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                            </control>
+                            <control type="button" id="11">
+                                <left>300</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>10</onleft>
+                                <onright>12</onright>
+                                <onup>{last_container}</onup>
+                                <ondown>15</ondown>
+                                <label>$INFO[Window.Property(button11.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
+                                <textcolor>FFCCCCCC</textcolor>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                            </control>
+                            <control type="button" id="12">
+                                <left>600</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>11</onleft>
+                                <onright>13</onright>
+                                <onup>{last_container}</onup>
+                                <ondown>16</ondown>
+                                <label>$INFO[Window.Property(button12.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
+                                <textcolor>FFCCCCCC</textcolor>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                            </control>
+                            <control type="button" id="13">
+                                <left>900</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>12</onleft>
+                                <onright>10</onright>
+                                <onup>{last_container}</onup>
+                                <ondown>17</ondown>
+                                <label>$INFO[Window.Property(button13.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
+                                <textcolor>FFCCCCCC</textcolor>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
                                 <aligny>center</aligny>
                             </control>
                         </control>
-                        <control type="grouplist">
-                            <width>130</width>
-                            <orientation>horizontal</orientation>
-                            <itemgap>0</itemgap>
-                            <align>center</align>
-                            <visible>String.IsEqual(Window.Property(tomatometer_rating),true)</visible>
-                            <control type="image" id="4102">
-                                <width>52</width>
-                                <height>32</height>
-                                <aspectratio>keep</aspectratio>
-                                <align>right</align>
-                                <aligny>center</aligny>
-                            </control>
-                            <control type="label" id="4002">
-                                <width max="75">auto</width>
-                                <height>32</height>
-                                <font>font13</font> <!-- MANDO_30 -->
+                        <control type="group">
+                            <top>90</top>
+                            <control type="button" id="14">
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>17</onleft>
+                                <onright>15</onright>
+                                <onup>10</onup>
+                                <ondown>{first_container}</ondown>
+                                <label>$INFO[Window.Property(button14.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
                                 <textcolor>FFCCCCCC</textcolor>
-                                <align>left</align>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
                                 <aligny>center</aligny>
                             </control>
-                        </control>
-                        <control type="grouplist">
-                            <width>130</width>
-                            <orientation>horizontal</orientation>
-                            <itemgap>0</itemgap>
-                            <align>center</align>
-                            <visible>String.IsEqual(Window.Property(tomatousermeter_rating),true)</visible>
-                            <control type="image" id="4103">
-                                <width>52</width>
-                                <height>32</height>
-                                <aspectratio>keep</aspectratio>
-                                <align>right</align>
-                                <aligny>center</aligny>
-                            </control>
-                            <control type="label" id="4003">
-                                <width max="75">auto</width>
-                                <height>32</height>
-                                <font>font13</font> <!-- MANDO_30 -->
+                            <control type="button" id="15">
+                                <left>300</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>14</onleft>
+                                <onright>16</onright>
+                                <onup>11</onup>
+                                <ondown>{first_container}</ondown>
+                                <label>$INFO[Window.Property(button15.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
                                 <textcolor>FFCCCCCC</textcolor>
-                                <align>left</align>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
                                 <aligny>center</aligny>
                             </control>
-                        </control>
-                        <control type="grouplist">
-                            <width>130</width>
-                            <orientation>horizontal</orientation>
-                            <itemgap>10</itemgap>
-                            <align>center</align>
-                            <visible>String.IsEqual(Window.Property(imdb_rating),true)</visible>
-                            <control type="image" id="4104">
-                                <width>52</width>
-                                <height>32</height>
-                                <aspectratio>keep</aspectratio>
-                                <align>right</align>
-                                <aligny>center</aligny>
-                            </control>
-                            <control type="label" id="4004">
-                                <width max="75">auto</width>
-                                <height>32</height>
-                                <font>font13</font> <!-- MANDO_30 -->
+                            <control type="button" id="16">
+                                <left>600</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>15</onleft>
+                                <onright>17</onright>
+                                <onup>12</onup>
+                                <ondown>{first_container}</ondown>
+                                <label>$INFO[Window.Property(button16.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
                                 <textcolor>FFCCCCCC</textcolor>
-                                <align>left</align>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
                                 <aligny>center</aligny>
                             </control>
-                        </control>
-                        <control type="grouplist">
-                            <width>130</width>
-                            <orientation>horizontal</orientation>
-                            <itemgap>0</itemgap>
-                            <align>center</align>
-                            <visible>String.IsEqual(Window.Property(tmdb_rating),true)</visible>
-                            <control type="image" id="4105">
-                                <width>52</width>
-                                <height>32</height>
-                                <aspectratio>keep</aspectratio>
-                                <align>right</align>
-                                <aligny>center</aligny>
-                            </control>
-                            <control type="label" id="4005">
-                                <width max="75">auto</width>
-                                <height>32</height>
-                                <font>font13</font> <!-- MANDO_30 -->
+                            <control type="button" id="17">
+                                <left>900</left>
+                                <width>275</width>
+                                <height>70</height>
+                                <onleft>16</onleft>
+                                <onup>13</onup>
+                                <onright>14</onright>
+                                <ondown>{first_container}</ondown>
+                                <label>$INFO[Window.Property(button17.label)]</label>
+                                <font>font13</font> <!-- REDLIGHT_30 -->
                                 <textcolor>FFCCCCCC</textcolor>
-                                <align>left</align>
+                                <focusedcolor>FF1F2020</focusedcolor>
+                                <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
+                                <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
+                                <align>center</align>
                                 <aligny>center</aligny>
                             </control>
                         </control>
                     </control>
                 </control>
-            </control>
-            <!-- Buttons outside grouplist (drawn last) for mouse hits. No focus-linked slide/fade — those flickered under mouse hover. -->
-            <control type="group">
-                <top>520</top>
-                <left>35</left>
-                <width>1190</width>
-                <control type="grouplist">
-                    <top>200</top>
-                    <width>1190</width>
-                    <height>780</height>
-                    <orientation>vertical</orientation>
-                    <scrolltime tween="sine">500</scrolltime>
-                    <itemgap>-300</itemgap>
-                    <usecontrolcoords>true</usecontrolcoords>
 
 '''
 
 	def suffix_template(self):
 		return '''\
-                </control>
-                <control type="group">
-                    <control type="group">
-                        <control type="button" id="10">
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>13</onleft>
-                            <onright>11</onright>
-                            <onup>{last_container}</onup>
-                            <ondown>14</ondown>
-                            <label>$INFO[Window.Property(button10.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="11">
-                            <left>300</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>10</onleft>
-                            <onright>12</onright>
-                            <onup>{last_container}</onup>
-                            <ondown>15</ondown>
-                            <label>$INFO[Window.Property(button11.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="12">
-                            <left>600</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>11</onleft>
-                            <onright>13</onright>
-                            <onup>{last_container}</onup>
-                            <ondown>16</ondown>
-                            <label>$INFO[Window.Property(button12.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="13">
-                            <left>900</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>12</onleft>
-                            <onright>10</onright>
-                            <onup>{last_container}</onup>
-                            <ondown>17</ondown>
-                            <label>$INFO[Window.Property(button13.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                    </control>
-                    <control type="group">
-                        <top>90</top>
-                        <control type="button" id="14">
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>17</onleft>
-                            <onright>15</onright>
-                            <onup>10</onup>
-                            <ondown>{first_container}</ondown>
-                            <label>$INFO[Window.Property(button14.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="15">
-                            <left>300</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>14</onleft>
-                            <onright>16</onright>
-                            <onup>11</onup>
-                            <ondown>{first_container}</ondown>
-                            <label>$INFO[Window.Property(button15.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="16">
-                            <left>600</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>15</onleft>
-                            <onright>17</onright>
-                            <onup>12</onup>
-                            <ondown>{first_container}</ondown>
-                            <label>$INFO[Window.Property(button16.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                        <control type="button" id="17">
-                            <left>900</left>
-                            <width>275</width>
-                            <height>70</height>
-                            <onleft>16</onleft>
-                            <onup>13</onup>
-                            <onright>14</onright>
-                            <ondown>{first_container}</ondown>
-                            <label>$INFO[Window.Property(button17.label)]</label>
-                            <font>font13</font> <!-- MANDO_30 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <focusedcolor>FF1F2020</focusedcolor>
-                            <texturefocus colordiffuse="FFCCCCCC" border="30">mando_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="$INFO[Window(10000).Property(mando.window_theme.extras)]" border="30">mando_common/circle.png</texturenofocus>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                        </control>
-                    </control>
-                </control>
             </control>
         </control>
     </controls>
@@ -1121,7 +1120,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]$INFO[Window.Property(more_from_collection.name)] $INFO[Window.Property(more_from_collection.number)][/B]</label>
                             <visible>!Control.HasFocus({container_no})</visible>
@@ -1129,7 +1128,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]$INFO[Window.Property(more_from_collection.name)] | [/B]$INFO[ListItem.Property(name)]$INFO[ListItem.Property(release_date), • ]$INFO[ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus({container_no})</visible>
@@ -1161,7 +1160,7 @@ class ExtrasUtils:
                                 <top>6</top>
                                 <width>218</width>
                                 <height>348</height>
-                                <font>font12</font> <!-- MANDO_26 -->
+                                <font>font12</font> <!-- REDLIGHT_26 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFCCCCCC</textcolor>
@@ -1258,7 +1257,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>{heading_label}</label>
                             <visible>!Control.HasFocus({container_no})</visible>
@@ -1266,7 +1265,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>{highlight_label}</label>
                             <visible>Control.HasFocus({container_no})</visible>
@@ -1360,7 +1359,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -1400,7 +1399,7 @@ class ExtrasUtils:
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1445,7 +1444,7 @@ class ExtrasUtils:
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1458,7 +1457,7 @@ class ExtrasUtils:
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1519,7 +1518,7 @@ class ExtrasUtils:
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font14</font> <!-- MANDO_33 -->
+                            <font>font14</font> <!-- REDLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -1552,7 +1551,7 @@ class ExtrasUtils:
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1564,7 +1563,7 @@ class ExtrasUtils:
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1591,7 +1590,7 @@ class ExtrasUtils:
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1603,7 +1602,7 @@ class ExtrasUtils:
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- MANDO_26 -->
+                                    <font>font12</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
