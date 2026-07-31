@@ -1095,7 +1095,7 @@ def default_settings():
 {'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega'},
 {'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'hyperionwiz/omega.github.io'},
 
-#==================== Watched Indicators
+#==================== Watched Status Provider
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'3': 'MDBList', '4': 'PunchPlay', '0': 'Mando', '2': 'Simkl', '1': 'Trakt'}},
 #======+============= MDBList Cache
 {'setting_id': 'mdblist.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},

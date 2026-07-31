@@ -2,7 +2,7 @@
 """WeTrakr scrobble-only integration (device OAuth + Kodi webhook).
 
 Does not sync watched ticks, resume, or lists into Mando. Prefer
-Watched Indicators = Mando (or another provider) for UI state.
+Watched Status Provider = Mando (or another provider) for UI state.
 """
 import json
 import time
