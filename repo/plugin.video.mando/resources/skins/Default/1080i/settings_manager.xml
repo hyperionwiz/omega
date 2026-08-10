@@ -2496,7 +2496,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.ad.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.ad.enabled),true)</visible>
                           <property name="setting_label">Revoke Authorisation</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.ad.account_id)]</property>
@@ -2596,10 +2595,10 @@
                       <item>
                           <visible>Container(2000).HasFocus(62)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.easynews),true)</visible>
-                          <property name="setting_label">Login</property>
+                          <property name="setting_label">Username</property>
                           <property name="setting_type">numeric</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews_user)]</property>
-                          <property name="setting_description">Enter the Login of your EasyNews account</property>
+                          <property name="setting_description">Enter the Username of your EasyNews account</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=easynews_user)</onclick>
                       </item>
                       <item>
@@ -2978,7 +2977,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
                           <property name="setting_label">Revoke Authorisation</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.oc.token)]</property>
@@ -3121,7 +3119,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.pm.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.pm.enabled),true)</visible>
                           <property name="setting_label">Revoke Authorisation</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.pm.account_id)]</property>
@@ -3254,7 +3251,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.rd.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.rd.enabled),true)</visible>
                           <property name="setting_label">Revoke Authorisation</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.account_id)]</property>
@@ -3395,7 +3391,6 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
                           <property name="setting_label">Revoke Authorisation</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.tb.token)]</property>
