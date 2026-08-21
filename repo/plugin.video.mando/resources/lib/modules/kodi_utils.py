@@ -280,6 +280,8 @@ MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/%s/%s/main/packages/media'
 LEGACY_MEDIA_GITHUB_RAW = 'https://raw.githubusercontent.com/kodiwind/proximus.github.io/main/packages/media'
 # Estuary WideList row icons use ListItem.Icon only for Container.Content() — not files.
 MENU_FOLDER_CONTENT = ''
+# EasyNews search / debrid cloud: skins (FENtastic, Aeon Nox, Nimbus) show thumbs when content is files.
+PREMIUM_FILES_CONTENT = 'files'
 
 def media_github_credentials():
 	return MEDIA_GITHUB_USER, MEDIA_GITHUB_REPO
@@ -308,11 +310,22 @@ def resolve_list_icon(icon, default_name='folder'):
 	return get_icon(icon)
 
 def set_list_item_art(listitem, icon, fanart=None, banner=None, landscape=None):
+	# Fill every slot plugin skins actually bind. Do not put row thumbs on fanart here —
+	# Estuary/FENtastic fanart views use Art(fanart) as the backdrop.
 	art = {'icon': icon, 'poster': icon, 'thumb': icon, 'banner': banner or icon, 'landscape': landscape or icon}
 	if fanart: art['fanart'] = fanart
 	listitem.setArt(art)
-	try: listitem.setIconImage(icon) # Estuary WideList reads ListItem.Icon, not Art(thumb).
+	try: listitem.setIconImage(icon) # Estuary / FENtastic WideList: ListItem.Icon
 	except: pass
+	try: listitem.setThumbnailImage(icon) # FENtastic IconWall: ListItem.Thumb (not Art(thumb))
+	except: pass
+
+def finish_premium_listitem(listitem, icon, fanart=None, plot=' '):
+	"""Art after InfoTag so getVideoInfoTag does not drop EasyNews/cloud thumbs."""
+	try:
+		listitem.getVideoInfoTag().setPlot(plot)
+	except: pass
+	set_list_item_art(listitem, icon, fanart=fanart)
 
 def get_addon_fanart():
 	return get_property('mando.default_addon_fanart') or addon_fanart()
@@ -452,9 +465,9 @@ def add_dir(handle, url_params, list_name, icon_image='folder', fanart_image=Non
 	url = build_url(url_params)
 	listitem = make_listitem()
 	listitem.setLabel(list_name)
-	set_list_item_art(listitem, icon, fanart=fanart, banner=fanart)
-	info_tag = listitem.getVideoInfoTag(True)
+	info_tag = listitem.getVideoInfoTag()
 	info_tag.setPlot(' ')
+	set_list_item_art(listitem, icon, fanart=fanart, banner=fanart)
 	add_item(handle, url, listitem, isFolder)
 
 def make_listitem(offscreen=True):
@@ -1256,9 +1269,11 @@ def confirm_dialog(heading='', text='Are you sure?', ok_label='OK', cancel_label
 def ok_dialog(heading='', text='No Results', ok_label='OK', scroll=False):
 	from windows.base_window import open_window
 	needs_scroll = scroll and _dialog_needs_scroll(text)
-	# Keep OK focused so Enter dismisses; Up reaches the scrollbar when text is long.
+	# Match confirm_dialog: long text focuses the scrollbar so Up/Down scrolls immediately;
+	# Left/Right (and Down past the end) still reach OK.
 	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label,
-				'scroll': 'true' if needs_scroll else 'false', 'scroll_focus': 'false'}
+				'scroll': 'true' if needs_scroll else 'false',
+				'scroll_focus': 'true' if needs_scroll else 'false'}
 	return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
