@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Cache built Next Episodes rows until watched / progress / hide state changes.
+"""Cache built Next Episodes rows until watched / progress / hide / local day changes.
 
 Mirrors Umbrella's progress-list memoization: reopen without watched activity is a
 cache hit (listitem paint only). After a watch, the activity token changes and the
 list rebuilds — prefer incremental rebuild via show_activity when a stale payload exists.
+
+Local calendar day is in the fingerprint so unaired (red) labels do not stick on
+widgets after the episode has aired. Personal calendars already keyed on day.
 """
 from caches.main_cache import main_cache
 # from modules.kodi_utils import logger
@@ -12,8 +15,11 @@ _CACHE_PREFIX = 'nextep_list_'
 _CACHE_HOURS = 168  # safety TTL; activity token usually invalidates sooner
 
 
-def _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, is_external):
+def _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, is_external, sort_key=None):
 	from modules import settings
+	from modules.utils import get_datetime
+	resolved_sort = sort_key if sort_key in ('last_played', 'first_aired', 'name') else settings.nextep_sort_key()
+	calendar_day = get_datetime(string=True)
 	parts = (
 		watched_indicators,
 		1 if mdblist_menu_next else 0,
@@ -26,7 +32,7 @@ def _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, 
 		1 if settings.nextep_airing_today() else 0,
 		1 if settings.nextep_limit_history() else 0,
 		settings.nextep_limit() if settings.nextep_limit_history() else 0,
-		settings.nextep_sort_key(),
+		resolved_sort,
 		1 if settings.nextep_sort_direction() else 0,
 		settings.single_ep_display_format(is_external),
 		1 if settings.single_ep_unwatched_episodes() else 0,
@@ -37,13 +43,14 @@ def _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, 
 		settings.date_offset(),
 		settings.playback_key(),
 		settings.ignore_articles(),
-		3,  # cache schema: live progress on paint + Clear Progress CM sync
+		calendar_day,
+		4,  # cache schema: live progress on paint + local day (unaired colour)
 	)
 	return '_'.join(str(p) for p in parts)
 
 
-def cache_id(watched_indicators, mdblist_menu_next, is_anime_list, is_external):
-	return '%s%s' % (_CACHE_PREFIX, _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, is_external))
+def cache_id(watched_indicators, mdblist_menu_next, is_anime_list, is_external, sort_key=None):
+	return '%s%s' % (_CACHE_PREFIX, _settings_fingerprint(watched_indicators, mdblist_menu_next, is_anime_list, is_external, sort_key))
 
 
 def activity_token(watched_indicators):

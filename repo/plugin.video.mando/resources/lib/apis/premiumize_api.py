@@ -4,7 +4,7 @@ import json
 import time
 import requests
 from threading import Thread
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from caches.main_cache import cache_object
 from caches.settings_cache import get_setting, set_setting
 from modules.utils import copy2clip, make_qrcode
@@ -72,8 +72,7 @@ class PremiumizeAPI:
 	def check_cache(self, hashes):
 		url = 'cache/check'
 		data = {'items[]': hashes}
-		response = self._post(url, data)
-		return response
+		return self._post(url, data, timeout=45)
 
 	def check_single_magnet(self, hash_string):
 		cache_info = self.check_cache(hash_string)['response']
@@ -211,22 +210,35 @@ class PremiumizeAPI:
 		return cache_object(self._post, string, args, False, 0.5)
 
 	def add_headers_to_url(self, url):
-		return url + '|' + urlencode(self.headers())
+		# Play/download links. CDN hosts (EnergyCDN etc) already authenticate in the
+		# signed path — sending API Bearer makes Kodi Range requests restart from
+		# byte 0 (start-of-playback loop). Keep Bearer only when the file host is
+		# premiumize.me itself. api.premiumize.me / www.premiumize.me/api still use
+		# headers() in _get/_post.
+		headers = {'User-Agent': 'Mando'}
+		host = ''
+		try:
+			host = (urlparse((url or '').split('|')[0]).hostname or '').lower()
+		except Exception:
+			pass
+		if host == 'premiumize.me' or host.endswith('.premiumize.me'):
+			headers['Authorization'] = 'Bearer %s' % self.token
+		return url + '|' + urlencode(headers)
 
 	def headers(self):
 		return {'User-Agent': 'Mando', 'Authorization': 'Bearer %s' % self.token}
 
-	def _get(self, url, data={}):
+	def _get(self, url, data={}, timeout=20):
 		if self.token in ('empty_setting', ''): return None
 		url = 'https://www.premiumize.me/api/' + url
-		response = requests.get(url, data=data, headers=self.headers(), timeout=20).text
+		response = requests.get(url, data=data, headers=self.headers(), timeout=timeout).text
 		try: return json.loads(response)
 		except: return response
 
-	def _post(self, url, data={}):
+	def _post(self, url, data={}, timeout=20):
 		if self.token in ('empty_setting', '') and not 'token' in url: return None
 		if not 'token' in url: url = 'https://www.premiumize.me/api/' + url
-		response = requests.post(url, data=data, headers=self.headers(), timeout=20).text
+		response = requests.post(url, data=data, headers=self.headers(), timeout=timeout).text
 		try: return json.loads(response)
 		except: return response
 
