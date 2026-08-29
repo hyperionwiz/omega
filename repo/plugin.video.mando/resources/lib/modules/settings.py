@@ -107,6 +107,10 @@ def playback_key():
 def playback_settings():
 	return (int(get_setting('mando.playback.watched_percent', '90')), int(get_setting('mando.playback.resume_percent', '5')))
 
+def playback_watched_percent():
+	"""Percent at which playback writes a local watched tick. Follows Watched Status Provider."""
+	return 80 if watched_indicators() in (1, 2) else 90
+
 def limit_resolve():
 	return get_setting('mando.playback.limit_resolve', 'false') == 'true'
 
@@ -189,6 +193,10 @@ def hide_unaired_watchlist_item(action, unaired):
 
 def lists_cache_duraton():
 	return int(get_setting('mando.lists_cache_duraton', '48'))
+
+def premieres_newest_first():
+	"""Content > Premieres & Latest Releases Sort: date-desc instead of popularity."""
+	return get_setting('mando.tmdb.premieres_sort', '0') == '1'
 
 def auto_start_mando():
 	return get_setting('mando.auto_start_mando', 'false') == 'true'
@@ -496,7 +504,7 @@ def nextep_pipeline_headroom(play_type, scraper_time, still_watching_due=False):
 def auto_nextep_settings(play_type):
 	play_type = 'autoplay' if play_type == 'autoplay_nextep' else 'autoscrape'
 	window_percentage = 100 - int(get_setting('mando.%s_next_window_percentage' % play_type, '95'))
-	alert_timing = _alert_timing_mode('%s_alert_timing' % play_type, '1')
+	alert_timing = _alert_timing_mode('%s_alert_timing' % play_type, '3')
 	watching_check = int(get_setting('mando.autoplay_watching_check', '3'))
 	scraper_time = int(get_setting('mando.results.timeout', '60')) + NEXTEP_SCRAPE_MARGIN_SEC
 	if play_type == 'autoplay':
