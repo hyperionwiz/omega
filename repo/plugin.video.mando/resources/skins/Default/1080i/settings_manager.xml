@@ -1308,8 +1308,17 @@
                           <property name="setting_label">Hide Watched Items in Widgets</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_watched)]</property>
-                          <property name="setting_description">Enable this and watched items will be hidden in Mando widgets.</property>
+                          <property name="setting_description">Enable this and watched items will be hidden in Mando widgets. Movies that are watched, and TV shows you have finished (watched count at least the aired episode count), are omitted. Watched / Recently Watched / In Progress widgets are unchanged.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(30)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.widget_hide_watched),true)</visible>
+                          <property name="setting_label">    - Fill From Later Pages</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.widget_hide_watched_fill)]</property>
+                          <property name="setting_description">When Hide Watched removes titles, fetch later pages of that list (up to 8) so the widget stays full (widget page size). Catalogue lists only (Trending, Latest Releases, Popular, Blockbusters, Oscar Winners, and similar), including Random versions of those widgets. Off by default — extra pages add a little Home load time.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched_fill)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(30)</visible>
@@ -2027,6 +2036,30 @@
                           <property name="setting_description">Open WeTrakr's official Import page (QR code or copied link). Use when moving watch history from Trakt to WeTrakr. Mando does not run the import, and this does not change watched ticks in Mando.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=wetrakr.wetrakr_import_trakt)</onclick>
                       </item>
+        <!-- Fanart.tv -->
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <property name="setting_label">Fanart.tv</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <property name="setting_label">API Key</property>
+                          <property name="setting_type">numeric</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.fanarttv_api)]</property>
+                          <property name="setting_description">Personal Fanart.tv API key from fanart.tv/get-an-api-key. When set, empty TMDb landscape, clearlogo, poster, and fanart slots are filled from Fanart.tv. TMDb is used when it already has the image. Does not add episode stills. After adding a key, Tools &gt; Clear Meta Cache so titles already in cache are re-fetched.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=fanarttv_api)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.fanarttv_api),empty_setting)</visible>
+                          <property name="setting_label">Test API Key...</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Check that your Fanart.tv API key is accepted.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=fanarttv_api_check_choice)</onclick>
+                      </item>
         <!-- OMDb -->
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
@@ -2041,6 +2074,15 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.omdb_api)]</property>
                           <property name="setting_description">Enter here your OMDb API key. This will allow you to utilize extra ratings information in Mandos Extras window.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=omdb_api)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.omdb_api),empty_setting)</visible>
+                          <property name="setting_label">Test API Key...</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Check that your OMDb API key is accepted. A failed test may also mean the free daily request limit has been reached.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=omdb_api_check_choice)</onclick>
                       </item>
         <!-- TMDb API -->
                       <item>

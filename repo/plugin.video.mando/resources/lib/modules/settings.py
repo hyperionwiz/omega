@@ -1057,6 +1057,9 @@ def scraping_settings():
 def external_cache_check():
 	return any_external_cache_check()
 
+def fanarttv_api_key():
+	return get_setting('mando.fanarttv_api', 'empty_setting')
+
 def omdb_api_key():
 	return get_setting('mando.omdb_api', 'empty_setting')
 
@@ -1078,6 +1081,9 @@ def widget_hide_next_page():
 
 def widget_hide_watched():
 	return get_setting('mando.widget_hide_watched', 'false') == 'true'
+
+def widget_hide_watched_fill():
+	return widget_hide_watched() and get_setting('mando.widget_hide_watched_fill', 'false') == 'true'
 
 def calendar_sort_order():
 	return int(get_setting('mando.trakt.calendar_sort_order', '0'))
