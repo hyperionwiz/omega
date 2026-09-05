@@ -12,7 +12,8 @@ from caches.settings_cache import get_setting, set_setting
 from caches import punchplay_cache as pp_cache
 from modules import kodi_utils, settings
 from modules.http_defaults import META_API_TIMEOUT
-from modules.utils import copy2clip, make_qrcode, make_tinyurl, TaskPool
+from modules.utils import copy2clip, make_qrcode, make_tinyurl, TaskPool, \
+							device_auth_complete_url, device_auth_site_label, authorise_wait_text
 
 BASE_URL = 'https://punchplay.tv'
 API_PREFIX = '/api/platform/v1'
@@ -446,19 +447,14 @@ def punchplay_authenticate(dummy=''):
 		return kodi_utils.notification('PunchPlay Authorisation Failed', 3000, icon)
 	user_code = str(code_data.get('user_code') or '')
 	device_code = code_data.get('device_code')
-	verification_url = (code_data.get('verification_uri') or 'https://punchplay.tv/link').rstrip('/')
-	auth_url = code_data.get('verification_uri_complete') or (
-		'%s?code=%s' % (verification_url, user_code) if user_code else verification_url)
+	auth_url = device_auth_complete_url(code_data, user_code, fallback='https://punchplay.tv/link', style='query')
 	expires_in = int(code_data.get('expires_in') or 600)
 	interval = 5
 	qr_code = make_qrcode(auth_url) or icon
 	try: copy2clip(auth_url)
 	except: pass
 	short_url = make_tinyurl(auth_url)
-	p_dialog_insert = '[CR]OR visit [B]%s[/B]' % short_url if short_url else ''
-	content = (
-		'Enter [B]%s[/B] at [B]%s[/B][CR]OR scan the [B]QR Code[/B]%s[CR][CR]Waiting for authorisation...'
-		% (user_code, verification_url.replace('https://', '').replace('http://', ''), p_dialog_insert))
+	content = authorise_wait_text(user_code, device_auth_site_label(code_data, 'https://punchplay.tv/link'), short_url)
 	progress = kodi_utils.progress_dialog('PunchPlay Authorise', qr_code)
 	progress.update(content, 0)
 	expires = time.time() + expires_in
@@ -486,12 +482,12 @@ def punchplay_authenticate(dummy=''):
 			error = body.get('error') or ''
 			if error in ('expired', 'access_denied', 'expired_token'): break
 			if poll.status_code == 429:
-				kodi_utils.sleep(30000)
+				if kodi_utils.sleep_while_authorising(progress, 30): break
 				continue
 		except Exception as e:
 			kodi_utils.logger('PunchPlay', 'poll: %s' % e)
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
-		kodi_utils.sleep(interval * 1000)
+		if kodi_utils.sleep_while_authorising(progress, interval): break
 	try: progress.close()
 	except: pass
 	if not token_payload or not _save_tokens(token_payload):

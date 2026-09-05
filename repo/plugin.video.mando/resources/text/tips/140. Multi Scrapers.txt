@@ -1,9 +1,11 @@
 
 External scrapers are optional torrent packs under Settings > Torrent Sources. Enable them there. Mando does not provide support for third-party scraper modules.
 
-[B]Internal Scrapers[/B] on the same page (AnimeTosho, Nyaa, Comet, StremThru Torz, Torrentio) are Mando's own. They are not slots, do not use Search Mode, and work with or without a pack. They use the same debrid [B]Check Cached Status[/B] setting as packs.
+[B]Internal Scrapers[/B] on the same page (AnimeTosho, Nyaa, Comet, StremThru Torz, Torrentio) are Mando's own. They are not slots, do not use Search Mode, and work with or without a pack. The master Enable stays off until you turn it on. Comet, StremThru Torz and Torrentio are on by default; AnimeTosho and Nyaa stay off. They use the same debrid [B]Check Cached Status[/B] setting as packs.
 
-You can assign up to three packs (slots). Each slot is independently enabled. Results from all enabled slots are merged and duplicates removed.
+When [B]Check Before Full Search[/B] is on for EasyNews, cloud, folders, AIOStreams or NZB, those run first. If early results open the list, [B]Run Scraper Search[/B] continues with Internal Scrapers (if enabled) and External Scrapers. Check Before hits stay and are not searched again.
+
+You can assign up to three packs (slots). Each slot is independently enabled. Results from all enabled slots are merged and duplicates removed. The same torrent from Internal Scrapers and a pack is shown once per debrid (cached row wins; the pack label is kept when both found it).
 
 [B]Choose Module[/B]
   Lists known compatible packs that are already installed: Classy, CocoScrapers, Diamond, Gears, Magneto, Taz19, Viper. [B]Other[/B] lists every Python module (Back returns to the known list). The same pack cannot be in two slots. Empty slots are not auto-filled. If no free compatible pack is installed, Install or Other is offered; after a pack installs, open Choose Module again to assign it.

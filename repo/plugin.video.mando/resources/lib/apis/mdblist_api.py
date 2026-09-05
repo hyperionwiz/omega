@@ -8,7 +8,8 @@ from caches import mdblist_cache
 from caches.settings_cache import get_setting, set_setting
 from modules import kodi_utils, settings, list_sort
 from modules.http_defaults import META_API_TIMEOUT, meta_status_retry
-from modules.utils import paginate_list, get_datetime, TaskPool, make_thread_list, copy2clip, make_qrcode, make_tinyurl
+from modules.utils import paginate_list, get_datetime, TaskPool, make_thread_list, copy2clip, make_qrcode, make_tinyurl, \
+							device_auth_complete_url, device_auth_site_label, authorise_wait_text
 
 _EPISODE_SE_RE = re.compile(
 	r'(?:^|[\s·|\-–—/])S(\d{1,2})\s*[:.]?\s*E(\d{1,3})(?:\b|:)|(?:^|[\s·|\-–—/])(\d{1,2})x(\d{1,3})\b',
@@ -420,10 +421,8 @@ def _mdbl_personal_list(original_list, media_kind):
 	return normalized
 
 def _mdblist_device_auth_url(device_data):
-	verification_url = (device_data.get('verification_uri') or device_data.get('verification_url') or 'https://mdblist.com/oauth/device/').rstrip('/')
-	user_code = device_data.get('user_code', '')
-	if user_code: return '%s?code=%s' % (verification_url, user_code)
-	return verification_url
+	return device_auth_complete_url(device_data, device_data.get('user_code', ''),
+		fallback='https://mdblist.com/oauth/device', style='query')
 
 def mdblist_get_device_code():
 	client_id = settings.mdblist_client()
@@ -443,10 +442,7 @@ def mdblist_poll_device(device_data):
 	qr_code = make_qrcode(auth_url) or ''
 	copy2clip(auth_url)
 	short_url = make_tinyurl(auth_url)
-	p_dialog_insert = '[CR]OR visit [B]%s[/B]' % short_url if short_url else ''
-	verify_display = (device_data.get('verification_uri') or device_data.get('verification_url') or 'mdblist.com/oauth/device').replace('https://', '').replace('http://', '')
-	content = ('Enter [B]%s[/B] at [B]%s[/B][CR]OR scan the [B]QR Code[/B]%s[CR][CR]'
-		'Waiting for authorisation...' % (user_code, verify_display, p_dialog_insert))
+	content = authorise_wait_text(user_code, device_auth_site_label(device_data, 'https://mdblist.com/oauth/device'), short_url)
 	progress = kodi_utils.progress_dialog('MDBList Authorise', qr_code)
 	progress.update(content, 0)
 	start = time.time()
@@ -454,7 +450,9 @@ def mdblist_poll_device(device_data):
 		if progress.iscanceled():
 			progress.close()
 			return None
-		kodi_utils.sleep(interval * 1000)
+		if kodi_utils.sleep_while_authorising(progress, interval):
+			progress.close()
+			return None
 		try:
 			client_id = settings.mdblist_client()
 			response = session.post(_OAUTH_TOKEN_URL, data={

@@ -36,15 +36,22 @@ def get_database(watched_indicators=None):
 # 		return True
 # 	except: return False
 
+def _local_hidden_progress_ids():
+	try:
+		watched_db = get_database()
+		row = watched_db.execute('SELECT status FROM watched_status WHERE db_type = ?', ('hidden_progress_items',)).fetchone()
+		if not row: return []
+		return [int(i) for i in (eval(row[0]) or [])]
+	except: return []
+
 def get_hidden_progress_items(watched_indicators):
 	try:
 		if watched_indicators == 0:
-			watched_db = get_database()
-			watched_info = watched_db.execute('SELECT status FROM watched_status WHERE db_type = ?', ('hidden_progress_items',)).fetchone()[0]
-			return eval(watched_info) or []
+			return _local_hidden_progress_ids()
 		elif watched_indicators == 2:
 			from apis.simkl_api import simkl_get_dropped_items
-			return simkl_get_dropped_items()
+			dropped = [int(i) for i in (simkl_get_dropped_items() or [])]
+			return list(dict.fromkeys(dropped + _local_hidden_progress_ids()))
 		elif watched_indicators == 3:
 			from apis.mdblist_api import mdblist_get_dropped_items
 			return mdblist_get_dropped_items()
@@ -71,9 +78,11 @@ def update_hidden_progress(media_id):
 
 def hide_unhide_progress_items(params):
 	action, media_id, refresh = params['action'], int(params.get('media_id', '0')), params.get('refresh', 'true') == 'true'
-	current_items = get_hidden_progress_items(0) or []
-	if action == 'drop': current_items.append(media_id)
-	else: current_items.remove(media_id)
+	current_items = [int(i) for i in (_local_hidden_progress_ids() or [])]
+	if action == 'drop':
+		if media_id not in current_items: current_items.append(media_id)
+	else:
+		current_items = [i for i in current_items if i != media_id]
 	watched_db = get_database()
 	watched_info = watched_db.execute('INSERT OR REPLACE INTO watched_status VALUES (?, ?, ?)', ('hidden_progress_items', 'hidden', repr(current_items),))
 	if refresh: kodi_refresh()
@@ -797,9 +806,11 @@ def _refresh_simkl_tvshow_watched():
 	# Activity-gated (same as SimklMonitor / TV show lists) — skip full watched pull when unchanged.
 	try:
 		if settings.watched_indicators() != 2 or not settings.simkl_user_active(): return
-		if _consume_provider_list_sync_skip(2): return
-		from apis.simkl_api import simkl_sync_activities
-		simkl_sync_activities()
+		if not _consume_provider_list_sync_skip(2):
+			from apis.simkl_api import simkl_sync_activities
+			simkl_sync_activities()
+		from caches.simkl_cache import simkl_watched_cache
+		simkl_watched_cache.prune_mirrored_specials()
 	except: pass
 
 def _refresh_simkl_progress():

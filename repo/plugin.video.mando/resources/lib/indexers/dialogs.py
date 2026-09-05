@@ -1395,11 +1395,16 @@ def set_language_filter_choice(params):
 
 def enable_scrapers_choice(params={}):
 	icon = params.get('icon', None) or kodi_utils.get_icon('mando')
-	scrapers = ['external', 'animetosho', 'nyaa', 'comet', 'torz', 'torrentio', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'tb_cloud', 'folders']
-	cloud_scrapers = {'rd_cloud': 'rd.enabled', 'pm_cloud': 'pm.enabled', 'ad_cloud': 'ad.enabled', 'tb_cloud': 'tb.enabled'}
-	scraper_names = ['EXTERNAL SCRAPERS', 'ANIMETOSHO (ANIME)', 'NYAA (ANIME)', 'COMET', 'STREMTHRU TORZ', 'TORRENTIO', 'EASYNEWS', 'RD CLOUD', 'PM CLOUD', 'AD CLOUD', 'TB CLOUD', 'FOLDERS 1-5']
+	scrapers = ['external', 'animetosho', 'nyaa', 'comet', 'torz', 'torrentio',
+				'aiostreams', 'easynews', 'nzb',
+				'ad_cloud', 'oc_cloud', 'pm_cloud', 'rd_cloud', 'tb_cloud', 'folders']
+	cloud_scrapers = {'ad_cloud': 'ad.enabled', 'oc_cloud': 'oc.enabled', 'pm_cloud': 'pm.enabled',
+					'rd_cloud': 'rd.enabled', 'tb_cloud': 'tb.enabled'}
+	scraper_names = ['EXTERNAL SCRAPERS', 'ANIMETOSHO (ANIME)', 'NYAA (ANIME)', 'COMET', 'STREMTHRU TORZ', 'TORRENTIO',
+					'AIOSTREAMS', 'EASYNEWS', 'NZB INDEXERS',
+					'AD CLOUD', 'OC CLOUD', 'PM CLOUD', 'RD CLOUD', 'TB CLOUD', 'FOLDERS 1-5']
 	set_scrapers = settings.active_internal_scrapers()
-	preselect = [scrapers.index(i) for i in set_scrapers]
+	preselect = [scrapers.index(i) for i in set_scrapers if i in scrapers]
 	list_items = [{'line1': item, 'icon': icon} for item in scraper_names]
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
 	choice = kodi_utils.select_dialog(scrapers, **kwargs)

@@ -1,3 +1,43 @@
+[COLOR gold][B]Version 2.5.0[/B][/COLOR]
+- [B]Simkl[/B]: default Client ID is the original approved app. The 2.4.6 key is kept only while that app is still authorised; Revoke restores the original default. Personal Client IDs are unchanged. Unauthorised installs still on the 2.4.6 key are moved back to the original default.
+- [B]Simkl[/B]: Drop still hides In Progress when Simkl has no catalog row for that TMDb show (e.g. the 2003 Battlestar miniseries). Specials no longer inherit a duplicated regular-episode watch as 1/N.
+- [B]Real Debrid[/B]: [B]Check Cached Status[/B] is available again (default off). An existing on value in settings is kept. Real Debrid still has no native torrent cache; the check is third-party, as before.
+- [B]Icons[/B]: if [I]repo.redwizard.xyz[/I] is unreachable, menu media and Change Icon fall back to [I]zeus-768.com[/I]. Shortcut folders that still point at the repo (or the old GitHub URLs) are remapped to whichever host is up.
+- [B]Debrid cache check[/B]: hashes already known cached or uncached (24h local cache) are not sent to Premiumize / TorBox / Offcloud / RD again. Premiumize checks 100 hashes per request instead of 50. Result filtering no longer does full-dict membership on every row.
+- [B]Sources[/B]: External torrents are cache-checked when Internal Scrapers are on but return nothing for that title (e.g. Nyaa on a non-anime episode).
+
+[COLOR gold][B]Version 2.4.9[/B][/COLOR]
+- [B]Playback[/B]: sorting no longer crashes with Mando Error when a scraper result has no debrid field (Gears / hoster rows, but applies to all scrapers).
+
+[COLOR gold][B]Version 2.4.8[/B][/COLOR]
+- [B]Simkl[/B]: pasting Client ID Key also accepts a copied Python/JSON settings line (extracts the hex key).
+
+[COLOR gold][B]Version 2.4.7[/B][/COLOR]
+- [B]Simkl[/B]: pasting Client ID Key ignores quotes or a stray trailing }.
+- [B]Settings[/B]: Cancel on a Client ID / API key keyboard keeps the current value. It no longer asks to enter a blank key.
+
+[COLOR gold][B]Version 2.4.6[/B][/COLOR]
+- [B]Simkl[/B]: new Client ID. Installs still on the old default are updated; Authorise again if you were signed in. A custom Client ID is left alone.
+- [B]Episode matching[/B]: 480 / 720 / 1080 / 2160 are no longer dropped when that number is the episode (One Piece - 1080.mkv / e1080).
+
+[COLOR gold][B]Version 2.4.5[/B][/COLOR]
+- [B]Internal Scrapers[/B]: Comet, StremThru Torz and Torrentio default to on; AnimeTosho and Nyaa stay off. The Internal Scrapers master Enable stays off. Existing installs are updated only if Internal is still off and no internal scraper has been turned on.
+- [B]Sources[/B]: Internal Scrapers and External Scrapers no longer list the same torrent twice. One row per info hash per debrid (cached wins over unchecked/uncached; the pack/Gears label is kept when both found it).
+- [B]Scrape Progress[/B]: the debrid cache-check pass keeps 4K / 1080p / 720p / SD counts when Internal Scrapers are enabled (it was only showing TOTAL). With both Internal and External on, cache is checked once for all torrent hashes instead of twice.
+- [B]Episode matching[/B]: SxxExx accepts 4-digit episode numbers (One Piece S23E1170). Bare/absolute also keeps e164 / ep15 / episode.15.
+
+[COLOR gold][B]Version 2.4.4[/B][/COLOR]
+- [B]Torrent Sources[/B]: Internal Scrapers uses the same separator pattern as External Scraper slots (heading then Enable) for AnimeTosho, Nyaa, Comet, StremThru Torz and Torrentio. Debrid accounts follow a [B]Debrid Accounts[/B] separator.
+
+[COLOR gold][B]Version 2.4.3[/B][/COLOR]
+- [B]Internal Scrapers[/B]: Settings > Torrent Sources now uses separators per indexer and site (same style as External Scraper slots) so AnimeTosho, Nyaa, Comet, StremThru Torz and Torrentio stay distinct.
+- [B]Scrape Progress[/B]: TOTAL count colour defaults to [B]FFFF33AE[/B] (Settings > Results Color Highlights). Existing installs that already have a colour keep it.
+- [B]Options[/B]: Enable Scrapers includes [B]AIOStreams[/B], [B]NZB Indexers[/B] and [B]OC Cloud[/B]. Direct sources are A–Z, then clouds A–Z ([B]AD[/B], [B]OC[/B], [B]PM[/B], [B]RD[/B], [B]TB[/B]). Fixes the menu crashing when one of those was already on.
+- [B]Check Before Full Search[/B]: the results row is now [B]Run Scraper Search[/B]. It continues with enabled Internal Scrapers and External Scrapers. EasyNews / cloud / folders from the first pass are kept and not searched again. Matches a scrape with Check Before off.
+- [B]Authorise[/B]: closing the PIN / QR wait window (including Back after returning from a browser on the same Android device) now cancels the wait instead of leaving it stuck.
+- [B]Real Debrid[/B]: removed [B]Check Cached Status[/B]. Real Debrid does not expose torrent cache; the third-party check was excluding viable RD results. Same idea as All Debrid. Existing installs with the toggle on are migrated off. [B]Rescrape With No Cache Check[/B] still applies to TorBox, Premiumize and Offcloud; Real Debrid-only users no longer see that rescrape path.
+- [B]Authorise[/B]: QR, clipboard, and short links use each service's prefilled PIN/code URL when the site supports it (Trakt activate/CODE, Simkl pin path, PunchPlay / MDBList / WeTrakr / Offcloud complete URIs, All Debrid user_url, Real-Debrid, TorBox). The wait screen still shows the code for typing. Premiumize still needs the code typed (their page has no prefill).
+
 [COLOR gold][B]Version 2.4.2[/B][/COLOR]
 - [B]Internal Scrapers[/B]: [B]AnimeTosho[/B], [B]StremThru Torz[/B] and [B]Torrentio[/B] join Comet and Nyaa (Settings > Torrent Sources > Internal Scrapers, off by default). Turn on [B]Enable[/B], then Indexers ([B]AnimeTosho (Anime)[/B], [B]Nyaa (Anime)[/B]) and/or Sites ([B]Comet[/B], [B]StremThru Torz[/B], [B]Torrentio[/B]). They run in the main scrape (no Check Before Full Search), with or without External Scrapers. Results show [B]Indexer: AnimeTosho / Nyaa[/B] or [B]Site: Comet / Torz / Torrentio[/B] and [B]Scraper: Internal[/B]. Indexers are anime name search; Sites are IMDb-scoped. They use the same debrid [B]Check Cached Status[/B] as External Scrapers. Clear Internal Scrapers Cache after changing host or category. Tips: Internal vs External cache clears stay separate; Multi Scrapers notes internals are not slots.
 - [B]Debrid[/B]: [B]Check Cached Status[/B] and [B]Include Uncached Results[/B] no longer say External Scrapers. They apply to Internal Scrapers as well, and show when Internal and/or External Scrapers are enabled. [B]Add Resolved Debrid Cache to Cloud[/B] uses the same gate; TorBox also shows it when NZB Indexers are on.

@@ -249,20 +249,25 @@ def seas_ep_filter_exact(season, episode, release_title):
 
 # Cloud filename S/E tokens (left-to-right). Prefer explicit season markers.
 # Covers S04E17, S4.E17, S4-E17, S4 -17, S4-17, S4.17, S4 - E17, S6x29, S6xE29, 4x17.
-# (?!\d) avoids treating long hash tags like S1E123456… as episode numbers.
+# Episode 1–4 digits (One Piece S23E1170). (?!\d) avoids hash tags like S1E123456…
 _CLOUD_SE_TOKEN_RE = re.compile(
 	r'(?:'
-	r's(\d{1,2})[.-]?e[p]?[.-]?(\d{1,3})(?!\d)'
+	r's(\d{1,2})[.-]?e[p]?[.-]?(\d{1,4})(?!\d)'
 	r'|'
-	r's(\d{1,2})x(?:e)?(\d{1,3})(?!\d)'
+	r's(\d{1,2})x(?:e)?(\d{1,4})(?!\d)'
 	r'|'
-	r's(\d{1,2})[.-]+(?:e[p]?[.-]*)?(\d{1,3})(?!\d)'
+	r's(\d{1,2})[.-]+(?:e[p]?[.-]*)?(\d{1,4})(?!\d)'
 	r'|'
-	r'(\d{1,2})x(\d{1,3})(?!\d)'
+	r'(\d{1,2})x(\d{1,4})(?!\d)'
 	r')'
 )
-# Anime-style bare episode only when no Sxx/NxN token exists: "Show - 001 - Title", "Show - 255.mkv".
-_CLOUD_BARE_EP_RE = re.compile(r'(?:^|[.-])(\d{1,3})(?=[.-]|$)')
+# Anime-style bare episode only when no Sxx/NxN token exists: "Show - 001 - Title", "Show - 1080.mkv".
+# 4 digits so 1080/1170 can match; a year token only keeps if that number is the requested episode.
+_CLOUD_BARE_EP_RE = re.compile(r'(?:^|[.-])(\d{1,4})(?=[.-]|$)')
+# e164 / ep15 / episode.15. Prefix required; 4 digits so e1170 can match.
+_CLOUD_BARE_EP_PREFIX_RE = re.compile(r'(?:^|[.-])(?:e(?:p(?:isode)?)?)[.-]?(\d{1,4})(?=[.-]|$)')
+# Quality-like numbers: skip unless that number is the requested episode/absolute.
+# 1080p is already not a bare token (p attached). Show.720.BluRay stays out when not ep 720.
 _BARE_EP_BLOCKLIST = frozenset((480, 720, 1080, 2160))
 
 def _normalize_release_title(release_title):
@@ -304,19 +309,28 @@ def absolute_episode_from_season_data(season_data, season, episode):
 	except Exception:
 		return None
 
-def iter_bare_episode_numbers(release_title):
-	"""Yield bare episode candidates when the name has no explicit season token."""
+def iter_bare_episode_numbers(release_title, requested=None):
+	"""Yield bare episode candidates when the name has no explicit season token.
+
+	480/720/1080/2160 are skipped unless they are the requested episode or absolute.
+	"""
 	normalized = _normalize_release_title(release_title)
 	if _CLOUD_SE_TOKEN_RE.search(normalized):
 		return
-	for match in _CLOUD_BARE_EP_RE.finditer(normalized):
-		try:
-			num = int(match.group(1))
-		except Exception:
-			continue
-		if num < 1 or num in _BARE_EP_BLOCKLIST:
-			continue
-		yield num
+	requested = set(requested or ())
+	seen = set()
+	for rx in (_CLOUD_BARE_EP_PREFIX_RE, _CLOUD_BARE_EP_RE):
+		for match in rx.finditer(normalized):
+			try:
+				num = int(match.group(1))
+			except Exception:
+				continue
+			if num < 1 or num in seen:
+				continue
+			if num in _BARE_EP_BLOCKLIST and num not in requested:
+				continue
+			seen.add(num)
+			yield num
 
 def parse_episode_from_filename(release_title, season=None):
 	"""Parse SxxExx / Sxx - ## / 1x## from a filename; prefer requested season; ignore later hash junk."""
@@ -354,7 +368,7 @@ def cloud_episode_matches(season, episode, filename, absolute_episode=None):
 		targets.add(episode_i)
 	if not targets:
 		return False
-	return any(num in targets for num in iter_bare_episode_numbers(filename))
+	return any(num in targets for num in iter_bare_episode_numbers(filename, targets))
 
 def find_season_in_release_title(release_title):
 	release_title = re.sub(r'[^A-Za-z0-9-]+', '.', unquote(release_title).replace('\'', '')).lower()

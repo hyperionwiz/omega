@@ -9,7 +9,8 @@ import time
 import requests
 from caches.settings_cache import get_setting, set_setting
 from modules import kodi_utils, settings
-from modules.utils import copy2clip, make_qrcode, make_tinyurl
+from modules.utils import copy2clip, make_qrcode, make_tinyurl, \
+							device_auth_complete_url, device_auth_site_label, authorise_wait_text
 
 BASE_URL = 'https://api.wetrakr.com'
 APP_UA = 'Mando-WeTrakr/%s' % kodi_utils.addon_version()
@@ -172,19 +173,14 @@ def wetrakr_authenticate(dummy=''):
 		return kodi_utils.notification('WeTrakr Authorisation Failed', 3000, icon)
 	user_code = str(code_data.get('user_code') or '')
 	device_code = code_data.get('device_code')
-	verification_url = (code_data.get('verification_url') or 'https://wetrakr.com/activate').rstrip('/')
 	expires_in = int(code_data.get('expires_in') or 600)
 	interval = max(int(code_data.get('interval') or 5), 1)
-	auth_url = verification_url if 'code=' in verification_url else (
-		'%s?code=%s' % (verification_url, user_code) if user_code else verification_url)
+	auth_url = device_auth_complete_url(code_data, user_code, fallback='https://wetrakr.com/activate', style='query')
 	qr_code = make_qrcode(auth_url) or icon
 	try: copy2clip(auth_url)
 	except: pass
 	short_url = make_tinyurl(auth_url)
-	p_dialog_insert = '[CR]OR visit [B]%s[/B]' % short_url if short_url else ''
-	content = (
-		'Enter [B]%s[/B] at [B]%s[/B][CR]OR scan the [B]QR Code[/B]%s[CR][CR]Waiting for authorisation...'
-		% (user_code, verification_url.replace('https://', '').replace('http://', ''), p_dialog_insert))
+	content = authorise_wait_text(user_code, device_auth_site_label(code_data, 'https://wetrakr.com/activate'), short_url)
 	progress = kodi_utils.progress_dialog('WeTrakr Authorise', qr_code)
 	progress.update(content, 0)
 	expires = time.time() + expires_in
@@ -204,7 +200,7 @@ def wetrakr_authenticate(dummy=''):
 			if error and error not in ('authorization_pending', 'slow_down'):
 				kodi_utils.logger('WeTrakr', 'poll: %s' % error)
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
-		kodi_utils.sleep(interval * 1000)
+		if kodi_utils.sleep_while_authorising(progress, interval): break
 	try: progress.close()
 	except: pass
 	if not token:

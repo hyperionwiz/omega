@@ -782,7 +782,8 @@ class Sources():
 				# window properties on the external progress bar (was showing TB_CLOUD etc. for the full timeout).
 				external_progress_scrapers = [i for i in self.internal_scraper_names if i not in self.remove_scrapers]
 				self.external_args = (self.meta, self.external_providers, self.debrid_enabled, self.cache_check_override, external_progress_scrapers,
-										self.prescrape_sources, self.progress_dialog, self.disabled_ext_ignored, self.cloud_scraper_names, self.external_orchestration())
+										self.prescrape_sources, self.progress_dialog, self.disabled_ext_ignored, self.cloud_scraper_names, self.external_orchestration(),
+										any(s in self.native_torrent_scrapers for s in (self.active_internal_scrapers or [])))
 				self.activate_providers('external', external, False)
 			if self._user_cancelled_scrape():
 				return []
@@ -824,6 +825,8 @@ class Sources():
 		self._touch_sources_busy()
 		results = self._stamp_native_torrent_cache(results)
 		if not results: return results
+		results = debrid.collapse_duplicate_torrent_hashes(results)
+		if not results: return results
 		results = self.sort_results(results)
 		min_seeders = settings.uncached_min_seeders()
 		all_uncached_results = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
@@ -837,11 +840,13 @@ class Sources():
 		if settings.include_uncached_premiumize():
 			uncached_in_main.extend([i for i in self.uncached_results if 'Premiumize' in i.get('cache_provider', '')])
 		if uncached_in_main:
-			strip_uncached = [i for i in all_uncached_results if i not in uncached_in_main]
-			self.uncached_results = [i for i in self.uncached_results if i not in uncached_in_main]
+			keep_ids = {id(i) for i in uncached_in_main}
+			strip_uncached = [i for i in all_uncached_results if id(i) not in keep_ids]
+			self.uncached_results = [i for i in self.uncached_results if id(i) not in keep_ids]
 		else:
 			strip_uncached = all_uncached_results
-		results = [i for i in results if i not in strip_uncached]
+		strip_ids = {id(i) for i in strip_uncached}
+		results = [i for i in results if id(i) not in strip_ids]
 		cloud_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud')
 		cloud_results = [i for i in results if i.get('scrape_provider') in cloud_scrapers]
 		aio_preserve_results = []
@@ -850,7 +855,8 @@ class Sources():
 		filter_exempt = cloud_results + aio_preserve_results
 		if self.ignore_scrape_filters: self.filters_ignored = True
 		else:
-			scrape_results = [i for i in results if i not in filter_exempt]
+			exempt_ids = {id(i) for i in filter_exempt}
+			scrape_results = [i for i in results if id(i) not in exempt_ids]
 			scrape_results = self.filter_results(scrape_results)
 			scrape_results = self.filter_audio(scrape_results)
 			for file_type in self.filter_keys: scrape_results = self.special_filter(scrape_results, file_type)
@@ -887,8 +893,9 @@ class Sources():
 		return combined
 
 	def _stamp_native_torrent_cache(self, results):
-		native = [i for i in results if i.get('scrape_provider') in self.native_torrent_scrapers and i.get('hash') and not i.get('cache_provider')]
-		if not native:
+		torrent_scrapers = ('external',) + self.native_torrent_scrapers
+		unstamped = [i for i in results if i.get('scrape_provider') in torrent_scrapers and i.get('hash') and not i.get('cache_provider')]
+		if not unstamped:
 			return results
 		return debrid.stamp_torrent_cache(
 			results, getattr(self, 'debrid_enabled', None) or debrid.debrid_enabled(),
@@ -898,9 +905,10 @@ class Sources():
 	def _native_torrent_data(self):
 		info = getattr(self, 'search_info', None) or {}
 		if self.media_type == 'movie':
-			return {'imdb': info.get('imdb_id'), 'title': info.get('title'), 'year': info.get('year')}
-		return {'imdb': info.get('imdb_id'), 'tvshowtitle': info.get('title'), 'title': info.get('ep_name'),
-			'year': info.get('year'), 'season': str(info.get('season') or ''), 'episode': str(info.get('episode') or '')}
+			return {'imdb': info.get('imdb_id'), 'title': info.get('title'), 'year': info.get('year'), 'aliases': info.get('aliases')}
+		return {'imdb': info.get('imdb_id'), 'tvdb': info.get('tvdb_id'), 'tvshowtitle': info.get('title'), 'title': info.get('ep_name'),
+			'year': info.get('year'), 'season': str(info.get('season') or ''), 'episode': str(info.get('episode') or ''),
+			'aliases': info.get('aliases')}
 
 	def _log_prescrape_settings(self):
 		try:
@@ -940,7 +948,7 @@ class Sources():
 	def filter_results(self, results):
 		if self.folders_ignore_filters:
 			folder_results = [i for i in results if i['scrape_provider'] == 'folders']
-			results = [i for i in results if not i in folder_results]
+			results = [i for i in results if i['scrape_provider'] != 'folders']
 		else: folder_results = []
 		results = [i for i in results if i['quality'] in self.quality_filter]
 		if self.filter_size_method:
@@ -1115,7 +1123,7 @@ class Sources():
 			if not sort_first_scrapers: return results
 			sort_first = [i for i in results if i['scrape_provider'] in sort_first_scrapers]
 			sort_first.sort(key=lambda k: (self._sort_folder_to_top(k['scrape_provider']), k['quality_rank']))
-			sort_last = [i for i in results if not i in sort_first]
+			sort_last = [i for i in results if i['scrape_provider'] not in sort_first_scrapers]
 			results = sort_first + sort_last
 		except: pass
 		return results
@@ -1468,8 +1476,8 @@ class Sources():
 				self._kill_progress_dialog(join_timeout=1.0)
 				if not self.progress_dialog and not self.background:
 					self._make_progress_dialog()
-				# Mirror empty-prescrape → full scrape: keep remove_scrapers and prescrape_sources
-				# so cloud scrapers stay finished and progress shows external/cache only.
+				# Keep remove_scrapers and prescrape_sources so Check Before hits stay and
+				# those scrapers are not run again. Remaining internals + External Scrapers run.
 				self.prescrape = False
 				self.clear_properties = True
 				self.filters_ignored = self.ignore_scrape_filters
@@ -1479,7 +1487,7 @@ class Sources():
 				self.active_folders, self.folder_info = False, []
 				self.internal_scraper_names, self.resolve_dialog_made = [], False
 				if not self.ignore_scrape_filters: kodi_utils.clear_property('fs_filterless_search')
-				self._prepare_external_only_followup()
+				self._prepare_prescrape_followup()
 				return self.get_sources()
 			elif action == 'cache_change_rescrape':
 				self.cache_check_override = chosen_item == 'true'
@@ -1489,11 +1497,11 @@ class Sources():
 	def _get_active_scraper_names(self, scraper_list):
 		return [i[2] for i in scraper_list]
 
-	def _prepare_external_only_followup(self):
-		"""External torrent follow-up: skip re-scraping internals, use current filter/sort/priority settings."""
+	def _prepare_prescrape_followup(self):
+		"""After Check Before hits: keep those rows, then run remaining internals and External Scrapers."""
 		self.autoplay = False
 		self._refresh_results_settings()
-		self._exclude_internal_scrapers_for_external_only_followup()
+		self.determine_scrapers_status()
 
 	def _refresh_results_settings(self):
 		self.provider_sort_ranks = settings.provider_sort_ranks()
@@ -1501,13 +1509,6 @@ class Sources():
 		self.weight_size = settings.size_sort_weighted()
 		self.quality_filter = self._quality_filter()
 		self._refresh_group_boost_sort()
-
-	def _exclude_internal_scrapers_for_external_only_followup(self):
-		"""Run External Scraper Search: skip all non-external scrapers; keep prescrape results in memory."""
-		self.determine_scrapers_status()
-		for scraper in self.active_internal_scrapers:
-			if scraper != 'external' and scraper not in self.remove_scrapers:
-				self.remove_scrapers.append(scraper)
 
 	def _reset_scrape_state(self, keep_disabled_ext_ignored=False):
 		self.prescrape = False
@@ -1641,6 +1642,8 @@ class Sources():
 		provider = debrid.normalize_debrid_provider(provider)
 		if not provider:
 			return True
+		if not settings.debrid_cache_check_supported(provider):
+			return False
 		if self.cache_check_override is not None:
 			return self.cache_check_override
 		return settings.debrid_cache_check(provider)
@@ -1891,7 +1894,7 @@ class Sources():
 	def _enrich_sort_fields(self, item):
 		boost = release_group_boost(item) if getattr(self, '_group_boost_active', False) else 0
 		return dict(item, **{
-			'provider_rank': self._get_provider_rank(item['debrid'].lower()),
+			'provider_rank': self._get_provider_rank((item.get('debrid') or '').lower()),
 			'quality_rank': self._get_quality_rank(item.get('quality', 'SD')),
 			'size_rank': self._get_size_rank(item),
 			'group_boost': boost})
@@ -1942,10 +1945,20 @@ class Sources():
 		if settings.include_uncached_premiumize():
 			keep_in_sort.append('Premiumize')
 		if keep_in_sort:
-			defer_uncached = [i for i in results if 'Uncached' in i.get('cache_provider', '') and not any(p in i.get('cache_provider', '') for p in keep_in_sort)]
-			return [i for i in results if i not in defer_uncached] + defer_uncached
-		uncached = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
-		cached = [i for i in results if i not in uncached]
+			keep, defer_uncached = [], []
+			for i in results:
+				cache_provider = i.get('cache_provider', '')
+				if 'Uncached' in cache_provider and not any(p in cache_provider for p in keep_in_sort):
+					defer_uncached.append(i)
+				else:
+					keep.append(i)
+			return keep + defer_uncached
+		cached, uncached = [], []
+		for i in results:
+			if 'Uncached' in i.get('cache_provider', ''):
+				uncached.append(i)
+			else:
+				cached.append(i)
 		return cached + uncached
 
 	def get_meta(self):
@@ -2574,7 +2587,7 @@ class Sources():
 				resolve_item = dict(item)
 				scrape_provider = item['scrape_provider']
 				provider = scrape_provider
-				if provider == 'external' or provider in self.native_torrent_scrapers: provider = item['debrid'].replace('.me', '')
+				if provider == 'external' or provider in self.native_torrent_scrapers: provider = (item.get('debrid') or '').replace('.me', '') or provider
 				elif provider == 'folders': provider = item['source']
 				elif provider == 'aiostreams': provider = item.get('aio_source_label') or provider
 				elif provider == 'nzb': provider = 'NZB'

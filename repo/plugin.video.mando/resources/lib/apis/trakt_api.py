@@ -17,6 +17,7 @@ from modules import kodi_utils, settings, list_sort
 from modules.http_defaults import META_API_TIMEOUT
 from modules.metadata import movie_meta_external_id, tvshow_meta_external_id
 from modules.utils import get_datetime, timedelta, replace_html_codes, copy2clip, make_qrcode, make_tinyurl, \
+							device_auth_complete_url, device_auth_site_label, authorise_wait_text, \
 							TaskPool, jsondate_to_datetime as js2date
 # logger = kodi_utils.logger
 
@@ -199,20 +200,17 @@ def trakt_get_device_token(device_codes):
 		expires_in = device_codes['expires_in']
 		sleep_interval = device_codes['interval']
 		user_code = str(device_codes['user_code'])
-		auth_url = 'https://trakt.tv/activate?code=%s' % str(user_code)
+		auth_url = device_auth_complete_url(device_codes, user_code, fallback='https://trakt.tv/activate', style='path')
 		qr_code = make_qrcode(auth_url) or ''
 		short_url = make_tinyurl(auth_url)
 		copy2clip(auth_url)
-		if short_url: p_dialog_insert = '[CR]OR visit [B]%s[/B]' % short_url
-		else: p_dialog_insert = ''
-		verify_display = str(device_codes.get('verification_url') or 'trakt.tv/activate').replace('https://', '').replace('http://', '')
-		content = 'Enter [B]%s[/B] at [B]%s[/B][CR]OR scan the [B]QR Code[/B]%s[CR][CR]Waiting for authorisation...' % (user_code, verify_display, p_dialog_insert)
+		content = authorise_wait_text(user_code, device_auth_site_label(device_codes, 'https://trakt.tv/activate'), short_url)
 		progressDialog = kodi_utils.progress_dialog('Trakt Authorise', qr_code)
 		progressDialog.update(content, 0)
 		try:
 			time_passed = 0
 			while not progressDialog.iscanceled() and time_passed < expires_in:
-				kodi_utils.sleep(max(sleep_interval, 1)*1000)
+				if kodi_utils.sleep_while_authorising(progressDialog, max(sleep_interval, 1)): break
 				response = requests.post(API_ENDPOINT % 'oauth/device/token', data=json.dumps(data), headers=headers, timeout=META_API_TIMEOUT)
 				status_code = response.status_code
 				if status_code == 200:

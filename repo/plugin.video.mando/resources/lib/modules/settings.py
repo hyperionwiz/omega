@@ -14,7 +14,8 @@ def trakt_client():
 
 def simkl_client():
 	"""Simkl Client ID from Meta Accounts; empty falls back to the shipped default in simkl_api."""
-	return (get_setting('mando.simkl.client', '') or '').strip()
+	from caches.settings_cache import normalize_credential_string
+	return normalize_credential_string(get_setting('mando.simkl.client', ''))
 
 def mdblist_client():
 	return get_setting('mando.mdblist.client', '')
@@ -962,8 +963,11 @@ _DEBRID_CACHE_CHECK_SETTINGS = {
 	'Offcloud': 'oc.cache_check',
 }
 
+def debrid_cache_check_supported(provider):
+	return provider in _DEBRID_CACHE_CHECK_SETTINGS
+
 def debrid_cache_check(provider):
-	if provider == 'AllDebrid':
+	if not debrid_cache_check_supported(provider):
 		return False
 	setting_id = _DEBRID_CACHE_CHECK_SETTINGS.get(provider)
 	if not setting_id: return False

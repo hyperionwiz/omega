@@ -8,6 +8,13 @@ from caches.base_cache import connect_database
 
 VALID_EXTRAS_CONTAINER_IDS = frozenset(range(2050, 2067))
 _COLOR_SETTING_RE = re.compile(r'^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{8}$')
+_CREDENTIAL_QUOTED_RE = re.compile(r'''['"]([A-Za-z0-9._-]{16,})['"]''')
+_CREDENTIAL_HEX64_RE = re.compile(r'(?<![0-9A-Fa-f])([0-9A-Fa-f]{64})(?![0-9A-Fa-f])')
+_CREDENTIAL_PASTE_NAMES = frozenset((
+	'simkl.client', 'punchplay.client', 'mdblist.client', 'trakt.client', 'trakt.secret',
+	'tmdb_api', 'tmdb.lists_read_token', 'fanarttv_api', 'omdb_api',
+	'string', 'boolean', 'action', 'setting_id', 'setting_type', 'setting_default', 'setting_value',
+))
 _EXTRAS_LIST_DEFAULT = '2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063,2064,2065,2066'
 _MAX_PROPERTY_LEN = 8192
 _SETTINGS_PROPERTIES_LOADED = 'mando.settings_properties_loaded'
@@ -108,11 +115,43 @@ def _new_setting_value(setting_id, setting_default, currentsettings, had_existin
 		return setting_default
 	return currentsettings.get(old_setting_id, setting_default)
 
-_CREDENTIAL_STRING_SETTINGS = frozenset(('tmdb_api', 'trakt.client', 'trakt.secret', 'tmdb.lists_read_token', 'fanarttv_api', 'omdb_api'))
+_CREDENTIAL_STRING_SETTINGS = frozenset((
+	'tmdb_api', 'trakt.client', 'trakt.secret', 'tmdb.lists_read_token', 'fanarttv_api', 'omdb_api',
+	'simkl.client', 'punchplay.client', 'mdblist.client',
+))
 
 def normalize_credential_string(value):
 	if value in (None, 'empty_setting'): return ''
-	return str(value).strip()
+	text = str(value).strip()
+	# Paste from Python/JSON: wrapping quotes, {id}, or leftovers like }' / }, at either end.
+	_paste_start, _paste_end = "'\"{", "'\"}),]"
+	while text:
+		if len(text) >= 2 and text[0] == text[-1] and text[0] in ('"', "'"):
+			text = text[1:-1].strip()
+			continue
+		if text.startswith('{') and text.endswith('}') and ':' not in text:
+			text = text[1:-1].strip()
+			continue
+		if text[0] in _paste_start:
+			text = text[1:].strip()
+			continue
+		if text[-1] in _paste_end:
+			text = text[:-1].strip()
+			continue
+		break
+	# Whole-line paste from settings_cache.py / JSON still has field names after edge stripping.
+	if any(ch in text for ch in ("'", '"', ':', ' ', ',')):
+		quoted = [m for m in _CREDENTIAL_QUOTED_RE.findall(text)
+			if m not in _CREDENTIAL_PASTE_NAMES and not m.startswith('setting_')]
+		hex_quoted = [m for m in quoted if len(m) == 64 and _CREDENTIAL_HEX64_RE.fullmatch(m)]
+		if hex_quoted:
+			return hex_quoted[-1]
+		if quoted:
+			return quoted[-1]
+		embedded = _CREDENTIAL_HEX64_RE.findall(text)
+		if embedded:
+			return embedded[-1]
+	return text
 
 def looks_like_tmdb_v4_jwt(value):
 	value = normalize_credential_string(value)
@@ -761,6 +800,43 @@ def sync_settings(params={}):
 		settings_cache.write_db('migration.ad_cache_check_removed_v173', 'true', defaults_map.get('migration.ad_cache_check_removed_v173'))
 		currentsettings['migration.ad_cache_check_removed_v173'] = 'true'
 		if load_properties: settings_cache.set_memory_cache('migration.ad_cache_check_removed_v173', 'true')
+	if had_existing_settings and currentsettings.get('migration.rd_cache_check_removed_v243') != 'true':
+		# 2.4.3 forced this off. 2.5.0 restores the toggle (default off) and keeps an existing on value.
+		settings_cache.write_db('migration.rd_cache_check_removed_v243', 'true', defaults_map.get('migration.rd_cache_check_removed_v243'))
+		currentsettings['migration.rd_cache_check_removed_v243'] = 'true'
+		if load_properties: settings_cache.set_memory_cache('migration.rd_cache_check_removed_v243', 'true')
+	if had_existing_settings and currentsettings.get('migration.internal_site_defaults_v245') != 'true':
+		untouched = currentsettings.get('provider.internal') != 'true' and not any(
+			currentsettings.get('provider.%s' % scraper) == 'true' for scraper in ('comet', 'torrentio', 'torz', 'nyaa', 'animetosho'))
+		if untouched:
+			for site_id in ('provider.comet', 'provider.torz', 'provider.torrentio'):
+				settings_cache.write_db(site_id, 'true', defaults_map.get(site_id))
+				currentsettings[site_id] = 'true'
+				if load_properties: settings_cache.set_memory_cache(site_id, 'true')
+			migrated = True
+		settings_cache.write_db('migration.internal_site_defaults_v245', 'true', defaults_map.get('migration.internal_site_defaults_v245'))
+		currentsettings['migration.internal_site_defaults_v245'] = 'true'
+		if load_properties: settings_cache.set_memory_cache('migration.internal_site_defaults_v245', 'true')
+	if had_existing_settings and currentsettings.get('migration.simkl_client_v246') != 'true':
+		# 2.4.6 swapped the deleted old app for the new Client ID and cleared tokens. Simkl
+		# restored the original app, so late updaters must keep their old ID and token.
+		settings_cache.write_db('migration.simkl_client_v246', 'true', defaults_map.get('migration.simkl_client_v246'))
+		currentsettings['migration.simkl_client_v246'] = 'true'
+		if load_properties: settings_cache.set_memory_cache('migration.simkl_client_v246', 'true')
+	if had_existing_settings and currentsettings.get('migration.simkl_client_v250') != 'true':
+		# Original app is the default again. Keep the 2.4.6 key only while that app still has a token.
+		_simkl_alt = '11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b'
+		if currentsettings.get('simkl.client') == _simkl_alt:
+			old_token = currentsettings.get('simkl.token')
+			if old_token in (None, '0', '', 'empty_setting'):
+				new_cid = defaults_map.get('simkl.client')
+				settings_cache.write_db('simkl.client', new_cid, new_cid)
+				currentsettings['simkl.client'] = new_cid
+				if load_properties: settings_cache.set_memory_cache('simkl.client', new_cid)
+				migrated = True
+		settings_cache.write_db('migration.simkl_client_v250', 'true', defaults_map.get('migration.simkl_client_v250'))
+		currentsettings['migration.simkl_client_v250'] = 'true'
+		if load_properties: settings_cache.set_memory_cache('migration.simkl_client_v250', 'true')
 	if currentsettings:
 		from modules.settings import migrate_simkl_context_menu_for_upgrade, migrate_mdblist_context_menu_for_upgrade, migrate_punchplay_context_menu_for_upgrade, migrate_cm_manager_order_for_upgrade, migrate_external_scraper_context_menu_for_upgrade
 		if migrate_simkl_context_menu_for_upgrade(had_existing_settings): migrated = True
@@ -901,8 +977,10 @@ def set_string(params):
 	current_value = get_setting('mando.%s' % setting_id)
 	current_value = current_value.replace('empty_setting', '')
 	new_value = kodi_utils.kodi_dialog().input('', defaultt=current_value)
-	if not new_value and not kodi_utils.confirm_dialog(text='Enter Blank Value?', ok_label='Yes', cancel_label='Re-Enter Value', default_control=11):
-		return set_string(params)
+	# Keyboard Cancel (and an empty OK) both return ''. Do not treat that as "set blank"
+	# when a key is already filled — that was prompting Enter Blank Value? on Cancel.
+	if not new_value:
+		return
 	if setting_id in _CREDENTIAL_STRING_SETTINGS:
 		new_value = normalize_credential_string(new_value)
 	if setting_id == 'tmdb_api' and new_value and looks_like_tmdb_v4_jwt(new_value):
@@ -1690,7 +1768,7 @@ def default_settings():
 {'setting_id': 'external_scraper.slot3.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'external_scraper.run_mode', 'setting_type': 'action', 'setting_default': '1', 'settings_options': {'1': 'Series (Fallback by Slot Order)', '2': 'Series (All Slots in Order)', '3': 'Primary Slot + Parallel Fallback', '0': 'Parallel (All Enabled Slots)'}},
 {'setting_id': 'provider.internal', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'provider.comet', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'provider.comet', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
 	'0': 'Goldy — https://comet.feels.legal',
 	'1': 'Stremio.ru — https://comet.stremio.ru',
@@ -1700,7 +1778,7 @@ def default_settings():
 {'setting_id': 'comet.custom_url', 'setting_type': 'string', 'setting_default': ''},
 {'setting_id': 'comet.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'provider.torrentio', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'provider.torrentio', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'torrentio.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
 	'0': 'https://torrentio.strem.fun',
 	'1': 'Custom — set URL below',
@@ -1708,7 +1786,7 @@ def default_settings():
 {'setting_id': 'torrentio.custom_url', 'setting_type': 'string', 'setting_default': ''},
 {'setting_id': 'torrentio.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'torrentio.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'provider.torz', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'provider.torz', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'torz.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
 	'0': 'Kuu-lection — https://stremthru.stremio.ru',
 	'1': 'Munif — https://stremthru.13377001.xyz',
@@ -1732,6 +1810,10 @@ def default_settings():
 {'setting_id': 'migration.external_scraper_slots_v160', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.cache_check_pm_oc_tb_v129e', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.ad_cache_check_removed_v173', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'migration.rd_cache_check_removed_v243', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'migration.internal_site_defaults_v245', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'migration.simkl_client_v246', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'migration.simkl_client_v250', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.my_content_nav_mode_v136', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.unified_list_sort', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== Real Debrid
@@ -1940,7 +2022,7 @@ def default_settings():
 {'setting_id': 'scraper_720p_highlight', 'setting_type': 'string', 'setting_default': 'FF3C9900'},
 {'setting_id': 'scraper_SD_highlight', 'setting_type': 'string', 'setting_default': 'FF0166FF'},
 {'setting_id': 'scraper_single_highlight', 'setting_type': 'string', 'setting_default': 'FF008EB2'},
-{'setting_id': 'scraper_total_highlight', 'setting_type': 'string', 'setting_default': 'FFFFFFFF'},
+{'setting_id': 'scraper_total_highlight', 'setting_type': 'string', 'setting_default': 'FFFF33AE'},
 {'setting_id': 'highlight.scrape_progress_colours', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'highlight.tint_focused_background', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'highlight.background_opacity', 'setting_type': 'string', 'setting_default': '66'},

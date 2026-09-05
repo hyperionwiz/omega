@@ -246,8 +246,32 @@ def browse_file(mask='', defaultt='', heading='Choose file', force_defaultt=Fals
 		return None
 	return result
 
+OFFICIAL_ADDON_ID = 'plugin.video.mando'
+
+def running_addon_id():
+	try:
+		return xbmcaddon.Addon().getAddonInfo('id') or ''
+	except Exception:
+		return ''
+
+def notify_unofficial_addon():
+	running = running_addon_id()
+	if not running or running == OFFICIAL_ADDON_ID:
+		return
+	if get_property('mando.unofficial_addon_notice'):
+		return
+	set_property('mando.unofficial_addon_notice', 'true')
+	try:
+		ok_dialog(
+			heading='Mando',
+			text='This is [B]Mando[/B] add-on code running as [B]%s[/B]. '
+			'Install the official version of Mando from The Red Repo...[CR]https://repo.redwizard.xyz'
+			% running)
+	except Exception:
+		pass
+
 def addon_info(info):
-	return xbmcaddon.Addon('plugin.video.mando').getAddonInfo(info)
+	return xbmcaddon.Addon(OFFICIAL_ADDON_ID).getAddonInfo(info)
 
 def addon_version():
 	return get_property('mando.addon_version') or addon_info('version')
@@ -275,7 +299,10 @@ def addon_fanart():
 	)
 
 MEDIA_REMOTE_BASE = 'https://kodiwind.x10.mx/mando/media'
-# Old GitHub raw hosts — remap stored shortcut/menu URLs onto MEDIA_REMOTE_BASE.
+MEDIA_REMOTE_FALLBACK_BASE = 'https://zeus-768.com/mando/media'
+_MEDIA_REMOTE_BASES = (MEDIA_REMOTE_BASE, MEDIA_REMOTE_FALLBACK_BASE)
+_MEDIA_BASE_PROPERTY = 'mando.media_remote_base'
+# Old GitHub raw hosts — remap stored shortcut/menu URLs onto the live media host.
 _MEDIA_GITHUB_PREFIXES = (
 	'https://raw.githubusercontent.com/The-Red-Wizard/TheRedWizard.github.io/main/packages/media',
 	'https://raw.githubusercontent.com/TheRedWizard/TheRedWizard.github.io/main/packages/media',
@@ -286,16 +313,48 @@ MENU_FOLDER_CONTENT = ''
 # EasyNews search / debrid cloud: skins (FENtastic, Aeon Nox, Nimbus) show thumbs when content is files.
 PREMIUM_FILES_CONTENT = 'files'
 
+def media_remote_base():
+	"""Repo host when it answers; Zeus backup while it does not."""
+	cached = get_property(_MEDIA_BASE_PROPERTY)
+	if cached in _MEDIA_REMOTE_BASES:
+		return cached
+	try:
+		from caches.main_cache import main_cache
+		cached = main_cache.get('media_remote_base')
+		if cached in _MEDIA_REMOTE_BASES:
+			set_property(_MEDIA_BASE_PROPERTY, cached)
+			return cached
+	except:
+		pass
+	chosen, names = MEDIA_REMOTE_BASE, None
+	for base in _MEDIA_REMOTE_BASES:
+		names = _fetch_remote_icon_names(base)
+		if names:
+			chosen = base
+			break
+	set_property(_MEDIA_BASE_PROPERTY, chosen)
+	try:
+		from caches.main_cache import main_cache
+		main_cache.set('media_remote_base', chosen, expiration=1)
+		if names:
+			main_cache.set('all_icons_remote', names, expiration=168)
+	except:
+		pass
+	return chosen
+
 def get_icon(image_name, image_folder='icons', image_type='png'):
 	local_path = os.path.join(addon_info('path'), 'resources', 'media', image_folder, '%s.%s' % (image_name, image_type))
 	if os.path.exists(local_path):
 		return local_path
-	return '%s/%s/%s.%s' % (MEDIA_REMOTE_BASE, image_folder, image_name, image_type)
+	return '%s/%s/%s.%s' % (media_remote_base(), image_folder, image_name, image_type)
 
 def _remap_remote_media_url(url):
-	for prefix in _MEDIA_GITHUB_PREFIXES:
+	live = media_remote_base()
+	for prefix in _MEDIA_GITHUB_PREFIXES + _MEDIA_REMOTE_BASES:
 		if url.startswith(prefix):
-			return MEDIA_REMOTE_BASE + url[len(prefix):]
+			if prefix == live:
+				return url
+			return live + url[len(prefix):]
 	return url
 
 def resolve_list_icon(icon, default_name='folder'):
@@ -620,7 +679,7 @@ def sync_scrape_progress_ui(percent=0, results_sd=0, results_720p=0, results_108
 		set_property('mando.scrape.progress_1080p_color', get_setting('mando.scraper_1080p_highlight', 'FFE6B800'))
 		set_property('mando.scrape.progress_720p_color', get_setting('mando.scraper_720p_highlight', 'FF3C9900'))
 		set_property('mando.scrape.progress_sd_color', get_setting('mando.scraper_SD_highlight', 'FF0166FF'))
-		set_property('mando.scrape.progress_total_color', get_setting('mando.scraper_total_highlight', 'FFFFFFFF'))
+		set_property('mando.scrape.progress_total_color', get_setting('mando.scraper_total_highlight', 'FFFF33AE'))
 	else:
 		white = 'FFFFFFFF'
 		set_property('mando.scrape.progress_4k_color', white)
@@ -1269,6 +1328,23 @@ def close_progress_dialog(progress):
 		progress.close()
 	except: pass
 
+def sleep_while_authorising(progress, seconds):
+	"""Sleep up to `seconds`. True if the auth window was closed/cancelled or Kodi is aborting."""
+	try: total_ms = int(max(0, float(seconds)) * 1000)
+	except: total_ms = 0
+	mon = kodi_monitor()
+	elapsed, step = 0, 200
+	while elapsed < total_ms:
+		try:
+			if progress is not None and progress.iscanceled(): return True
+		except: return True
+		if mon and mon.abortRequested(): return True
+		chunk = min(step, total_ms - elapsed)
+		sleep(chunk)
+		elapsed += chunk
+	try: return bool(progress is not None and progress.iscanceled())
+	except: return True
+
 def select_dialog(function_list, **kwargs):
 	from windows.base_window import open_window
 	alt_function_list = kwargs.pop('alt_function_list', None)
@@ -1523,21 +1599,42 @@ def _icon_names_from_payload(data):
 			names.append(name)
 	return names or None
 
-def get_all_icons():
+def _fetch_remote_icon_names(base, timeout=4):
 	import requests
+	try:
+		response = requests.get('%s/icons.json' % base, timeout=timeout)
+		if response.status_code != 200:
+			return None
+		text = response.text.lstrip()
+		if not (text.startswith('[') or text.startswith('{')):
+			return None
+		return _icon_names_from_payload(response.json())
+	except:
+		return None
+
+def get_all_icons():
 	from caches.main_cache import main_cache
 	cached = main_cache.get('all_icons_remote')
 	if cached is not None:
 		return cached
-	try:
-		response = requests.get('%s/icons.json' % MEDIA_REMOTE_BASE, timeout=8)
-		if response.status_code == 200:
-			names = _icon_names_from_payload(response.json())
+	base = media_remote_base()
+	cached = main_cache.get('all_icons_remote')
+	if cached is not None:
+		return cached
+	names = _fetch_remote_icon_names(base, timeout=8)
+	if not names:
+		for candidate in _MEDIA_REMOTE_BASES:
+			if candidate == base:
+				continue
+			names = _fetch_remote_icon_names(candidate, timeout=8)
 			if names:
-				main_cache.set('all_icons_remote', names, expiration=168)
-				return names
-	except:
-		pass
+				set_property(_MEDIA_BASE_PROPERTY, candidate)
+				try: main_cache.set('media_remote_base', candidate, expiration=1)
+				except: pass
+				break
+	if names:
+		main_cache.set('all_icons_remote', names, expiration=168)
+		return names
 	return []
 
 def upload_logfile(params):

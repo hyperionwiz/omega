@@ -1625,7 +1625,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your MDBList account. Enter the code on screen or scan the QR code — same flow as Simkl and Trakt.</property>
+                          <property name="setting_description">Authorise your MDBList account. Scan the QR or open the link (code filled in). The code stays on screen if you need to type it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=mdblist.mdblist_authenticate)</onclick>
                       </item>
                       <item>
@@ -1695,7 +1695,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your PunchPlay account. Enter the code on screen or scan the QR code — same flow as MDBList and Trakt. Defers native scrobble when script.punchplay is already authorised.</property>
+                          <property name="setting_description">Authorise your PunchPlay account. Scan the QR or open the link (code filled in). The code stays on screen if you need to type it. Defers native scrobble when script.punchplay is already authorised.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=punchplay.punchplay_authenticate)</onclick>
                       </item>
                       <item>
@@ -1790,7 +1790,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Simkl account. PIN shown on screen — visit simkl.com/pin.</property>
+                          <property name="setting_description">Authorise your Simkl account. Scan the QR or open the link (PIN filled in). The PIN stays on screen if you need to type it at simkl.com/pin.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=simkl.simkl_authenticate)</onclick>
                       </item>
                       <item>
@@ -1858,6 +1858,7 @@
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.simkl.client),6cacc8db22e67b2cd423ef73a9fd3a4f45146ba7fbf30fb2ae28f2fa9d0c2583)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.client),11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b)</visible>
                           <property name="setting_label">    - Restore Default Client ID Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -1885,7 +1886,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Trakt account and use it within Mando. If Authorise fails, restore the default Client ID/Secret below (personal Trakt apps may no longer work for free accounts), then try again.</property>
+                          <property name="setting_description">Authorise your Trakt account and use it within Mando. Scan the QR or open the link (code filled in). If Authorise fails, restore the default Client ID/Secret below (personal Trakt apps may no longer work for free accounts), then try again.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=trakt.trakt_authenticate)</onclick>
                       </item>
                       <item>
@@ -1996,7 +1997,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise WeTrakr for scrobble only. After authorising, use Enable Scrobbling to turn reporting on or off. Watched ticks stay with Watched Status Provider (recommended: Mando). See About WeTrakr Scrobble for details.</property>
+                          <property name="setting_description">Authorise WeTrakr for scrobble only. Scan the QR or open the link (code filled in). After authorising, use Enable Scrobbling to turn reporting on or off. Watched ticks stay with Watched Status Provider (recommended: Mando). See About WeTrakr Scrobble for details.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=wetrakr.wetrakr_authenticate)</onclick>
                       </item>
                       <item>
@@ -2156,7 +2157,7 @@
                           <property name="setting_label">Authorise Account</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your TMDb account and use it within Mando for Lists.</property>
+                          <property name="setting_description">Authorise your TMDb account for Lists. Scan the QR or open the link — access is already requested. Confirm Access on TMDb.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=tmdblist_api.authenticate)</onclick>
                       </item>
                       <item>
@@ -2437,20 +2438,20 @@
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.internal)]</property>
-                          <property name="setting_description">Enable Mando's internal torrent scrapers. Indexers (AnimeTosho, Nyaa) and Sites (Comet, StremThru Torz, Torrentio) stay off until you enable them below. Requires an authorised debrid. Does not require External Scrapers — they can run on their own or together with Magneto/Gears/etc.</property>
+                          <property name="setting_description">Enable Mando's internal torrent scrapers. Comet, StremThru Torz and Torrentio are on by default; AnimeTosho and Nyaa stay off until you enable them. Requires an authorised debrid. Does not require External Scrapers — they can run on their own or together with Magneto/Gears/etc. They are not a Check Before Full Search source; they run in the main scrape, including Run Scraper Search after early Check Before results.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.internal)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <property name="setting_label">Indexers</property>
+                          <property name="setting_label">AnimeTosho (Anime)</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <property name="setting_label">AnimeTosho (Anime)</property>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.animetosho)]</property>
                           <property name="setting_description">Search AnimeTosho (anime indexer) for torrent magnets, then check them on your debrid. Complements Nyaa for anime-style names (Show - 100). Requires an authorised debrid. The public JSON feed can change; no support is provided for the site.</property>
@@ -2481,6 +2482,13 @@
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Nyaa (Anime)</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.nyaa)]</property>
                           <property name="setting_description">Search Nyaa (anime indexer) for torrent magnets, then check them on your debrid. Aimed at anime-style names (Show - 100) that Magneto/Classy drop. Requires an authorised debrid. Nyaa RSS can change; no support is provided for the public site.</property>
@@ -2520,14 +2528,14 @@
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <property name="setting_label">Sites</property>
+                          <property name="setting_label">Comet</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <property name="setting_label">Comet</property>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.comet)]</property>
                           <property name="setting_description">Query Comet for torrent hashes, then check them on your debrid (Check Cached Status). Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. Public Comet hosts can change or go down; no support is provided for those instances.</property>
@@ -2579,6 +2587,13 @@
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">StremThru Torz</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.torz)]</property>
                           <property name="setting_description">Query StremThru Torz for torrent hashes, then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. Public StremThru hosts can change or go down; no support is provided for those instances.</property>
@@ -2630,6 +2645,13 @@
                           <visible>Container(2000).HasFocus(61)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Torrentio</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.torrentio)]</property>
                           <property name="setting_description">Query Torrentio for torrent hashes (YTS, EZTV, RARBG, 1337x, TPB, NyaaSi, and others), then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. torrentio.strem.fun can rate-limit or go down; no support is provided for the public instance.</property>
@@ -2676,6 +2698,13 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.torrentio.title_filter_episode)]</property>
                           <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing. Generic names such as Pilot or Home are still skipped.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=torrentio.title_filter_episode)</onclick>
+                      </item>
+        <!-- Debrid Accounts -->
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <property name="setting_label">Debrid Accounts</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
                       </item>
         <!-- AIOStreams (hidden while aiostreams_api.ENABLED is false) -->
                       <item>
@@ -2776,7 +2805,7 @@
                           <property name="setting_label">Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.aiostreams)]</property>
-                          <property name="setting_description">Query AIOStreams early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Query AIOStreams early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.aiostreams)</onclick>
                       </item>
                       <item>
@@ -2815,7 +2844,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your All Debrid account and use it within Mando.</property>
+                          <property name="setting_description">Authorise your All Debrid account. Scan the QR or open the link (PIN filled in). The PIN stays on screen if you need to type it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=alldebrid.authenticate)</onclick>
                       </item>
                       <item>
@@ -2876,7 +2905,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.ad_cloud)]</property>
-                          <property name="setting_description">Search your All Debrid cloud early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your All Debrid cloud early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.ad_cloud)</onclick>
                       </item>
                       <item>
@@ -3045,7 +3074,7 @@
                           <property name="setting_label">Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.easynews)]</property>
-                          <property name="setting_description">Query EasyNews early in the source search, before external torrent scrapers and the rest of the internal scrape list. The progress window can show EasyNews quality counts (4K, 1080p, etc.) while torrent scrapers are still running. If EasyNews returns results during prescrape, you may get playable links sooner instead of waiting for the full scrape to finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Query EasyNews early in the source search, before Internal Scrapers and External Scrapers. The progress window can show EasyNews quality counts (4K, 1080p, etc.) while torrent scrapers are still running. If EasyNews returns results during prescrape, you may get playable links sooner instead of waiting for the full scrape to finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.easynews)</onclick>
                       </item>
                       <item>
@@ -3280,7 +3309,7 @@
                           <property name="setting_label">Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.nzb)]</property>
-                          <property name="setting_description">Query NZB indexers early in the source search (before external torrent scrapers). Results play via TorBox Pro usenet — cached hits resolve quickly; uncached NZBs are fetched on your TorBox Pro plan when you pick one. Requires TorBox authorization with Pro (usenet). Pair with Autoplay Result below for cached prescrape hits only.</property>
+                          <property name="setting_description">Query NZB indexers early in the source search, before Internal Scrapers and External Scrapers. Results play via TorBox Pro usenet — cached hits resolve quickly; uncached NZBs are fetched on your TorBox Pro plan when you pick one. Requires TorBox authorization with Pro (usenet). If early results open the list, Run Scraper Search continues with remaining scrapers. Pair with Autoplay Result below for cached prescrape hits only.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.nzb)</onclick>
                       </item>
                       <item>
@@ -3319,7 +3348,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Offcloud account with a QR code and use it within Mando.</property>
+                          <property name="setting_description">Authorise your Offcloud account. Scan the QR or open the link (code filled in when Offcloud provides it). The code stays on screen if you need to type it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=offcloud.authenticate)</onclick>
                       </item>
                       <item>
@@ -3413,7 +3442,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.oc_cloud)]</property>
-                          <property name="setting_description">Search your Offcloud cloud early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your Offcloud cloud early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.oc_cloud)</onclick>
                       </item>
                       <item>
@@ -3462,7 +3491,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Premiumize account and use it within Mando.</property>
+                          <property name="setting_description">Authorise your Premiumize account. Scan the QR to open premiumize.me/device, then type the code shown on screen (their page does not fill it in).</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=premiumize.authenticate)</onclick>
                       </item>
                       <item>
@@ -3546,7 +3575,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.pm_cloud)]</property>
-                          <property name="setting_description">Search your Premiumize cloud early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your Premiumize cloud early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.pm_cloud)</onclick>
                       </item>
                       <item>
@@ -3595,7 +3624,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your Real Debrid account and use it within Mando.</property>
+                          <property name="setting_description">Authorise your Real Debrid account. Scan the QR or open the link (code filled in). The code stays on screen if you need to type it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=real_debrid.authenticate)</onclick>
                       </item>
                       <item>
@@ -3624,7 +3653,7 @@
                           <property name="setting_label">Check Cached Status</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd.cache_check)]</property>
-                          <property name="setting_description">Real Debrid does not expose cached status for torrents. When enabled, Mando filters Internal Scrapers and External Scrapers using third-party cache checks. The scrape may take longer and you will see fewer links.</property>
+                          <property name="setting_description">When enabled, Mando checks whether torrent results (Internal Scrapers and External Scrapers) are cached on Real Debrid via a third-party cache check. Real Debrid does not expose torrent cache itself. The scrape may take longer and you will see fewer links.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd.cache_check)</onclick>
                       </item>
                       <item>
@@ -3667,7 +3696,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.rd_cloud)]</property>
-                          <property name="setting_description">Search your Real Debrid cloud early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your Real Debrid cloud early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.rd_cloud)</onclick>
                       </item>
                       <item>
@@ -3736,7 +3765,7 @@
                           <property name="setting_label">Authorise</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Authorise your TorBox account with a QR code and use it within Mando.</property>
+                          <property name="setting_description">Authorise your TorBox account. Scan the QR or open the link (code filled in). The code stays on screen if you need to type it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=torbox.authenticate)</onclick>
                       </item>
                       <item>
@@ -3830,7 +3859,7 @@
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.tb_cloud)]</property>
-                          <property name="setting_description">Search your TorBox cloud early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your TorBox cloud early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Cloud Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.tb_cloud)</onclick>
                       </item>
                       <item>
@@ -3905,7 +3934,7 @@
                           <property name="setting_label">Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.folders)]</property>
-                          <property name="setting_description">Search your local media folders early in the source search, before external torrent scrapers and the rest of the internal scrape list finish. Does not replace other providers — the full source search continues afterward. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
+                          <property name="setting_description">Search your local media folders early in the source search, before Internal Scrapers and External Scrapers finish. Does not replace other providers — remaining scrapers still run afterward. If early results open the list, Run Scraper Search continues with Internal Scrapers (if enabled) and External Scrapers. Pair with Autoplay Result below (shown when Check Before Full Search is enabled) to autoplay a prescrape hit from this source.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=check.folders)</onclick>
                       </item>
                       <item>
@@ -3990,7 +4019,7 @@
                           <property name="setting_label">Rescrape Actions</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Configure automatic retries when a source search returns no playable results. Each action can be Off, Auto, or Prompt, with order from Highest to Lowest. Rescrape With No Cache Check disables per-provider torrent cache checks (Real Debrid, TorBox, Premiumize, Offcloud) for Internal Scrapers and External Scrapers. Rescrape With Disabled External Providers includes disabled external torrent providers (not internal scrapers such as EasyNews or debrid cloud). Offer Full Search After Early Results applies to the empty-search retry path only; Check Before Full Search and Run External Scraper Search during prescrape are separate.</property>
+                          <property name="setting_description">Configure automatic retries when a source search returns no playable results. Each action can be Off, Auto, or Prompt, with order from Highest to Lowest. Rescrape With No Cache Check disables per-provider torrent cache checks (Real Debrid, TorBox, Premiumize, Offcloud) for Internal Scrapers and External Scrapers. Rescrape With Disabled External Providers includes disabled external torrent providers (not internal scrapers such as EasyNews or debrid cloud). Offer Full Search After Early Results applies to the empty-search retry path only; Check Before Full Search and Run Scraper Search during prescrape are separate.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=rescrape_actions_choice)</onclick>
                       </item>
         <!-- Sorting and Filtering -->
@@ -4389,7 +4418,7 @@
                           <property name="setting_label">    - Scrape Progress TOTAL Count Color</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">[COLOR $INFO[Window(10000).Property(mando.scraper_total_highlight)]]$INFO[Window(10000).Property(mando.scraper_total_highlight)][/COLOR]</property>
-                          <property name="setting_description">Colour for the TOTAL results count on the scrape progress dialog (TOTAL label stays muted grey). Default is white.</property>
+                          <property name="setting_description">Colour for the TOTAL results count on the scrape progress dialog (TOTAL label stays muted grey). Default is FFFF33AE. Existing installs that already have a colour keep it.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=scraper_color_choice&amp;setting_id=scraper_total_highlight)</onclick>
                       </item>
                       <item>

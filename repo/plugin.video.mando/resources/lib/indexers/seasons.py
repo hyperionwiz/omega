@@ -119,6 +119,8 @@ def build_season_list(params):
 	if watched_indicators == 2 and settings.simkl_user_active():
 		from apis.simkl_api import simkl_sync_activities
 		simkl_sync_activities()
+		from caches.simkl_cache import simkl_watched_cache
+		simkl_watched_cache.prune_mirrored_specials()
 		watched_info = watched_info_season(tmdb_id, get_database(watched_indicators))
 	if watched_indicators == 3 and settings.mdblist_user_active():
 		from apis.mdblist_api import mdblist_sync_activities
