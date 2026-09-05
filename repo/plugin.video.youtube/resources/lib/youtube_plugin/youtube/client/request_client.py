@@ -17,12 +17,12 @@ from ...kodion.utils.methods import merge_dicts
 
 class YouTubeRequestClient(BaseRequestsClass):
     _API_KEYS = {
-        'android': 'AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w',
-        'android_embedded': 'AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw',
-        'ios': 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc',
-        'ios_youtube_tv': 'AIzaSyAA2X8Iz20HQACliPKA2J9URIdPmS3xFUA',
-        'youtube_tv': 'AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8',
-        'web': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+        'android': '',
+        'android_embedded': '',
+        'ios': '',
+        'ios_youtube_tv': '',
+        'youtube_tv': '',
+        'web': '',
     }
     _PLAYER_PARAMS = {
         'default': '8AEB',
