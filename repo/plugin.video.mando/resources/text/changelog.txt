@@ -1,3 +1,6 @@
+[COLOR gold][B]Version 2.5.1[/B][/COLOR]
+- [B]Scrape Progress[/B]: after scrapers finish, cache check no longer resets the bar against a multi-minute timeout. Sorting shows SORTING. Preferred-filter scoring parses each filename once instead of once per filter.
+
 [COLOR gold][B]Version 2.5.0[/B][/COLOR]
 - [B]Simkl[/B]: default Client ID is the original approved app. The 2.4.6 key is kept only while that app is still authorised; Revoke restores the original default. Personal Client IDs are unchanged. Unauthorised installs still on the 2.4.6 key are moved back to the original default.
 - [B]Simkl[/B]: Drop still hides In Progress when Simkl has no catalog row for that TMDb show (e.g. the 2003 Battlestar miniseries). Specials no longer inherit a duplicated regular-episode watch as 1/N.

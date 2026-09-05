@@ -823,11 +823,14 @@ class Sources():
 	def process_results(self, results):
 		if not results: return results
 		self._touch_sources_busy()
+		sort_started = time.time()
 		results = self._stamp_native_torrent_cache(results)
 		if not results: return results
+		self._update_scrape_progress('SORTING', 95)
 		results = debrid.collapse_duplicate_torrent_hashes(results)
 		if not results: return results
-		results = self.sort_results(results)
+		if not self._pref_sort_should_run():
+			results = self.sort_results(results)
 		min_seeders = settings.uncached_min_seeders()
 		all_uncached_results = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
 		# seeders can be present but None (external scrapers); .get default only covers missing keys
@@ -889,7 +892,7 @@ class Sources():
 			combined = self.sort_first(combined)
 		elif not pref_sort_ran:
 			combined = self.sort_results(combined)
-		self._log_custom_sort_summary(combined, pref_sort_ran)
+		self._log_custom_sort_summary(combined, pref_sort_ran, time.time() - sort_started)
 		return combined
 
 	def _stamp_native_torrent_cache(self, results):
@@ -923,14 +926,21 @@ class Sources():
 				self._playback_skips_prescrape_override(), self.autoplay, self.background, check, active))
 		except: pass
 
-	def _log_custom_sort_summary(self, results, pref_sort_ran):
+	def _log_custom_sort_summary(self, results, pref_sort_ran, elapsed=0):
 		try:
 			if not results or not self._pref_sort_should_run(): return
 			prefs = settings.preferred_filters()
 			scored = sum(1 for i in results if i.get('pref_includes', 0) > 0)
-			top = [(i.get('quality'), i.get('pref_includes', 0), i.get('scrape_provider'), (i.get('display_name') or i.get('name') or '')[:80]) for i in results[:15]]
-			kodi_utils.logger('CustomSort', '%s tmdb=%s ran=%s prefs=%s scored=%s/%s top=%s' % (
-				self.media_type, self.tmdb_id, pref_sort_ran, prefs, scored, len(results), top))
+			kodi_utils.logger('CustomSort', '%s tmdb=%s ran=%s prefs=%s scored=%s/%s elapsed=%.2fs' % (
+				self.media_type, self.tmdb_id, pref_sort_ran, prefs, scored, len(results), elapsed))
+		except: pass
+
+	def _update_scrape_progress(self, content, percent):
+		dialog = getattr(self, 'progress_dialog', None)
+		if not dialog or self.background: return
+		try:
+			dialog.update_scraper(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k,
+				self.sources_total, content, percent)
 		except: pass
 
 	def sort_results(self, results):
@@ -1018,12 +1028,18 @@ class Sources():
 		return self._pref_tag_in_extra_info(tag, extra_info)
 
 	def _normalized_title_blob(self, item):
+		cached = item.get('_rl_blob')
+		if cached is not None: return cached
 		parts = [item.get('name'), item.get('display_name')]
 		extra = item.get('extraInfo', '')
 		if extra: parts.append(' | '.join(extra) if isinstance(extra, list) else extra)
-		return ' '.join(' '.join([i for i in parts if i]).lower().split())
+		blob = ' '.join(' '.join([i for i in parts if i]).lower().split())
+		item['_rl_blob'] = blob
+		return blob
 
 	def _all_extra_info_tags(self, item):
+		cached = item.get('_rl_all_tags')
+		if cached is not None: return cached
 		tags = []
 		existing = item.get('extraInfo', '')
 		if isinstance(existing, list): tags.extend(existing)
@@ -1035,12 +1051,15 @@ class Sources():
 				_, info = get_file_info(name_info=release_info_format(raw))
 				if isinstance(info, list): tags.extend(info)
 			except: pass
+		item['_rl_all_tags'] = tags
 		return tags
 
 	def _explicit_sdr_release(self, item):
+		if '_rl_sdr' in item: return item['_rl_sdr']
 		blob = self._normalized_title_blob(item)
-		if ' sdr ' in f' {blob} ' or blob.startswith('sdr '): return True
-		return 'SDR' in self._all_extra_info_tags(item)
+		result = ' sdr ' in f' {blob} ' or blob.startswith('sdr ') or 'SDR' in self._all_extra_info_tags(item)
+		item['_rl_sdr'] = result
+		return result
 
 	def _pref_tag_in_result(self, tag, item):
 		normalized = self._normalize_pref_tag(tag)
@@ -1065,7 +1084,14 @@ class Sources():
 				if not preferences: return results
 				preferences = [self._normalize_pref_tag(i) for i in preferences]
 				pref_weights = {0: 100, 1: 50, 2: 20, 3: 10, 4: 5, 5: 2}
-				return [dict(i, **{'pref_includes': sum(pref_weights.get(preferences.index(x), 0) for x in preferences if self._pref_tag_in_result(x, i))}) for i in results]
+				weights = [pref_weights.get(idx, 0) for idx in range(len(preferences))]
+				for item in results:
+					score = 0
+					for idx, tag in enumerate(preferences):
+						if self._pref_tag_in_result(tag, item):
+							score += weights[idx]
+					item['pref_includes'] = score
+				return results
 			except: pass
 		return results
 
@@ -1892,12 +1918,11 @@ class Sources():
 		return (a, b, c, boost)
 
 	def _enrich_sort_fields(self, item):
-		boost = release_group_boost(item) if getattr(self, '_group_boost_active', False) else 0
-		return dict(item, **{
-			'provider_rank': self._get_provider_rank((item.get('debrid') or '').lower()),
-			'quality_rank': self._get_quality_rank(item.get('quality', 'SD')),
-			'size_rank': self._get_size_rank(item),
-			'group_boost': boost})
+		item['provider_rank'] = self._get_provider_rank((item.get('debrid') or '').lower())
+		item['quality_rank'] = self._get_quality_rank(item.get('quality', 'SD'))
+		item['size_rank'] = self._get_size_rank(item)
+		item['group_boost'] = release_group_boost(item) if getattr(self, '_group_boost_active', False) else 0
+		return item
 
 	def _split_aiostreams_preserve(self, results):
 		if not self._aiostreams_preserve_order(): return [], results

@@ -629,7 +629,11 @@ def stamp_torrent_cache(results, active_debrid, cache_check_override=None, data=
 			pass
 		while not progress_dialog.iscanceled() and not (monitor and monitor.abortRequested()):
 			remaining = [x.getName() for x in debrid_check_threads if x.is_alive()]
-			percent = min(100, int((max((_time() - start_time), 0) / float(debrid_timeout)) * 100))
+			elapsed = max((_time() - start_time), 0)
+			if not remaining:
+				percent = 90
+			else:
+				percent = min(89, 50 + int(min(elapsed, 8.0) / 8.0 * 39))
 			try:
 				with final_lock:
 					shown = list(final_results) if final_results else native
