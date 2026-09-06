@@ -2,13 +2,14 @@
 from apis.easynews_api import EasyNews
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
-from modules.settings import filter_by_name, filter_by_episode_title, easynews_language_filter, easynews_lang_include_unknown, easynews_fallback_search, easynews_search_width
+from modules.settings import filter_by_name, filter_by_episode_title, easynews_language_filter, easynews_lang_include_unknown, easynews_fallback_search, easynews_search_width, shared_title_require_year
 # from modules.kodi_utils import logger
 
 class source:
 	def __init__(self):
 		self.scrape_provider = 'easynews'
 		self.sources = []
+		self.require_year = False
 
 	def results(self, info):
 		try:
@@ -21,6 +22,7 @@ class source:
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
 			self.absolute_episode = info.get('absolute_episode')
 			self.ep_name = info.get('ep_name') or ''
+			self.require_year = shared_title_require_year(info, self.scrape_provider)
 			expiry = info.get('expiry_times')[0]
 			primary = self._search_name()
 			files = self._merge_searches(self._search_queries(), expiry)
@@ -34,7 +36,7 @@ class source:
 						file_name = normalize(item['name'])
 						if any(x in file_name.lower() for x in extras): continue
 						if filter_title and not source_utils.check_title_or_absolute(
-								title, file_name, self.aliases, self.year, self.season, self.episode, self.absolute_episode, self.ep_name, allow_episode_title): continue
+								title, file_name, self.aliases, self.year, self.season, self.episode, self.absolute_episode, self.ep_name, allow_episode_title, self.require_year): continue
 						if filter_lang and not self._language_ok(item['language'], lang_filters, include_unknown): continue
 						display_name = clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 						url_dl, size = item['url_dl'], round(float(int(item['rawSize']))/1073741824, 2)
@@ -84,9 +86,9 @@ class source:
 		width = easynews_search_width()
 		if width >= 1:
 			if self.media_type == 'movie': self._add_query(queries, seen, self.search_title)
-			else: self._add_query(queries, seen, '%s S%02d' % (self.search_title, self.season))
+			else: self._add_query(queries, seen, source_utils.tv_scrape_query(self.search_title, self.year, self.season, self.episode, self.require_year, season_only=True))
 		if width >= 2:
-			if self.media_type != 'movie': self._add_query(queries, seen, self.search_title)
+			if self.media_type != 'movie' and not self.require_year: self._add_query(queries, seen, self.search_title)
 			for alias in self.aliases:
 				name = clean_file_name(alias).replace('&', 'and')
 				if name == self.search_title: continue
@@ -94,8 +96,8 @@ class source:
 					self._add_query(queries, seen, '%s %d' % (name, self.year))
 					self._add_query(queries, seen, name)
 				else:
-					self._add_query(queries, seen, '%s S%02dE%02d' % (name, self.season, self.episode))
-					self._add_query(queries, seen, '%s S%02d' % (name, self.season))
+					self._add_query(queries, seen, source_utils.tv_scrape_query(name, self.year, self.season, self.episode, self.require_year))
+					self._add_query(queries, seen, source_utils.tv_scrape_query(name, self.year, self.season, self.episode, self.require_year, season_only=True))
 		return queries
 
 	def _fallback_search_queries(self, primary):
@@ -109,8 +111,8 @@ class source:
 			if self.media_type == 'movie':
 				self._add_query(queries, seen, '%s %d' % (name, self.year))
 			else:
-				self._add_query(queries, seen, '%s S%02dE%02d' % (name, self.season, self.episode))
-				self._add_query(queries, seen, '%s S%02d' % (name, self.season))
+				self._add_query(queries, seen, source_utils.tv_scrape_query(name, self.year, self.season, self.episode, self.require_year))
+				self._add_query(queries, seen, source_utils.tv_scrape_query(name, self.year, self.season, self.episode, self.require_year, season_only=True))
 		return queries
 
 	def _quality_estimate(self, width):
@@ -121,4 +123,4 @@ class source:
 
 	def _search_name(self):
 		if self.media_type == 'movie': return '%s %d' % (self.search_title, self.year)
-		else: return '%s S%02dE%02d' % (self.search_title,  self.season, self.episode)
+		else: return source_utils.tv_scrape_query(self.search_title, self.year, self.season, self.episode, self.require_year)

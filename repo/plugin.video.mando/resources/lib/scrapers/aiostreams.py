@@ -2,7 +2,7 @@
 from apis import aiostreams_api
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
-from modules.settings import filter_by_name
+from modules.settings import filter_by_name, shared_title_require_year
 from caches.settings_cache import get_setting
 from modules.kodi_utils import logger
 
@@ -24,6 +24,7 @@ class source:
 			imdb_id = info.get('imdb_id')
 			tmdb_id = info.get('tmdb_id')
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
+			self.require_year = shared_title_require_year(info, self.scrape_provider)
 			timeout = int(get_setting('mando.results.timeout', '60'))
 			if 'timeout' in info: timeout = max(1, int(info['timeout']) - 1)
 			scrape_results, self.errors = aiostreams_api.search(
@@ -49,7 +50,7 @@ class source:
 						if any(x in file_name.lower() for x in extras):
 							skipped['extras'] += 1
 							continue
-						if filter_title and not source_utils.check_title(title, file_name, self.aliases, self.year, self.season, self.episode):
+						if filter_title and not source_utils.check_title(title, file_name, self.aliases, self.year, self.season, self.episode, self.require_year):
 							skipped['title_filter'] += 1
 							continue
 						url = merged.get('url')

@@ -263,6 +263,21 @@ def clear_cache(cache_type, silent=False):
 			results.append(animetosho_api.clear_animetosho_cache())
 		except Exception:
 			results.append(False)
+		try:
+			from apis import piratebay_api
+			results.append(piratebay_api.clear_piratebay_cache())
+		except Exception:
+			results.append(False)
+		try:
+			from apis import mediafusion_api
+			results.append(mediafusion_api.clear_mediafusion_cache())
+		except Exception:
+			results.append(False)
+		try:
+			from apis import zilean_api
+			results.append(zilean_api.clear_zilean_cache())
+		except Exception:
+			results.append(False)
 		for item in ('pm_cloud', 'rd_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'folders'): results.append(clear_cache(item, silent=True))
 		success = False not in results
 	elif cache_type == 'easynews_scrape':

@@ -22,7 +22,6 @@ class source:
 				imdb_id, info.get('media_type'), info.get('season'), info.get('episode'),
 				timeout=scrape_timeout(info), expiration=scrape_expiry(info))
 			self.sources = filter_and_build_sources(self.scrape_provider, streams, info)
-			logger('torz scraper', '%s : %s kept / %s raw' % (info.get('title', ''), len(self.sources), len(streams or [])))
 		except Exception as e:
 			logger('torz scraper Exception', str(e))
 		source_utils.internal_results(self.scrape_provider, self.sources)

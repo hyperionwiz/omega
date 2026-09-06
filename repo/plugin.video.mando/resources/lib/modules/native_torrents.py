@@ -13,15 +13,18 @@ _SXXEXX = re.compile(r's\d{1,2}e\d{1,2}', re.I)
 _SEASON_TAG = re.compile(r'(?:s|season)[.\s_-]*(\d{1,2})(?:[^\de]|$)', re.I)
 _INFO_LINE = re.compile(r'(💾|👤|⚙️)')
 
-NATIVE_INDEXER_SCRAPERS = ('animetosho', 'nyaa')
-NATIVE_SITE_SCRAPERS = ('comet', 'torz', 'torrentio')
+NATIVE_INDEXER_SCRAPERS = ('animetosho', 'nyaa', 'piratebay')
+NATIVE_SITE_SCRAPERS = ('comet', 'mediafusion', 'torz', 'torrentio', 'zilean')
 NATIVE_TORRENT_SCRAPERS = NATIVE_INDEXER_SCRAPERS + NATIVE_SITE_SCRAPERS
 NATIVE_SITE_DISPLAY = {
+	'animetosho': 'ANIMETOSHO',
 	'comet': 'COMET',
+	'mediafusion': 'MEDIAFUSION',
+	'nyaa': 'NYAA',
+	'piratebay': 'PIRATEBAY',
 	'torrentio': 'TORRENTIO',
 	'torz': 'TORZ',
-	'nyaa': 'NYAA',
-	'animetosho': 'ANIMETOSHO',
+	'zilean': 'ZILEAN',
 }
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
@@ -278,6 +281,7 @@ def build_source(scrape_provider, name, info_hash, size=0.0, seeders=0, package=
 
 
 def name_search_queries(info):
+	from modules.settings import shared_title_require_year
 	title = clean_file_name(info.get('title') or '').replace('&', 'and')
 	year = int(info.get('year') or 0)
 	media_type = info.get('media_type')
@@ -302,10 +306,11 @@ def name_search_queries(info):
 		return queries
 	hdlr = 'S%02dE%02d' % (int(season), int(episode))
 	hdlr_alt = 'S%dE%d' % (int(season), int(episode))
-	_add('%s %s' % (title, hdlr))
-	if hdlr_alt != hdlr:
+	require_year = shared_title_require_year(info, 'indexer')
+	_add(source_utils.tv_scrape_query(title, year, season, episode, require_year))
+	if hdlr_alt != hdlr and not require_year:
 		_add('%s %s' % (title, hdlr_alt))
-	if absolute_episode not in (None, '', 0, '0'):
+	if absolute_episode not in (None, '', 0, '0') and not require_year:
 		try:
 			abs_i = int(absolute_episode)
 		except Exception:
@@ -318,7 +323,7 @@ def name_search_queries(info):
 	for alias in aliases[:2]:
 		name = clean_file_name(alias).replace('&', 'and')
 		if name and name != title:
-			_add('%s %s' % (name, hdlr))
+			_add(source_utils.tv_scrape_query(name, year, season, episode, require_year))
 	return queries
 
 
@@ -335,7 +340,7 @@ def merge_name_searches(search_fn, queries, timeout, expiry):
 
 
 def filter_and_build_sources(scrape_provider, items, info):
-	from modules.settings import filter_by_name, filter_by_episode_title
+	from modules.settings import filter_by_name, filter_by_episode_title, shared_title_require_year
 	from modules.kodi_utils import logger
 	filter_title = filter_by_name(scrape_provider)
 	allow_episode_title = filter_by_episode_title(scrape_provider)
@@ -345,6 +350,7 @@ def filter_and_build_sources(scrape_provider, items, info):
 	aliases = source_utils.get_aliases_titles(info.get('aliases', []))
 	absolute_episode = info.get('absolute_episode')
 	ep_name = info.get('ep_name') or ''
+	require_year = shared_title_require_year(info, scrape_provider)
 	extras = source_utils.extras()
 	season_divider = int(info.get('season_episode_count') or 1) or 1
 	show_divider = int(info.get('total_aired_eps') or 1) or 1
@@ -356,10 +362,10 @@ def filter_and_build_sources(scrape_provider, items, info):
 		if not filter_title:
 			return True, pack_type_from_name(file_name, season)
 		if source_utils.check_title_or_absolute(
-				title, file_name, aliases, year, season, episode, absolute_episode, ep_name, allow_episode_title):
+				title, file_name, aliases, year, season, episode, absolute_episode, ep_name, allow_episode_title, require_year):
 			return True, None
 		package = pack_type_from_name(file_name, season)
-		if package and source_utils.check_title(title, file_name, aliases, year, 'pack', episode):
+		if package and source_utils.check_title(title, file_name, aliases, year, 'pack', episode, require_year):
 			return True, package
 		return False, None
 
@@ -378,4 +384,6 @@ def filter_and_build_sources(scrape_provider, items, info):
 				scrape_provider, file_name, info_hash, size, raw.get('seeders') or 0, package))
 		except Exception as e:
 			logger('%s scraper yield source error' % scrape_provider, str(e))
+	logger('%s scraper' % scrape_provider, '%s : %s kept / %s raw / packs=%s' % (
+		info.get('title', ''), len(sources), len(items or []), sum(1 for s in sources if s.get('package'))))
 	return sources

@@ -10,7 +10,7 @@ from urllib.parse import urljoin, quote
 from caches import simkl_cache
 from caches.settings_cache import get_setting, set_setting
 from modules import kodi_utils, settings, list_sort
-from modules.http_defaults import META_API_TIMEOUT
+from modules.http_defaults import META_API_TIMEOUT, scoped_token
 from modules.utils import copy2clip, make_qrcode, make_tinyurl, device_auth_complete_url, device_auth_site_label, authorise_wait_text
 
 BASE_URL = 'https://api.simkl.com'
@@ -77,16 +77,17 @@ def _throttle():
 
 def _client_id():
 	"""Prefer Meta Accounts Simkl Client ID; fall back to the shipped default."""
-	try: return settings.simkl_client() or SIMKL_CLIENT_ID
-	except Exception: return SIMKL_CLIENT_ID
+	try: return settings.simkl_client() or scoped_token(SIMKL_CLIENT_ID)
+	except Exception: return scoped_token(SIMKL_CLIENT_ID)
 
 def _client_ids_to_try():
 	"""Authorised: whatever they signed in with. Otherwise the real default, never the 2.4.6 alt."""
 	primary = _client_id()
+	fallback = scoped_token(SIMKL_CLIENT_ID)
 	if _has_simkl_token():
-		return [primary] if primary else [SIMKL_CLIENT_ID]
+		return [primary] if primary else ([fallback] if fallback else [])
 	if (not primary) or primary == SIMKL_CLIENT_ID_ALT:
-		return [SIMKL_CLIENT_ID]
+		return [fallback] if fallback else []
 	return [primary]
 
 def _client_id_rejected(resp):

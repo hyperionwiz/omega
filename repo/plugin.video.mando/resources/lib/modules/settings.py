@@ -618,7 +618,10 @@ def _any_debrid_account():
 	return any(enabled_debrids_check(i) for i in ('rd', 'pm', 'ad', 'oc', 'tb'))
 
 def internal_scrapers_enabled():
-	return get_setting('mando.provider.internal', 'false') == 'true'
+	return get_setting('mando.provider.internal', 'true') == 'true'
+
+def prefer_internal_scrapers():
+	return get_setting('mando.provider.prefer_internal', 'false') == 'true'
 
 def _native_torrent_scrape_active(scraper):
 	return internal_scrapers_enabled() and get_setting('mando.provider.%s' % scraper, 'false') == 'true' and _any_debrid_account()
@@ -637,6 +640,15 @@ def nyaa_scrape_active():
 
 def animetosho_scrape_active():
 	return _native_torrent_scrape_active('animetosho')
+
+def piratebay_scrape_active():
+	return _native_torrent_scrape_active('piratebay')
+
+def mediafusion_scrape_active():
+	return _native_torrent_scrape_active('mediafusion')
+
+def zilean_scrape_active():
+	return _native_torrent_scrape_active('zilean')
 
 def nzb_search_width():
 	return int(get_setting('mando.nzb.search_width', '0'))
@@ -705,7 +717,8 @@ def tv_progress_location():
 
 def check_prescrape_sources(scraper, media_type):
 	"""Prescrape only when Check Before Full Search is enabled for that provider."""
-	if scraper in ('animetosho', 'nyaa', 'comet', 'torz', 'torrentio'):
+	from modules.native_torrents import NATIVE_TORRENT_SCRAPERS
+	if scraper in NATIVE_TORRENT_SCRAPERS:
 		return False
 	if scraper in ('easynews', 'aiostreams', 'nzb', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'):
 		return get_setting('mando.check.%s' % scraper) == 'true'
@@ -946,12 +959,33 @@ def migrate_external_scraper_run_mode_for_upgrade(had_existing_settings):
 	set_setting('external_scraper.run_mode', '1' if legacy == '1' else '0')
 	return True
 
+_SAME_TITLE_KEYS = (
+	'indexer', 'site', 'aiostreams', 'easynews', 'nzb', 'folders',
+	'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud',
+)
+
+def _title_filter_key(scraper):
+	from modules.native_torrents import NATIVE_INDEXER_SCRAPERS, NATIVE_SITE_SCRAPERS
+	if scraper in NATIVE_INDEXER_SCRAPERS:
+		return 'indexer'
+	if scraper in NATIVE_SITE_SCRAPERS:
+		return 'site'
+	return scraper
+
+def same_title_year(scraper=None):
+	if scraper:
+		return get_setting('mando.%s.same_title_year' % _title_filter_key(scraper), 'false') == 'true'
+	return any(get_setting('mando.%s.same_title_year' % key, 'false') == 'true' for key in _SAME_TITLE_KEYS)
+
+def shared_title_require_year(info, scraper):
+	return bool(info.get('shared_title_require_year')) and same_title_year(scraper)
+
 def filter_by_name(scraper):
 	if get_property('fs_filterless_search') == 'true': return False
-	return get_setting('mando.%s.title_filter' % scraper, 'false') == 'true'
+	return get_setting('mando.%s.title_filter' % _title_filter_key(scraper), 'false') == 'true'
 
 def filter_by_episode_title(scraper):
-	return get_setting('mando.%s.title_filter_episode' % scraper, 'true') == 'true'
+	return get_setting('mando.%s.title_filter_episode' % _title_filter_key(scraper), 'true') == 'true'
 
 def uncached_min_seeders():
 	return int(get_setting('mando.results.uncached_min_seeders', '0'))
@@ -1037,11 +1071,9 @@ def active_internal_scrapers():
 	active = [i.split('.')[1] for i in settings if get_setting('mando.%s' % i) == 'true']
 	if aiostreams_active(): active.append('aiostreams')
 	if nzb_scrape_active(): active.append('nzb')
-	if animetosho_scrape_active(): active.append('animetosho')
-	if nyaa_scrape_active(): active.append('nyaa')
-	if comet_scrape_active(): active.append('comet')
-	if torz_scrape_active(): active.append('torz')
-	if torrentio_scrape_active(): active.append('torrentio')
+	from modules.native_torrents import NATIVE_TORRENT_SCRAPERS
+	for scraper in NATIVE_TORRENT_SCRAPERS:
+		if _native_torrent_scrape_active(scraper): active.append(scraper)
 	return active
 
 def provider_sort_ranks():

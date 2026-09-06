@@ -2007,13 +2007,18 @@ class Sources():
 		expiry_times = get_cache_expiry(self.media_type, self.meta, self.season)
 		season, episode = self.get_season(), self.get_episode()
 		absolute_episode = None
+		require_year = False
 		if self.media_type == 'episode':
 			from modules.source_utils import absolute_episode_from_season_data
 			absolute_episode = absolute_episode_from_season_data(self.meta.get('season_data'), season, episode)
+			if settings.same_title_year():
+				from modules.source_utils import resolve_shared_title_require_year
+				require_year = resolve_shared_title_require_year(self.meta)
 		self.search_info = {'media_type': self.media_type, 'title': title, 'year': year, 'tmdb_id': self.tmdb_id, 'imdb_id': self.meta.get('imdb_id'), 'aliases': aliases,
 							'season': season, 'episode': episode, 'tvdb_id': self.meta.get('tvdb_id'), 'ep_name': ep_name, 'expiry_times': expiry_times,
 							'total_seasons': self.meta.get('total_seasons', 1), 'absolute_episode': absolute_episode,
-							'total_aired_eps': self.meta.get('total_aired_eps', 1), 'season_episode_count': 1}
+							'total_aired_eps': self.meta.get('total_aired_eps', 1), 'season_episode_count': 1,
+							'shared_title_require_year': require_year}
 		if self.media_type == 'episode':
 			try:
 				self.search_info['season_episode_count'] = [int(x['episode_count']) for x in (self.meta.get('season_data') or []) if int(x['season_number']) == int(season)][0]

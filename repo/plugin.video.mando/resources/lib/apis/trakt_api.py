@@ -53,15 +53,13 @@ def get_trakt_all(params):
 	page_limit = _trakt_fetch_page_limit(base_params)
 	sort_by, sort_how = 'rank', 'asc'
 	all_items = []
-	page_no, page_count = 1, 1
-	while page_no <= page_count:
+	page_no, max_pages = 1, 80
+	while page_no <= max_pages:
 		query = dict(base_params)
 		query['limit'] = page_limit
 		page_method = method if page_no == 1 else (None if method == 'sort_by_headers' else method)
-		result, page_count = call_trakt(path, params=query, data=params.get('data'), is_delete=params.get('is_delete', False),
+		result, _header_pages = call_trakt(path, params=query, data=params.get('data'), is_delete=params.get('is_delete', False),
 						with_auth=params.get('with_auth', False), method=page_method, pagination=True, page_no=page_no)
-		try: page_count = max(int(page_count), page_no)
-		except: page_count = page_no
 		if result is None:
 			if page_no == 1: return None
 			break
@@ -72,6 +70,7 @@ def get_trakt_all(params):
 		else: break
 		if not chunk: break
 		all_items.extend(chunk)
+		if len(chunk) < page_limit: break
 		page_no += 1
 		if page_no > 1: kodi_utils.sleep(100)
 	if method == 'sort_by_headers':
@@ -544,8 +543,8 @@ def trakt_fetch_collection_watchlist(list_type, media_type):
 	if media_type in ('show', 'shows', 'tvshow'): media_type, url_type = ('show', 'shows')
 	key, r_key, string_insert = ('movie', 'released', 'movie') if media_type == 'movie' else ('show', 'first_aired', 'tvshow')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type == 'movie' else 'last_collected_at'
-	string = 'trakt_%s_%s' % (list_type, string_insert)
-	path = 'sync/%s/%s?extended=full'
+	string = 'trakt_%s_%s_p250' % (list_type, string_insert)
+	path = 'sync/%s/%s'
 	params = {'path': path, 'path_insert': (list_type, url_type), 'params': {'extended': 'full'}, 'with_auth': True, 'fetch_all': True}
 	return trakt_cache.cache_trakt_object(_process, string, params)
 

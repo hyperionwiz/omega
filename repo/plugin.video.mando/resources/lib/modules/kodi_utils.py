@@ -248,28 +248,6 @@ def browse_file(mask='', defaultt='', heading='Choose file', force_defaultt=Fals
 
 OFFICIAL_ADDON_ID = 'plugin.video.mando'
 
-def running_addon_id():
-	try:
-		return xbmcaddon.Addon().getAddonInfo('id') or ''
-	except Exception:
-		return ''
-
-def notify_unofficial_addon():
-	running = running_addon_id()
-	if not running or running == OFFICIAL_ADDON_ID:
-		return
-	if get_property('mando.unofficial_addon_notice'):
-		return
-	set_property('mando.unofficial_addon_notice', 'true')
-	try:
-		ok_dialog(
-			heading='Mando',
-			text='This is [B]Mando[/B] add-on code running as [B]%s[/B]. '
-			'Install the official version of Mando from The Red Repo...[CR]https://repo.redwizard.xyz'
-			% running)
-	except Exception:
-		pass
-
 def addon_info(info):
 	return xbmcaddon.Addon(OFFICIAL_ADDON_ID).getAddonInfo(info)
 
@@ -1241,7 +1219,11 @@ def open_settings(section=None, panel=None):
 		from apis.aiostreams_api import refresh_settings_properties
 		refresh_settings_properties()
 	except: pass
-	section_indexes = {'torrent': 5, 'direct': 6, '61': 5, '62': 6, 'torrent_sources': 5, 'direct_sources': 6}
+	section_indexes = {
+		'torrent': 6, 'torrent_scrapers': 6, 'torrent_sources': 6, '63': 6,
+		'torrent_accounts': 5, 'debrid_accounts': 5, 'debrid': 5, 'accounts': 5, '61': 5,
+		'direct': 7, 'direct_sources': 7, '62': 7,
+	}
 	focus_key = str(section or '').strip().lower()
 	if focus_key in section_indexes:
 		set_property('mando.settings_manager.focus_index', str(section_indexes[focus_key]))

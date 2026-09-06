@@ -1,3 +1,17 @@
+[COLOR gold][B]Version 2.5.4[/B][/COLOR]
+- [B]AIOStreams[/B]: StremThru play links that 302 to a debrid CDN (e.g. TorBox) are followed before Kodi opens them. Kodi's Stat/HEAD on the StremThru URL was timing out even though GET worked.
+- [B]Settings[/B]: [B]Torrent Sources[/B] is now [B]Debrid Accounts[/B] (debrid auth and cloud search) and [B]Torrent Scrapers[/B] (External Scrapers and Internal Scrapers). The left menu has one more item, so it scrolls. Internal Scrapers group [B]Indexers[/B] (AnimeTosho, Nyaa, PirateBay) and [B]Sites[/B] (Comet, MediaFusion, StremThru Torz, Torrentio, Zilean) A–Z, each with one shared Filter Results by Name, Same Title Series, and Allow episode title without show name.
+- [B]Torrent Scrapers[/B]: [B]Prefer Internal Scrapers[/B] (default Off) only shows when Internal and External are both on. Same hash still lists once per debrid (cached wins); on a tie the Internal Indexer/Site label is kept instead of the pack.
+- [B]Internal Scrapers[/B]: no separate season/show pack search. PACK is only when the filename looks like a pack; Sites often name the episode file inside a pack, so a scrape can have no PACK rows and still be using those torrents.
+- [B]Internal Scrapers[/B]: [B]Zilean[/B] (IMDb hash DB), [B]MediaFusion[/B] (Stremio JSON) and [B]PirateBay[/B] (apibay.org name search) join the existing internals. Comet, StremThru Torz and Torrentio default on; AnimeTosho, Nyaa, PirateBay, MediaFusion and Zilean stay off. The master Enable is on for new installs and Reset Settings; existing installs keep their current Enable.
+- [B]Same Title Series[/B]: optional (default Off). Indexers share one switch (year in the search, shown whenever Internal Scrapers are on). Sites share another (year in filenames when Filter Results by Name is on). EasyNews, NZB, AIOStreams, folders, and each cloud keep their own switch under Filter Results by Name. Enable this and Mando will keep scrape results on the series you opened when another show shares the same title. External Scrapers are unchanged.
+
+[COLOR gold][B]Version 2.5.3[/B][/COLOR]
+- [B]Scrape Progress[/B]: ticks stay grey through cache check and SORTING. The red at the end only meant the scrape was finishing, but it was easy to take as an error. Playback resolve still turns red if a link is taking unusually long.
+
+[COLOR gold][B]Version 2.5.2[/B][/COLOR]
+- [B]Trakt Library[/B]: collection keeps loading after the first 250 titles (Trakt’s per-page cap). A stale first-page cache is dropped so existing installs pick up the rest. Next Page is still only shown when list pagination is on in Settings.
+
 [COLOR gold][B]Version 2.5.1[/B][/COLOR]
 - [B]Scrape Progress[/B]: after scrapers finish, cache check no longer resets the bar against a multi-minute timeout. Sorting shows SORTING. Preferred-filter scoring parses each filename once instead of once per filter.
 

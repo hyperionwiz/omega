@@ -108,7 +108,10 @@
                           <property name="setting_label">Meta Accounts</property>
                       </item>
                       <item id="61">
-                          <property name="setting_label">Torrent Sources</property>
+                          <property name="setting_label">Debrid Accounts</property>
+                      </item>
+                      <item id="63">
+                          <property name="setting_label">Torrent Scrapers</property>
                       </item>
                       <item id="62">
                           <property name="setting_label">Direct Sources</property>
@@ -2223,16 +2226,16 @@
                           <property name="setting_description">Groq API key for AI Similar. Used in three places: Extras > Similar, Browse Similar (context menu), and Because You Watched when Content > General > Service used for Because You Watched is Similar (AI).</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=groq_api)</onclick>
                       </item>
-<!-- TORRENT SOURCES 61 / DIRECT SOURCES 62 -->
+<!-- DEBRID ACCOUNTS 61 / TORRENT SCRAPERS 63 / DIRECT SOURCES 62 -->
         <!-- External Scrapers -->
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <property name="setting_label">External Scrapers</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.external)]</property>
@@ -2240,7 +2243,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.external)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.multi_search),true)</visible>
                           <property name="setting_label">Multi-Scraper Search</property>
@@ -2248,7 +2251,7 @@
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.multi_search),true)</visible>
                           <property name="setting_label">Search Mode</property>
@@ -2258,14 +2261,14 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=external_scraper.run_mode)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">External Scraper Slot 1</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot1.module),empty_setting)</visible>
                           <property name="setting_label">Enable Slot 1</property>
@@ -2275,7 +2278,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external_scraper.slot1.enabled)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">Choose Module (Slot 1)</property>
                           <property name="setting_type">action</property>
@@ -2284,7 +2287,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_choice&amp;slot=1)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot1.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot1.enabled),true)</visible>
@@ -2296,7 +2299,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=open_external_scraper_settings&amp;slot=1&amp;return_to=settings)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot1.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot1.enabled),true)</visible>
@@ -2307,14 +2310,14 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_clear_slot&amp;slot=1)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">External Scraper Slot 2</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.module),empty_setting)</visible>
                           <property name="setting_label">Enable Slot 2</property>
@@ -2324,7 +2327,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external_scraper.slot2.enabled)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">Choose Module (Slot 2)</property>
                           <property name="setting_type">action</property>
@@ -2333,7 +2336,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_choice&amp;slot=2)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.enabled),true)</visible>
@@ -2345,7 +2348,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=open_external_scraper_settings&amp;slot=2&amp;return_to=settings)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.enabled),true)</visible>
@@ -2356,7 +2359,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_move_slot&amp;slot=2&amp;direction=up)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot2.enabled),true)</visible>
@@ -2367,14 +2370,14 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_clear_slot&amp;slot=2)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">External Scraper Slot 3</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.module),empty_setting)</visible>
                           <property name="setting_label">Enable Slot 3</property>
@@ -2384,7 +2387,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=external_scraper.slot3.enabled)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <property name="setting_label">Choose Module (Slot 3)</property>
                           <property name="setting_type">action</property>
@@ -2393,7 +2396,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_choice&amp;slot=3)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.enabled),true)</visible>
@@ -2405,7 +2408,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=open_external_scraper_settings&amp;slot=3&amp;return_to=settings)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.enabled),true)</visible>
@@ -2416,7 +2419,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=external_scraper_move_slot&amp;slot=3&amp;direction=up)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.module),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.external_scraper.slot3.enabled),true)</visible>
@@ -2428,74 +2431,98 @@
                       </item>
         <!-- Internal Scrapers -->
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <property name="setting_label">Internal Scrapers</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.internal)]</property>
-                          <property name="setting_description">Enable Mando's internal torrent scrapers. Comet, StremThru Torz and Torrentio are on by default; AnimeTosho and Nyaa stay off until you enable them. Requires an authorised debrid. Does not require External Scrapers — they can run on their own or together with Magneto/Gears/etc. They are not a Check Before Full Search source; they run in the main scrape, including Run Scraper Search after early Check Before results.</property>
+                          <property name="setting_description">Enable Mando's own torrent scrapers. Turn on the Indexers and Sites you want below. Requires an authorised debrid (Debrid Accounts). External Scrapers are optional and separate.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.internal)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.external),true)</visible>
+                          <property name="setting_label">Prefer Internal Scrapers</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.provider.prefer_internal)]</property>
+                          <property name="setting_description">When Internal Scrapers and External Scrapers both find the same torrent, keep the Internal row (Indexer or Site label) instead of the pack. Cached still wins over uncached. Does not change quality or size sort, scrape timeout, or Search Mode.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.prefer_internal)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Indexers</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Filter Results by Name</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.indexer.title_filter)]</property>
+                          <property name="setting_description">Keep AnimeTosho, Nyaa and PirateBay filenames that match the movie/episode (including aliases, SxxExx, and absolute numbers such as Show - 100). Turn off only if valid names are being dropped. Default is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=indexer.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.indexer.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep AnimeTosho, Nyaa and PirateBay on the series you opened when another show shares the same title. It puts the year in the search.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=indexer.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.indexer.title_filter),true)</visible>
+                          <property name="setting_label">    - Allow episode title without show name</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.indexer.title_filter_episode)]</property>
+                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=indexer.title_filter_episode)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">AnimeTosho (Anime)</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.animetosho)]</property>
-                          <property name="setting_description">Search AnimeTosho (anime indexer) for torrent magnets, then check them on your debrid. Complements Nyaa for anime-style names (Show - 100). Requires an authorised debrid. The public JSON feed can change; no support is provided for the site.</property>
+                          <property name="setting_description">Search AnimeTosho (anime indexer) for torrent magnets, then check them on your debrid. Complements Nyaa for anime-style names (Show - 100). Requires an authorised debrid.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.animetosho)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.animetosho),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.animetosho.title_filter)]</property>
-                          <property name="setting_description">Keep AnimeTosho filenames that match the movie/episode (including aliases, SxxExx, and absolute numbers such as Show - 100). Turn off only if valid names are being dropped. Default is on.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=animetosho.title_filter)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.animetosho),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.animetosho.title_filter),true)</visible>
-                          <property name="setting_label">    - Allow episode title without show name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.animetosho.title_filter_episode)]</property>
-                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=animetosho.title_filter_episode)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Nyaa (Anime)</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.nyaa)]</property>
-                          <property name="setting_description">Search Nyaa (anime indexer) for torrent magnets, then check them on your debrid. Aimed at anime-style names (Show - 100) that Magneto/Classy drop. Requires an authorised debrid. Nyaa RSS can change; no support is provided for the public site.</property>
+                          <property name="setting_description">Search Nyaa (anime indexer) for torrent magnets, then check them on your debrid. Aimed at anime-style names (Show - 100). Requires an authorised debrid.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.nyaa)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.nyaa),true)</visible>
                           <property name="setting_label">    - Category</property>
@@ -2505,44 +2532,96 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=nyaa.category)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.nyaa),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.nyaa.title_filter)]</property>
-                          <property name="setting_description">Keep Nyaa filenames that match the movie/episode (including aliases, SxxExx, and absolute numbers such as Show - 100). Turn off only if valid names are being dropped. Default is on.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=nyaa.title_filter)</onclick>
+                          <property name="setting_label">PirateBay</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.nyaa),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.nyaa.title_filter),true)</visible>
+                          <property name="setting_label">Enable</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.provider.piratebay)]</property>
+                          <property name="setting_description">Search The Pirate Bay JSON API (apibay.org) by name (Title SxxExx), then check magnets on your debrid. Noisy compared with IMDb sites; default is off. Requires an authorised debrid.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.piratebay)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.piratebay),true)</visible>
+                          <property name="setting_label">    - Instance</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.piratebay.url_name)]</property>
+                          <property name="setting_description">apibay.org is the public JSON API. Custom is a full base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=piratebay.url)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.piratebay),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.piratebay.url),1)</visible>
+                          <property name="setting_label">    - Custom URL</property>
+                          <property name="setting_type">numeric</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.piratebay.custom_url)]</property>
+                          <property name="setting_description">PirateBay JSON base URL (no trailing slash), e.g. https://apibay.org. Mando appends /q.php?q={query}&amp;cat=0.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=piratebay.custom_url)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Sites</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Filter Results by Name</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.site.title_filter)]</property>
+                          <property name="setting_description">After Comet, MediaFusion, Torz, Torrentio and Zilean return streams for this IMDb title, keep filenames that match the movie/episode (including aliases, SxxExx, absolute numbers, and season/show packs). Turn off to keep every stream for that ID — more rows, more chance of a wrong file. Default is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=site.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.site.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.site.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep Comet, MediaFusion, Torz, Torrentio and Zilean on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=site.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.site.title_filter),true)</visible>
                           <property name="setting_label">    - Allow episode title without show name</property>
                           <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.nyaa.title_filter_episode)]</property>
-                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=nyaa.title_filter_episode)</onclick>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.site.title_filter_episode)]</property>
+                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing. Generic names such as Pilot or Home are still skipped.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=site.title_filter_episode)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Comet</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.comet)]</property>
-                          <property name="setting_description">Query Comet for torrent hashes, then check them on your debrid (Check Cached Status). Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. Public Comet hosts can change or go down; no support is provided for those instances.</property>
+                          <property name="setting_description">Query Comet for torrent hashes, then check them on your debrid (Check Cached Status). Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.comet)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.comet),true)</visible>
                           <property name="setting_label">    - Instance</property>
@@ -2552,7 +2631,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=comet.url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.comet),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.comet.url),3)</visible>
@@ -2563,54 +2642,70 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=comet.custom_url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.comet),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.comet.title_filter)]</property>
-                          <property name="setting_description">After Comet returns streams for this IMDb title, keep filenames that match the movie/episode (including aliases, SxxExx, absolute numbers, and season/show packs). Turn off to keep every Comet stream for that ID — more rows, more chance of a wrong file. Default is on.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=comet.title_filter)</onclick>
+                          <property name="setting_label">MediaFusion</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.comet),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.comet.title_filter),true)</visible>
-                          <property name="setting_label">    - Allow episode title without show name</property>
+                          <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.comet.title_filter_episode)]</property>
-                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing. Generic names such as Pilot or Home are still skipped.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=comet.title_filter_episode)</onclick>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.provider.mediafusion)]</property>
+                          <property name="setting_description">Query MediaFusion for torrent hashes (same Stremio JSON shape as Torrentio), then check them on your debrid. Overlaps Comet, Torrentio and AIOStreams; default is off. Requires an authorised debrid.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.mediafusion)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.mediafusion),true)</visible>
+                          <property name="setting_label">    - Instance</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.mediafusion.url_name)]</property>
+                          <property name="setting_description">Midnight (fortheweebs) is the public host that returns torrent hashes. Elfhosted currently returns none on the public instance. Custom is a full MediaFusion base URL with no trailing slash (include a config token in the path if the host needs one). Clear Internal Scrapers Cache after changing host.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=mediafusion.url)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.mediafusion),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.mediafusion.url),2)</visible>
+                          <property name="setting_label">    - Custom URL</property>
+                          <property name="setting_type">numeric</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.mediafusion.custom_url)]</property>
+                          <property name="setting_description">MediaFusion base URL (no trailing slash), e.g. https://mediafusion.example.com or https://host/CONFIGTOKEN. Mando appends /stream/movie/{imdb}.json or /stream/series/{imdb}:{season}:{episode}.json.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=mediafusion.custom_url)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">StremThru Torz</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.torz)]</property>
-                          <property name="setting_description">Query StremThru Torz for torrent hashes, then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. Public StremThru hosts can change or go down; no support is provided for those instances.</property>
+                          <property name="setting_description">Query StremThru Torz for torrent hashes, then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.torz)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.torz),true)</visible>
                           <property name="setting_label">    - Instance</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.torz.url_name)]</property>
-                          <property name="setting_description">Kuu-lection (stremthru.stremio.ru) is the Magneto default. Munif and Midnight are fallbacks. Custom is a full StremThru base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
+                          <property name="setting_description">Kuu-lection (stremthru.stremio.ru) is the default. Munif and Midnight are fallbacks. Custom is a full StremThru base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=torz.url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.torz),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.torz.url),3)</visible>
@@ -2621,44 +2716,23 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=torz.custom_url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.torz),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.torz.title_filter)]</property>
-                          <property name="setting_description">After Torz returns torrents for this IMDb title, keep filenames that match the movie/episode (including aliases, SxxExx, absolute numbers, and season/show packs). Turn off to keep every Torz result for that ID — more rows, more chance of a wrong file. Default is on.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=torz.title_filter)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.torz),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.torz.title_filter),true)</visible>
-                          <property name="setting_label">    - Allow episode title without show name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.torz.title_filter_episode)]</property>
-                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing. Generic names such as Pilot or Home are still skipped.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=torz.title_filter_episode)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Torrentio</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.torrentio)]</property>
-                          <property name="setting_description">Query Torrentio for torrent hashes (YTS, EZTV, RARBG, 1337x, TPB, NyaaSi, and others), then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid. torrentio.strem.fun can rate-limit or go down; no support is provided for the public instance.</property>
+                          <property name="setting_description">Query Torrentio for torrent hashes (YTS, EZTV, RARBG, 1337x, TPB, NyaaSi, and others), then check them on your debrid. Matching uses Mando filters, including SxxExx and absolute episode names. Requires an authorised debrid.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.torrentio)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.torrentio),true)</visible>
                           <property name="setting_label">    - Instance</property>
@@ -2668,7 +2742,7 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=torrentio.url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.torrentio),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.torrentio.url),1)</visible>
@@ -2679,32 +2753,41 @@
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=torrentio.custom_url)</onclick>
                       </item>
                       <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.torrentio),true)</visible>
-                          <property name="setting_label">    - Filter Results by Name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.torrentio.title_filter)]</property>
-                          <property name="setting_description">After Torrentio returns streams for this IMDb title, keep filenames that match the movie/episode (including aliases, SxxExx, absolute numbers, and season/show packs). Turn off to keep every Torrentio stream for that ID — more rows, more chance of a wrong file. Default is on.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=torrentio.title_filter)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.provider.torrentio),true)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.torrentio.title_filter),true)</visible>
-                          <property name="setting_label">    - Allow episode title without show name</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(mando.torrentio.title_filter_episode)]</property>
-                          <property name="setting_description">When Filter Results by Name is on, keep a TV file that has the right SxxExx or absolute number and a distinctive episode title even if the show name is missing. Generic names such as Pilot or Home are still skipped.</property>
-                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=torrentio.title_filter_episode)</onclick>
-                      </item>
-        <!-- Debrid Accounts -->
-                      <item>
-                          <visible>Container(2000).HasFocus(61)</visible>
-                          <property name="setting_label">Debrid Accounts</property>
+                          <property name="setting_label">Zilean</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Enable</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.provider.zilean)]</property>
+                          <property name="setting_description">Query Zilean (IMDb hash database) for torrent hashes, then check them on your debrid. Complements Comet/Torrentio with extra cached hashes. Requires an authorised debrid.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.zilean)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.zilean),true)</visible>
+                          <property name="setting_label">    - Instance</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.zilean.url_name)]</property>
+                          <property name="setting_description">Kuu-lection (zilean.stremio.ru) is the default. Midnight is a fallback. Custom is a full Zilean base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=zilean.url)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.zilean),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.zilean.url),2)</visible>
+                          <property name="setting_label">    - Custom URL</property>
+                          <property name="setting_type">numeric</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.zilean.custom_url)]</property>
+                          <property name="setting_description">Zilean base URL (no trailing slash), e.g. https://zilean.example.com. Mando appends /dmm/filtered?ImdbId={imdb} or /dmm/filtered?ImdbId={imdb}&amp;Season={s}&amp;Episode={e}.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_string&amp;setting_id=zilean.custom_url)</onclick>
                       </item>
         <!-- AIOStreams (hidden while aiostreams_api.ENABLED is false) -->
                       <item>
@@ -2720,7 +2803,7 @@
                           <property name="setting_label">Enable</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.provider.aiostreams)]</property>
-                          <property name="setting_description">Enable AIOStreams as an optional source provider alongside Debrid, EasyNews, and external scrapers. Requires your AIOStreams instance username and password (HTTP Basic Auth).</property>
+                          <property name="setting_description">Enable AIOStreams as an optional source provider alongside Torrent Scrapers, EasyNews, and debrid cloud. Requires your AIOStreams instance username and password (HTTP Basic Auth).</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=provider.aiostreams)</onclick>
                       </item>
                       <item>
@@ -2785,6 +2868,18 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.aiostreams.title_filter)]</property>
                           <property name="setting_description">After AIOStreams returns results, match filenames against the movie or episode title (and aliases). Disable if valid links go missing.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=aiostreams.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(62)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.aiostreams.available),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.aiostreams),true)</visible>
+                          <visible>![String.IsEmpty(Window(10000).Property(mando.aiostreams.username)) + String.IsEmpty(Window(10000).Property(mando.aiostreams.password))]</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.aiostreams.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.aiostreams.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=aiostreams.same_title_year)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(62)</visible>
@@ -2902,6 +2997,18 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.ad.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.ad.enabled),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.ad_cloud),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.ad_cloud.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.ad_cloud.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=ad_cloud.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.ad.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.ad.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.ad_cloud),true)</visible>
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.ad_cloud)]</property>
@@ -2983,6 +3090,17 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.title_filter)]</property>
                           <property name="setting_description">After EasyNews returns results, match filenames against the movie or episode title (and aliases). EasyNews search is already narrow (e.g. Movie Year or Show S01E05), so this often removes few extra results but helps when unrelated files slip through. Disable if valid links go missing. Search Width, Filter Languages, and Fallback Search Queries usually matter more for EasyNews.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(62)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.easynews),true)</visible>
+                          <visible>![String.IsEmpty(Window(10000).Property(mando.easynews_user)) + String.IsEmpty(Window(10000).Property(mando.easynews_password))]</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.easynews.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.easynews.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep EasyNews on the series you opened when another show shares the same title. It puts the year in EasyNews queries, and requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=easynews.same_title_year)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(62)</visible>
@@ -3275,6 +3393,17 @@
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.nzb),true)</visible>
                           <visible>![String.IsEmpty(Window(10000).Property(mando.nzb1.url)) + String.IsEmpty(Window(10000).Property(mando.nzb1.key))]</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.nzb.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.nzb.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep NZB results on the series you opened when another show shares the same title. It puts the year in NZB queries, and requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=nzb.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(62)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.nzb),true)</visible>
+                          <visible>![String.IsEmpty(Window(10000).Property(mando.nzb1.url)) + String.IsEmpty(Window(10000).Property(mando.nzb1.key))]</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.nzb.title_filter),true)</visible>
                           <property name="setting_label">    - Allow episode title without show name</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.nzb.title_filter_episode)]</property>
@@ -3439,6 +3568,18 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.oc_cloud),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.oc_cloud.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.oc_cloud.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=oc_cloud.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.oc.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.oc.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.oc_cloud),true)</visible>
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.oc_cloud)]</property>
@@ -3572,6 +3713,18 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.pm.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.pm.enabled),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.pm_cloud),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.pm_cloud.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.pm_cloud.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=pm_cloud.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.pm.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.pm.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.pm_cloud),true)</visible>
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.pm_cloud)]</property>
@@ -3687,6 +3840,18 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.rd_cloud.title_filter)]</property>
                           <property name="setting_description">Enable this and Mando will perform extra name matching functions on your Real Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd_cloud.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.rd.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.rd.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.rd_cloud),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.rd_cloud.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.rd_cloud.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=rd_cloud.same_title_year)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(61)</visible>
@@ -3856,6 +4021,18 @@
                           <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.tb_cloud),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.tb_cloud.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.tb_cloud.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=tb_cloud.same_title_year)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(61)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tb.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.tb.enabled),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.tb_cloud),true)</visible>
                           <property name="setting_label">    - Check Before Full Search</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.check.tb_cloud)]</property>
@@ -3927,6 +4104,16 @@
                           <property name="setting_value">$INFO[Window(10000).Property(mando.folders.title_filter)]</property>
                           <property name="setting_description">Enable this and Mando will perform extra name matching functions on your local media folders results. Will help to limit incorrect results, but may also filter some relevant results.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=folders.title_filter)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(62)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.folders),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.folders.title_filter),true)</visible>
+                          <property name="setting_label">    - Same Title Series</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.folders.same_title_year)]</property>
+                          <property name="setting_description">Enable this and Mando will keep this source on the series you opened when another show shares the same title. It requires the year in filenames when Filter Results by Name is on.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=folders.same_title_year)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(62)</visible>
@@ -4019,7 +4206,7 @@
                           <property name="setting_label">Rescrape Actions</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
-                          <property name="setting_description">Configure automatic retries when a source search returns no playable results. Each action can be Off, Auto, or Prompt, with order from Highest to Lowest. Rescrape With No Cache Check disables per-provider torrent cache checks (Real Debrid, TorBox, Premiumize, Offcloud) for Internal Scrapers and External Scrapers. Rescrape With Disabled External Providers includes disabled external torrent providers (not internal scrapers such as EasyNews or debrid cloud). Offer Full Search After Early Results applies to the empty-search retry path only; Check Before Full Search and Run Scraper Search during prescrape are separate.</property>
+                          <property name="setting_description">Configure automatic retries when a source search returns no playable results. Each action can be Off, Auto, or Prompt, with order from Highest to Lowest. Rescrape With No Cache Check disables per-provider torrent cache checks (Real Debrid, TorBox, Premiumize, Offcloud) for Internal Scrapers and External Scrapers. Rescrape With Disabled External Providers includes disabled External Scraper pack providers (not Internal Scrapers, EasyNews, debrid cloud, or folders). Offer Full Search After Early Results applies to the empty-search retry path only; Check Before Full Search and Run Scraper Search during prescrape are separate.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=rescrape_actions_choice)</onclick>
                       </item>
         <!-- Sorting and Filtering -->

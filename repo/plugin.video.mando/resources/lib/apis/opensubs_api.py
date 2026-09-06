@@ -16,10 +16,11 @@ _OSUB_LONGLONG = struct.calcsize('q')
 
 
 def effective_api_key():
+	from modules.http_defaults import scoped_token
 	key = get_setting('mando.playback.opensubs_api_key', 'empty_setting')
 	if key not in (None, '', '0', 'empty_setting'):
 		return str(key).strip()
-	return _DEFAULT_API_KEY
+	return scoped_token(_DEFAULT_API_KEY)
 
 
 def _api_key():
