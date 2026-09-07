@@ -703,14 +703,50 @@ def _url_host(url):
 	except Exception:
 		return ''
 
+def _follow_stremthru_redirect(url, headers=None, timeout=12, max_hops=5):
+	"""Return the first non-StremThru Location. Do not GET the CDN.
+
+	allow_redirects=True waits for the CDN's first byte. TorBox Auto/Hyperdrive
+	(store-*.tb-cdn.io) can sit past the probe timeout; wget/GET on the wrapper
+	already had the 302. Kodi opens the CDN URL itself.
+	"""
+	from urllib.parse import urljoin
+	current = (url or '').split('|', 1)[0].strip()
+	if not current:
+		return None
+	req_headers = headers or {}
+	for _ in range(max_hops):
+		try:
+			resp = requests.get(current, headers=req_headers, allow_redirects=False, timeout=timeout)
+		except Exception as exc:
+			logger('aiostreams playback probe', str(exc))
+			return None
+		try:
+			if resp.status_code >= 400:
+				return None
+			if resp.is_redirect:
+				location = (resp.headers.get('Location') or '').strip()
+				if not location:
+					return None
+				nxt = urljoin(current, location)
+				if _is_stremthru_url(nxt):
+					current = nxt
+					continue
+				return nxt
+			return (resp.url or current).strip()
+		finally:
+			resp.close()
+	return current
+
+
 def _resolve_stremthru_playback(url, headers=None):
 	"""Follow StremThru 302s to the debrid CDN before Kodi opens the wrapper.
 
 	GET/wget on stremthru.* redirects immediately (e.g. TorBox tb-cdn). Kodi
 	CCurlFile::Stat uses HEAD on the wrapper and times out, then Mando
-	fails over to the next result.
+	fails over to the next result. Do not wait for the CDN to start sending.
 	"""
-	final = _probe_final_url(url, headers)
+	final = _follow_stremthru_redirect(url, headers)
 	if not final:
 		return None
 	if _is_placeholder_stream_url(final):

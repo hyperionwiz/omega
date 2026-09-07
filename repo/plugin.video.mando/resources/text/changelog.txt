@@ -1,3 +1,6 @@
+[COLOR gold][B]Version 2.5.5[/B][/COLOR]
+- [B]AIOStreams[/B]: StremThru 302s are followed without waiting for the debrid CDN to start sending the file. TorBox Auto/Hyperdrive could stall that GET (12s timeout) and skip to the next result.
+
 [COLOR gold][B]Version 2.5.4[/B][/COLOR]
 - [B]AIOStreams[/B]: StremThru play links that 302 to a debrid CDN (e.g. TorBox) are followed before Kodi opens them. Kodi's Stat/HEAD on the StremThru URL was timing out even though GET worked.
 - [B]Settings[/B]: [B]Torrent Sources[/B] is now [B]Debrid Accounts[/B] (debrid auth and cloud search) and [B]Torrent Scrapers[/B] (External Scrapers and Internal Scrapers). The left menu has one more item, so it scrolls. Internal Scrapers group [B]Indexers[/B] (AnimeTosho, Nyaa, PirateBay) and [B]Sites[/B] (Comet, MediaFusion, StremThru Torz, Torrentio, Zilean) A–Z, each with one shared Filter Results by Name, Same Title Series, and Allow episode title without show name.
