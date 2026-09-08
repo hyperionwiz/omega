@@ -3,25 +3,33 @@ from caches.settings_cache import get_setting, set_setting, default_setting_valu
 from modules.kodi_utils import translate_path, get_property, addon_profile, make_directory
 from modules.kodi_utils import logger
 
+def _shipped_credential(setting_id):
+	from caches.settings_cache import normalize_credential_string
+	from modules.http_defaults import shipped_setting
+	value = normalize_credential_string(get_setting('mando.%s' % setting_id, ''))
+	return value or shipped_setting(setting_id)
+
 def tmdb_api_key():
-	return get_setting('mando.tmdb_api', '')
+	return _shipped_credential('tmdb_api')
 
 def tmdb_lists_read_token():
-	return get_setting('mando.tmdb.lists_read_token', '')
+	return _shipped_credential('tmdb.lists_read_token')
 
 def trakt_client():
-	return get_setting('mando.trakt.client', '')
+	return _shipped_credential('trakt.client')
 
 def simkl_client():
-	"""Simkl Client ID from Meta Accounts; empty falls back to the shipped default in simkl_api."""
-	from caches.settings_cache import normalize_credential_string
-	return normalize_credential_string(get_setting('mando.simkl.client', ''))
+	"""Simkl Client ID from Meta Accounts; empty falls back to the shipped default."""
+	return _shipped_credential('simkl.client')
 
 def mdblist_client():
-	return get_setting('mando.mdblist.client', '')
+	return _shipped_credential('mdblist.client')
+
+def punchplay_client():
+	return _shipped_credential('punchplay.client')
 
 def trakt_secret():
-	return get_setting('mando.trakt.secret', '')
+	return _shipped_credential('trakt.secret')
 
 def trakt_user_active():
 	from caches.settings_cache import settings_cache
@@ -1489,7 +1497,7 @@ def cm_default_order():
 def rpdb_info(media_type):
 	if media_type == 'extras': active = extras_enable_item_ratings()
 	else: active = int(get_setting('mando.rpdb_enabled', '0')) in {'movie': (1, 3), 'tvshow': (2, 3)}[media_type]
-	if active: return {'rpdb_api_key': get_setting('mando.rpdb_api'), 'rpdb_format': get_setting('mando.rpdb_format')}
+	if active: return {'rpdb_api_key': _shipped_credential('rpdb_api'), 'rpdb_format': get_setting('mando.rpdb_format')}
 	else: return {'rpdb_api_key': None, 'rpdb_format': None}
 
 def use_season_name():

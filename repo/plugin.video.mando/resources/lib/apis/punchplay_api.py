@@ -39,7 +39,8 @@ def _icon():
 	return kodi_utils.get_icon('punchplay') or kodi_utils.addon_icon()
 
 def punchplay_client_id():
-	return (get_setting('mando.punchplay.client', '') or '').strip()
+	from modules.settings import punchplay_client
+	return punchplay_client()
 
 def _device_id():
 	from caches.settings_cache import settings_cache

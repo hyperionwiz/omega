@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import time
 import base64
 from urllib.parse import quote_plus
 from modules.utils import clean_file_name, normalize
@@ -183,7 +184,7 @@ def search_stremio_streams(url, cache_prefix, timeout=15, expiration=24, log_nam
 		return cached
 	streams = []
 	try:
-		response = json_http().get(url, timeout=max(5, int(timeout)))
+		response = json_http().get(url, timeout=max(1, int(timeout)))
 		response.raise_for_status()
 		payload = response.json() or {}
 		for raw in payload.get('streams') or []:
@@ -197,12 +198,25 @@ def search_stremio_streams(url, cache_prefix, timeout=15, expiration=24, log_nam
 	return streams
 
 
-def scrape_timeout(info, cap=20):
+def scrape_timeout(info, cap=None):
 	from caches.settings_cache import get_setting
-	timeout = int(get_setting('mando.results.timeout', '20'))
-	if 'timeout' in info:
-		timeout = max(5, int(info['timeout']) - 1)
-	return min(timeout, cap)
+	try:
+		setting = max(1, int(get_setting('mando.results.timeout', '20')))
+	except (TypeError, ValueError):
+		setting = 20
+	timeout = setting
+	info = info or {}
+	deadline = info.get('scrape_deadline')
+	if deadline:
+		timeout = int(deadline - time.time())
+	elif 'timeout' in info:
+		try:
+			timeout = int(info['timeout'])
+		except (TypeError, ValueError):
+			timeout = setting
+	if cap is None:
+		cap = setting
+	return max(1, min(timeout, cap))
 
 
 def scrape_expiry(info):
@@ -327,10 +341,18 @@ def name_search_queries(info):
 	return queries
 
 
-def merge_name_searches(search_fn, queries, timeout, expiry):
+def merge_name_searches(search_fn, queries, timeout, expiry, deadline=None):
 	files, seen = [], set()
-	per_query = max(5, min(10, int(timeout) // max(1, len(queries) or 1)))
-	for query in queries:
+	queries = queries or []
+	for index, query in enumerate(queries):
+		if deadline:
+			remaining = int(deadline - time.time())
+		else:
+			remaining = int(timeout)
+		if remaining <= 0:
+			break
+		left = len(queries) - index
+		per_query = max(1, min(remaining, remaining // left if left else remaining))
 		for item in search_fn(query, timeout=per_query, expiration=expiry) or []:
 			info_hash = item.get('hash')
 			if info_hash and info_hash not in seen:

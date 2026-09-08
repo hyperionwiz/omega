@@ -454,7 +454,20 @@ class SettingsCache:
 
 	def set_memory_cache(self, setting_id, setting_value):
 		try:
-			kodi_utils.set_property('mando.%s' % setting_id, property_safe_string(setting_value))
+			display = property_safe_string(setting_value)
+			from modules.http_defaults import SHIPPED_SETTING_IDS, shipped_setting, shipped_simkl_alt, shipped_simkl_client
+			if setting_id in SHIPPED_SETTING_IDS:
+				cid = normalize_credential_string(setting_value)
+				primary = shipped_simkl_client() if setting_id == 'simkl.client' else shipped_setting(setting_id)
+				if not cid and primary:
+					display = primary
+				is_default = 'true' if primary and (not cid or cid == primary) else 'false'
+				kodi_utils.set_property('mando.%s_is_default' % setting_id, is_default)
+				if setting_id == 'simkl.client':
+					alt = shipped_simkl_alt()
+					is_alt = 'true' if alt and cid == alt else 'false'
+					kodi_utils.set_property('mando.simkl.client_is_alt', is_alt)
+			kodi_utils.set_property('mando.%s' % setting_id, display)
 		except: pass
 
 	def delete_memory_cache(self, setting_id):
@@ -830,11 +843,12 @@ def sync_settings(params={}):
 		if load_properties: settings_cache.set_memory_cache('migration.simkl_client_v246', 'true')
 	if had_existing_settings and currentsettings.get('migration.simkl_client_v250') != 'true':
 		# Original app is the default again. Keep the 2.4.6 key only while that app still has a token.
-		_simkl_alt = '11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b'
-		if currentsettings.get('simkl.client') == _simkl_alt:
+		from modules.http_defaults import shipped_simkl_alt, shipped_simkl_client
+		_simkl_alt = shipped_simkl_alt()
+		if _simkl_alt and currentsettings.get('simkl.client') == _simkl_alt:
 			old_token = currentsettings.get('simkl.token')
 			if old_token in (None, '0', '', 'empty_setting'):
-				new_cid = defaults_map.get('simkl.client')
+				new_cid = shipped_simkl_client() or defaults_map.get('simkl.client')
 				settings_cache.write_db('simkl.client', new_cid, new_cid)
 				currentsettings['simkl.client'] = new_cid
 				if load_properties: settings_cache.set_memory_cache('simkl.client', new_cid)
@@ -1141,6 +1155,10 @@ def restore_setting_default(params):
 	try:
 		setting_id = params['setting_id']
 		setting_default = default_setting_values(setting_id)['setting_default']
+		from modules.http_defaults import shipped_setting
+		shipped = shipped_setting(setting_id)
+		if shipped:
+			setting_default = shipped
 		set_setting(setting_id, setting_default)
 	except:
 		if not silent: kodi_utils.ok_dialog(text='Error restoring default setting')
@@ -1562,14 +1580,14 @@ def default_settings():
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'3': 'MDBList', '4': 'PunchPlay', '0': 'Mando', '2': 'Simkl', '1': 'Trakt'}},
 #======+============= MDBList Cache
 {'setting_id': 'mdblist.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'mdblist.client', 'setting_type': 'string', 'setting_default': 'JFZCpEIYFtpvGk47pEEprjEkXzlPL8hJR45jqddJ'},
+{'setting_id': 'mdblist.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'mdblist.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'mdblist.refresh', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'mdblist.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'mdblist.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
 #======+============= PunchPlay Cache
 {'setting_id': 'punchplay.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'punchplay.client', 'setting_type': 'string', 'setting_default': 'ppc_20f43c36d33f17d01241ed83'},
+{'setting_id': 'punchplay.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'punchplay.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'punchplay.refresh', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'punchplay.expires', 'setting_type': 'string', 'setting_default': '0'},
@@ -1578,7 +1596,7 @@ def default_settings():
 {'setting_id': 'punchplay.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
 #======+============= Simkl Cache
 {'setting_id': 'simkl.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'simkl.client', 'setting_type': 'string', 'setting_default': '6cacc8db22e67b2cd423ef73a9fd3a4f45146ba7fbf30fb2ae28f2fa9d0c2583'},
+{'setting_id': 'simkl.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'simkl.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'simkl.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'simkl.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1749,7 +1767,7 @@ def default_settings():
 #==================== OMDb
 {'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': '52b7b0d6'},
 #==================== RPDb
-{'setting_id': 'rpdb_api', 'setting_type': 'string', 'setting_default': 't0-free-rpdb'},
+{'setting_id': 'rpdb_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== Google API
 {'setting_id': 'google_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== GROQ API

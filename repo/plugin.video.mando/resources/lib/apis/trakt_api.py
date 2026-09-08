@@ -132,11 +132,13 @@ def call_trakt(path, params={}, data=None, is_delete=False, with_auth=True, meth
 	else: return result
 
 def _trakt_using_custom_keys():
-	from caches.settings_cache import default_setting_values
+	from modules.http_defaults import shipped_setting
 	try:
-		default_client = default_setting_values('trakt.client')['setting_default']
-		default_secret = default_setting_values('trakt.secret')['setting_default']
+		default_client = shipped_setting('trakt.client')
+		default_secret = shipped_setting('trakt.secret')
 	except Exception:
+		return True
+	if not default_client or not default_secret:
 		return True
 	return settings.trakt_client() != default_client or settings.trakt_secret() != default_secret
 

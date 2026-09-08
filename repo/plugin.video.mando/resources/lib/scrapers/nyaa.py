@@ -16,7 +16,8 @@ class source:
 			if not nyaa_scrape_active():
 				return source_utils.internal_results(self.scrape_provider, self.sources)
 			files = merge_name_searches(
-				nyaa_api.search, name_search_queries(info), scrape_timeout(info), scrape_expiry(info))
+				nyaa_api.search, name_search_queries(info), scrape_timeout(info), scrape_expiry(info),
+				info.get('scrape_deadline'))
 			self.sources = filter_and_build_sources(self.scrape_provider, files, info)
 		except Exception as e:
 			logger('nyaa scraper Exception', str(e))

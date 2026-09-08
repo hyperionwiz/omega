@@ -17,7 +17,7 @@ class source:
 			include_unknown = easynews_lang_include_unknown()
 			filter_title = filter_by_name('easynews')
 			allow_episode_title = filter_by_episode_title('easynews')
-			self.media_type, title, self.year, self.season, self.episode = info.get('media_type'), info.get('title'), int(info.get('year')), info.get('season'), info.get('episode')
+			self.media_type, title, self.year, self.season, self.episode = info.get('media_type'), info.get('title'), int(info.get('year') or 0), info.get('season'), info.get('episode')
 			self.search_title = clean_file_name(title).replace('&', 'and')
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
 			self.absolute_episode = info.get('absolute_episode')

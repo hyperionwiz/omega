@@ -20,7 +20,7 @@ class source:
 			self.folder_results, self.scrape_results = [], []
 			self.filter_title = filter_by_name(self.scrape_provider)
 			self.media_type, title = info.get('media_type'), info.get('title')
-			self.year, self.season, self.episode = int(info.get('year')), info.get('season'), info.get('episode')
+			self.year, self.season, self.episode = int(info.get('year') or 0), info.get('season'), info.get('episode')
 			self.absolute_episode = info.get('absolute_episode')
 			self.require_year = shared_title_require_year(info, self.scrape_provider)
 			self.tmdb_id = info.get('tmdb_id')

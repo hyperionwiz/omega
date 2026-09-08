@@ -16,7 +16,8 @@ class source:
 			if not piratebay_scrape_active():
 				return source_utils.internal_results(self.scrape_provider, self.sources)
 			files = merge_name_searches(
-				piratebay_api.search, name_search_queries(info), scrape_timeout(info), scrape_expiry(info))
+				piratebay_api.search, name_search_queries(info), scrape_timeout(info), scrape_expiry(info),
+				info.get('scrape_deadline'))
 			self.sources = filter_and_build_sources(self.scrape_provider, files, info)
 		except Exception as e:
 			logger('piratebay scraper Exception', str(e))

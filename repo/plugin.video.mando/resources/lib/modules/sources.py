@@ -755,6 +755,7 @@ class Sources():
 				self._release_sources_busy()
 
 	def collect_results(self):
+		self._begin_scrape_clock()
 		if self.prescrape_sources:
 			self.sources.extend(self.prescrape_sources)
 		self._quality_poll_scrapers = set()
@@ -794,11 +795,12 @@ class Sources():
 		if self._user_cancelled_scrape():
 			return []
 		if self.threads:
-			self._join_internal_threads(6)
+			self._join_internal_threads(self._scrape_remaining())
 			self._absorb_internal_properties()
 		return self.sources
 
 	def collect_prescrape_results(self):
+		self._begin_scrape_clock()
 		threads_append = self.prescrape_threads.append
 		folder_prescrape = False
 		if self.active_folders:
@@ -809,8 +811,11 @@ class Sources():
 		if not self.prescrape_scrapers and not folder_prescrape: return []
 		for i in self.prescrape_scrapers: threads_append(Thread(target=self.activate_providers, args=(i[0], i[1], True), name=i[2]))
 		[i.start() for i in self.prescrape_threads]
-		if self.background: [i.join() for i in self.prescrape_threads]
-		else: self.scrapers_dialog()
+		if self.background:
+			self._join_internal_threads(self._scrape_remaining(), self.prescrape_threads)
+		else:
+			self.scrapers_dialog()
+			self._join_internal_threads(self._scrape_remaining(), self.prescrape_threads)
 		for i in self.prescrape_scrapers:
 			scraper_name = i[2]
 			if scraper_name not in self.remove_scrapers:
@@ -1390,25 +1395,21 @@ class Sources():
 	def scrapers_dialog(self):
 		def _scraperDialog():
 			monitor = kodi_utils.kodi_monitor()
-			start_time = time.time()
+			started = getattr(self, 'scrape_started', None) or time.time()
+			budget = max(1.0, float(self._results_timeout_sec()))
+			deadline = getattr(self, 'scrape_deadline', None) or (started + budget)
 			while not self.progress_dialog.iscanceled() and not monitor.abortRequested():
 				try:
 					self._touch_sources_busy()
 					remaining_providers = [x.getName() for x in _threads if x.is_alive() is True]
 					self._process_internal_results()
-					current_progress = max((time.time() - start_time), 0)
+					current_progress = max((time.time() - started), 0)
 					line1 = ', '.join(remaining_providers).upper()
-					percent = int((current_progress/float(25))*100)
+					percent = int((current_progress / budget) * 100)
 					self.progress_dialog.update_scraper(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
 					kodi_utils.sleep(self.sleep_time)
 					if len(remaining_providers) == 0: break
-					if percent >= 100:
-						grace_deadline = time.time() + 8
-						while time.time() < grace_deadline and any(x.is_alive() for x in _threads):
-							self._process_internal_results()
-							kodi_utils.sleep(100)
-						for thread in _threads:
-							thread.join(timeout=max(0.0, grace_deadline - time.time()))
+					if percent >= 100 or time.time() >= deadline:
 						self._absorb_internal_properties()
 						break
 				except:	return self._kill_progress_dialog()
@@ -1762,13 +1763,36 @@ class Sources():
 			return si.get('title'), si.get('season'), si.get('episode')
 		return self.get_search_title(), self.get_season(), self.get_episode()
 
+	def _results_timeout_sec(self):
+		try:
+			return max(1, int(get_setting('mando.results.timeout', '20')))
+		except (TypeError, ValueError):
+			return 20
+
+	def _begin_scrape_clock(self):
+		budget = self._results_timeout_sec()
+		self.scrape_started = time.time()
+		self.scrape_deadline = self.scrape_started + budget
+		info = getattr(self, 'search_info', None)
+		if info is not None:
+			info['timeout'] = budget
+			info['scrape_deadline'] = self.scrape_deadline
+
+	def _scrape_remaining(self):
+		deadline = getattr(self, 'scrape_deadline', None)
+		if deadline is None:
+			return float(self._results_timeout_sec())
+		return max(0.0, deadline - time.time())
+
 	def _wait_for_cloud_threads(self, timeout=None):
 		"""Keep the scraper progress bar alive while parallel cloud threads finish after external."""
 		if not self.threads:
 			return
 		if timeout is None:
-			timeout = min(35, max(15, int(get_setting('mando.results.timeout', '20')) + 10))
-		start_time, deadline = time.time(), time.time() + timeout
+			timeout = self._scrape_remaining()
+		start_time = getattr(self, 'scrape_started', None) or time.time()
+		budget = max(1.0, float(self._results_timeout_sec()))
+		deadline = time.time() + max(0.0, timeout)
 		while time.time() < deadline:
 			if self._user_cancelled_scrape():
 				break
@@ -1777,7 +1801,7 @@ class Sources():
 			if self.progress_dialog and alive:
 				try:
 					elapsed = max(time.time() - start_time, 0)
-					percent = min(99, int((elapsed / 25.0) * 100))
+					percent = min(99, int((elapsed / budget) * 100))
 					line1 = ', '.join(alive).upper()
 					self.progress_dialog.update_scraper(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
 				except:
@@ -1786,7 +1810,7 @@ class Sources():
 				break
 			self._absorb_internal_properties()
 			kodi_utils.sleep(100)
-		self._join_internal_threads(max(0, deadline - time.time()))
+		self._join_internal_threads(self._scrape_remaining())
 		self._absorb_internal_properties()
 		self._finalize_cloud_scraper_properties()
 
@@ -1828,10 +1852,12 @@ class Sources():
 			self._quality_poll_scrapers.add(scraper)
 			self._sources_quality_count(sources)
 
-	def _join_internal_threads(self, timeout=30):
+	def _join_internal_threads(self, timeout=None, threads=None):
 		"""Wait for cloud/internal threads; cap wait so a stuck scraper cannot block results forever."""
-		deadline = time.time() + timeout
-		for thread in self.threads:
+		if timeout is None:
+			timeout = self._scrape_remaining()
+		deadline = time.time() + max(0.0, float(timeout))
+		for thread in threads if threads is not None else self.threads:
 			if self._user_cancelled_scrape():
 				break
 			remaining = deadline - time.time()
@@ -3188,6 +3214,12 @@ class Sources():
 	def resolve_sources(self, item, meta=None):
 		if self._user_cancelled_resolve():
 			return None
+		try:
+			from modules.http_defaults import revoked_client
+			if revoked_client():
+				return None
+		except Exception:
+			pass
 		if meta is not None:
 			self.meta = meta
 		url = None

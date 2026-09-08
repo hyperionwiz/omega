@@ -1765,7 +1765,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.punchplay.client),ppc_20f43c36d33f17d01241ed83)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.punchplay.client_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default Client ID Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -1860,8 +1860,8 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.client),6cacc8db22e67b2cd423ef73a9fd3a4f45146ba7fbf30fb2ae28f2fa9d0c2583)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.client),11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.simkl.client_is_default),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.simkl.user),empty_setting) | !String.IsEqual(Window(10000).Property(mando.simkl.client_is_alt),true)</visible>
                           <property name="setting_label">    - Restore Default Client ID Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -1947,7 +1947,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.client),30e6c73030cc41dbff996200ac3060cde689555ba207020e08a2175533b912c3)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.client_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default Client ID Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -1964,7 +1964,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.secret),726f6b12a9f0079d5850a7bb0e15860725cd487cbfb54ce5471de217639465c5)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.trakt.secret_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default Client Secret Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -2105,7 +2105,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb_api),a0bf207c5ff6c0caabac0327e39b1cd2)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb_api_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default TMDb API Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -2114,7 +2114,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb_api),a0bf207c5ff6c0caabac0327e39b1cd2)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb_api_is_default),true)</visible>
                           <property name="setting_label">Test API Key...</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -2138,7 +2138,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb.lists_read_token),eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMGJmMjA3YzVmZjZjMGNhYWJhYzAzMjdlMzliMWNkMiIsIm5iZiI6MTUwMzk0ODAxMC43NTQsInN1YiI6IjU5YTQ2Y2U4YzNhMzY4MGIxMjAwMjgxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2pYaMVzWy-TNg2SBlkP_CrYWpaxcU7LZIZLPdgJp9jw)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb.lists_read_token_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default Lists Read Access Token</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -2147,7 +2147,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb.lists_read_token),eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMGJmMjA3YzVmZjZjMGNhYWJhYzAzMjdlMzliMWNkMiIsIm5iZiI6MTUwMzk0ODAxMC43NTQsInN1YiI6IjU5YTQ2Y2U4YzNhMzY4MGIxMjAwMjgxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2pYaMVzWy-TNg2SBlkP_CrYWpaxcU7LZIZLPdgJp9jw)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.tmdb.lists_read_token_is_default),true)</visible>
                           <property name="setting_label">Test Lists Read Access Token...</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>
@@ -2189,7 +2189,7 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(mando.rpdb_api),t0-free-rpdb)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(mando.rpdb_api_is_default),true)</visible>
                           <property name="setting_label">    - Restore Default RPDb Key</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">...</property>

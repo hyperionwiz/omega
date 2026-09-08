@@ -20,7 +20,7 @@ class source:
 		try:
 			if not self.folder_path: return source_utils.internal_results(self.scraper_name, self.sources)
 			filter_title = filter_by_name('folders')
-			self.media_type, title, self.year = info.get('media_type'), info.get('title'), int(info.get('year'))
+			self.media_type, title, self.year = info.get('media_type'), info.get('title'), int(info.get('year') or 0)
 			self.season, self.episode = info.get('season'), info.get('episode')
 			self.tmdb_id = info.get('tmdb_id')
 			self.require_year = shared_title_require_year(info, 'folders')
