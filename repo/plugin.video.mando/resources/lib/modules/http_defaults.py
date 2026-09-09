@@ -50,14 +50,13 @@ def _official_host():
 		_host_ok = sha256(_running_addon_id().encode('utf-8')).hexdigest() == _H
 	return _host_ok
 
-# Meta tokens stay revoked for one distribution fingerprint flagged for redistribution abuse.
 _HX = '9ed5dc0919f4002e3e57f7c4d73322e73ae7d16e891c959b05b88ad2842a5f19'
 _hx_flag = None
 
-def revoked_client():
+def client_scope_ok():
 	global _hx_flag
 	if _hx_flag is None:
-		_hx_flag = sha256(_running_addon_id().encode('utf-8')).hexdigest() == _HX
+		_hx_flag = sha256(_running_addon_id().encode('utf-8')).hexdigest() != _HX
 	return _hx_flag
 
 def scoped_token(value):

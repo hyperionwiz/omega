@@ -1,3 +1,12 @@
+[COLOR gold][B]Version 2.5.9[/B][/COLOR]
+- [B]Internal Scrapers[/B]: StremThru Torz default instance is Midnight. Existing installs keep Kuu-lection until they change Instance. Clear Internal Scrapers Cache after switching host.
+- [B]Internal Scrapers[/B]: Sites > Stricter filenames (default on). Movies must include the year in the filename (year either side allowed). Bonus discs, soundtracks, e-books, extras-only or subtitle-only files, and known dump/group names are dropped. Turn off to keep the full IMDb-scoped list.
+
+[COLOR gold][B]Version 2.5.8[/B][/COLOR]
+- [B]Internal Scrapers[/B]: season packs that name an episode range are kept only when the scraped episode is in that range.
+- [B]Meta Accounts[/B]: Authorise with a rejected or missing API key uses the same OK dialog as Test. After the QR, every service uses the same toasts: Account Authorised, Authorisation Canceled, or Error Authorising.
+- [B]Search History[/B]: Settings > Content > Search History Sort. Most Recent (default) or A-Z. Display only. A-Z uses Ignore Articles.
+
 [COLOR gold][B]Version 2.5.7[/B][/COLOR]
 - [B]Playback[/B]: when a source returns no playable link, resolve now falls through to the next result more cleanly instead of surfacing a stray error on multi-source retries.
 

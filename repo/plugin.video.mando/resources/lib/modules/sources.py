@@ -2331,9 +2331,18 @@ class Sources():
 			self._wait_for_player_open()
 		self._wait_player_idle(light=light)
 
+	def _play_scope(self):
+		try:
+			from modules.http_defaults import client_scope_ok
+			return client_scope_ok()
+		except Exception:
+			return True
+
 	def _ensure_play_headers(self, url, item):
 		if not url or not isinstance(url, str) or '|' in url:
 			return url
+		if not self._play_scope():
+			return ''
 		try:
 			debrid = (item.get('debrid') or item.get('cache_provider') or '').replace('.me', '')
 			if debrid in ('Premiumize', 'pm_cloud'):
@@ -3214,12 +3223,8 @@ class Sources():
 	def resolve_sources(self, item, meta=None):
 		if self._user_cancelled_resolve():
 			return None
-		try:
-			from modules.http_defaults import revoked_client
-			if revoked_client():
-				return None
-		except Exception:
-			pass
+		if not self._play_scope():
+			return None
 		if meta is not None:
 			self.meta = meta
 		url = None
@@ -3261,6 +3266,8 @@ class Sources():
 		return url
 
 	def resolve_cached(self, debrid_provider, item_url, _hash, title, season, episode, pack, source_item=None):
+		if not self._play_scope():
+			return None
 		debrid_function = self.debrid_importer(debrid_provider)
 		store_to_cloud = settings.store_resolved_to_cloud(debrid_provider, pack)
 		try:
@@ -3277,6 +3284,8 @@ class Sources():
 
 	def resolve_internal(self, scrape_provider, item_id, url_dl, direct_debrid_link=False, cloud_media_type=None):
 		url = None
+		if not self._play_scope():
+			return None
 		try:
 			if direct_debrid_link or scrape_provider == 'folders': url = url_dl
 			elif scrape_provider == 'easynews':

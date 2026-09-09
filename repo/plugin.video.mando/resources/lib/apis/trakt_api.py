@@ -32,11 +32,11 @@ def _trakt_fetch_page_limit(base_params):
 	return TRAKT_PAGE_LIMIT
 
 def no_client_key():
-	kodi_utils.notification('Please set a valid Trakt Client ID Key')
+	kodi_utils.ok_dialog(heading='Trakt', text='Trakt Client ID Key is not set.')
 	return None
 
 def no_secret_key():
-	kodi_utils.notification('Please set a valid Trakt Client Secret Key')
+	kodi_utils.ok_dialog(heading='Trakt', text='Trakt Client Secret Key is not set.')
 	return None
 
 def get_trakt(params):
@@ -162,7 +162,7 @@ def trakt_get_device_code():
 			kodi_utils.notification('Trakt default keys restored — try Authorise again', 4000)
 			return None
 	else:
-		kodi_utils.ok_dialog(heading='Trakt Authorise', text=message)
+		kodi_utils.ok_dialog(heading='Trakt', text=message)
 	return None
 
 def trakt_test_credentials():
@@ -255,6 +255,7 @@ def trakt_authenticate(dummy=''):
 		return False
 	token = trakt_get_device_token(code)
 	if token == 'canceled':
+		kodi_utils.notification('Trakt Authorisation Canceled', 3000)
 		return False
 	if token:
 		set_setting('trakt.token', token['access_token'])

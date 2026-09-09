@@ -13,6 +13,14 @@ _SEEDERS = re.compile(r'(?:👤|seeders?)\s*[:\s]*(\d+)', re.I)
 _SXXEXX = re.compile(r's\d{1,2}e\d{1,2}', re.I)
 _SEASON_TAG = re.compile(r'(?:s|season)[.\s_-]*(\d{1,2})(?:[^\de]|$)', re.I)
 _INFO_LINE = re.compile(r'(💾|👤|⚙️)')
+# Named episode ranges (Fenom filter_season_pack equivalents). Season is group 1.
+_EPISODE_RANGE = (
+	re.compile(r's(\d{1,2})e(\d{1,3})[-.]e(\d{1,3})', re.I),
+	re.compile(r's(\d{1,2})e(\d{1,3})[-.](\d{1,3})(?!p|bit|gb)(?!\d{1,3})', re.I),
+	re.compile(r's(\d{1,2})[-.]e(\d{1,3})[-.]e(\d{1,3})', re.I),
+	re.compile(r'season[.-]?(\d{1,2})[.-]?ep[.-]?(\d{1,3})[-.]ep[.-]?(\d{1,3})', re.I),
+	re.compile(r'season[.-]?(\d{1,2})[.-]?episode[.-]?(\d{1,3})[-.]episode[.-]?(\d{1,3})', re.I),
+)
 
 NATIVE_INDEXER_SCRAPERS = ('animetosho', 'nyaa', 'piratebay')
 NATIVE_SITE_SCRAPERS = ('comet', 'mediafusion', 'torz', 'torrentio', 'zilean')
@@ -223,6 +231,25 @@ def scrape_expiry(info):
 	return int((info.get('expiry_times') or [24])[0] or 24)
 
 
+def episode_range_from_name(name):
+	"""Return (season, start, end) for SxxEaa-Ebb style names, else None."""
+	if not name:
+		return None
+	dotted = normalize(name).lower().replace(' ', '.')
+	for regex in _EPISODE_RANGE:
+		match = regex.search(dotted)
+		if not match:
+			continue
+		try:
+			pack_season, start, end = int(match.group(1)), int(match.group(2)), int(match.group(3))
+		except Exception:
+			return None
+		if start > end:
+			start, end = end, start
+		return pack_season, start, end
+	return None
+
+
 def pack_type_from_name(name, season=None):
 	if not name:
 		return None
@@ -263,7 +290,7 @@ def apply_pack_size(size, package, season_divider, show_divider):
 	return round(size, 2)
 
 
-def build_source(scrape_provider, name, info_hash, size=0.0, seeders=0, package=None, extra_name_info=''):
+def build_source(scrape_provider, name, info_hash, size=0.0, seeders=0, package=None, extra_name_info='', episode_start=0, episode_end=0):
 	file_name = normalize(name or info_hash)
 	display_name = clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 	name_info = source_utils.release_info_format(file_name)
@@ -291,6 +318,9 @@ def build_source(scrape_provider, name, info_hash, size=0.0, seeders=0, package=
 	}
 	if package:
 		item['package'] = package
+	if episode_start:
+		item['episode_start'] = episode_start
+		item['episode_end'] = episode_end
 	return item
 
 
@@ -362,10 +392,11 @@ def merge_name_searches(search_fn, queries, timeout, expiry, deadline=None):
 
 
 def filter_and_build_sources(scrape_provider, items, info):
-	from modules.settings import filter_by_name, filter_by_episode_title, shared_title_require_year
+	from modules.settings import filter_by_name, filter_by_episode_title, shared_title_require_year, site_strict_filenames
 	from modules.kodi_utils import logger
 	filter_title = filter_by_name(scrape_provider)
 	allow_episode_title = filter_by_episode_title(scrape_provider)
+	strict_filenames = scrape_provider in NATIVE_SITE_SCRAPERS and site_strict_filenames()
 	title = info.get('title', '')
 	year = int(info.get('year') or 0)
 	season, episode = info.get('season'), info.get('episode')
@@ -376,20 +407,42 @@ def filter_and_build_sources(scrape_provider, items, info):
 	extras = source_utils.extras()
 	season_divider = int(info.get('season_episode_count') or 1) or 1
 	show_divider = int(info.get('total_aired_eps') or 1) or 1
+	is_episode = info.get('media_type') == 'episode'
+	season_i = episode_i = None
+	if is_episode:
+		try:
+			season_i, episode_i = int(season), int(episode)
+		except Exception:
+			is_episode = False
 	sources, seen = [], set()
 
 	def _keep(file_name):
 		if any(x in file_name.lower() for x in extras):
-			return False, None
-		if not filter_title:
-			return True, pack_type_from_name(file_name, season)
-		if source_utils.check_title_or_absolute(
-				title, file_name, aliases, year, season, episode, absolute_episode, ep_name, allow_episode_title, require_year):
-			return True, None
+			return False, None, 0, 0
+		if strict_filenames:
+			if not is_episode and year and not source_utils.release_contains_show_year(file_name, year):
+				return False, None, 0, 0
+			if source_utils.has_junk_release_name(file_name):
+				return False, None, 0, 0
+		if is_episode:
+			ranged = episode_range_from_name(file_name)
+			if ranged:
+				pack_season, start, end = ranged
+				if pack_season != season_i or not (start <= episode_i <= end):
+					return False, None, 0, 0
+				if filter_title and not source_utils.check_title(title, file_name, aliases, year, 'pack', episode, require_year):
+					return False, None, 0, 0
+				return True, 'season', start, end
+		if filter_title:
+			if source_utils.check_title_or_absolute(
+					title, file_name, aliases, year, season, episode, absolute_episode, ep_name, allow_episode_title, require_year):
+				return True, None, 0, 0
+			package = pack_type_from_name(file_name, season)
+			if package and source_utils.check_title(title, file_name, aliases, year, 'pack', episode, require_year):
+				return True, package, 0, 0
+			return False, None, 0, 0
 		package = pack_type_from_name(file_name, season)
-		if package and source_utils.check_title(title, file_name, aliases, year, 'pack', episode, require_year):
-			return True, package
-		return False, None
+		return True, package, 0, 0
 
 	for raw in items or []:
 		try:
@@ -397,13 +450,14 @@ def filter_and_build_sources(scrape_provider, items, info):
 			if not info_hash or info_hash in seen:
 				continue
 			file_name = raw.get('name') or ''
-			keep, package = _keep(file_name)
+			keep, package, episode_start, episode_end = _keep(file_name)
 			if not keep:
 				continue
 			seen.add(info_hash)
 			size = apply_pack_size(raw.get('size') or 0, package, season_divider, show_divider)
 			sources.append(build_source(
-				scrape_provider, file_name, info_hash, size, raw.get('seeders') or 0, package))
+				scrape_provider, file_name, info_hash, size, raw.get('seeders') or 0, package,
+				episode_start=episode_start, episode_end=episode_end))
 		except Exception as e:
 			logger('%s scraper yield source error' % scrape_provider, str(e))
 	logger('%s scraper' % scrape_provider, '%s : %s kept / %s raw / packs=%s' % (

@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import json
 import re
@@ -107,13 +108,6 @@ def _new_setting_value(setting_id, setting_default, currentsettings, had_existin
 		# purge then deletes the five legacy ids and with them the only copy of the user's orderings.
 		if setting_id == 'migration.unified_list_sort': return 'true' if fresh_install else setting_default
 		return setting_default
-	if setting_id == 'provider.internal':
-		# New-install default is on. Existing installs that never had this key stay off unless a
-		# scraper was already enabled (legacy inference from before the master switch).
-		if any(currentsettings.get('provider.%s' % scraper) == 'true' for scraper in (
-			'comet', 'torrentio', 'torz', 'nyaa', 'animetosho', 'piratebay', 'mediafusion', 'zilean')):
-			return 'true'
-		return 'false'
 	old_setting_id = _NEW_SETTING_VALUE_MIGRATIONS.get(setting_id)
 	if not old_setting_id:
 		return setting_default
@@ -1652,6 +1646,7 @@ def default_settings():
 {'setting_id': 'paginate.limit_widgets', 'setting_type': 'action', 'setting_default': '20'},
 {'setting_id': 'paginate.jump_to', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'ignore_articles', 'setting_type': 'boolean', 'setting_default': 'true'},
+{'setting_id': 'search.history_sort', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Most Recent', '1': 'A-Z'}},
 {'setting_id': 'recommend_service', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Recommended (TMDb)', '1': 'More Like This (IMDb)',
 '2': 'Similar (AI)', '3': 'Related (Trakt)'}},
 {'setting_id': 'recommend_seed', 'setting_type': 'action', 'setting_default': '5', 'settings_options': {'1': 'Last Watched Only', '2': 'Last 2 Watched',
@@ -1759,7 +1754,7 @@ def default_settings():
 #==================== TMDb API
 {'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': 'db6aa4def186c3ca8fc9065bd3492e79'},
 #==================== TMDb Lists
-{'setting_id': 'tmdb.lists_read_token', 'setting_type': 'string', 'setting_default': 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjZhYTRkZWYxODZjM2NhOGZjOTA2NWJkMzQ5MmU3OSIsInN1YiI6IjVhNTdjZDY5MGUwYTI2NjlkYTAwNTJmYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TYHbH3aJOOjbqMniAUvfSHnhtLzRcCxp5x1dp7GntuQ'},
+{'setting_id': 'tmdb.lists_read_token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tmdb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tmdb.username', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== Fanart.tv
@@ -1807,6 +1802,7 @@ def default_settings():
 {'setting_id': 'site.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'site.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'site.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'site.strict_filenames', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.torrentio', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1818,10 +1814,10 @@ def default_settings():
 {'setting_id': 'torrentio.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'torrentio.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.torz', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'torz.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
+{'setting_id': 'torz.url', 'setting_type': 'action', 'setting_default': '2', 'settings_options': {
+	'2': 'Midnight — https://stremthrufortheweebs.midnightignite.me',
 	'0': 'Kuu-lection — https://stremthru.stremio.ru',
 	'1': 'Munif — https://stremthru.13377001.xyz',
-	'2': 'Midnight — https://stremthrufortheweebs.midnightignite.me',
 	'3': 'Custom — set URL below',
 }},
 {'setting_id': 'torz.custom_url', 'setting_type': 'string', 'setting_default': ''},

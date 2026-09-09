@@ -17,6 +17,29 @@ def extras():
 	return ('sample', 'extra', 'extras', 'deleted', 'unused', 'footage', 'inside', 'blooper', 'bloopers',
 			'making.of', 'feature', 'featurette', 'behind.the.scenes', 'trailer')
 
+def junk_name_tokens():
+	# Fenom/Gears dump-and-group names, minus quality tags that eat ordinary WEB/HDTV rips.
+	# extras() already drops sample/trailer. Match on release_info_format (dotted).
+	return (
+		'400p.octopus', '720p.octopus', '1080p.octopus', 'alexfilm', 'amedia', 'audiobook',
+		'baibako', 'bigsinema', 'bonus.disc', 'casstudio.tv', 'courage.bambey',
+		'.cbr', '.cbz', 'coldfilm', 'dilnix', 'dutchreleaseteam', 'e.book.collection',
+		'empire.minutemen', 'eniahd', '.exe', 'exkinoray', 'extras.only',
+		'gears.media', 'gearsmedia', 'good.people', 'gostfilm', 'hamsterstudio', 'hdrezka',
+		'hurtom', 'idea.film', 'ideafilm', 'jaskier', 'kapatejl6',
+		'kerob', 'kinokopilka', 'kravec', 'kuraj.bambey', 'lakefilm', 'lostfilm',
+		'megapeer', 'minutemen.empire', 'newstudio', 'omskbird', '.ost.',
+		'paravozik', 'profix.media', 'rifftrax', 'soundtrack', 'subtitle.only',
+		'sunshinestudio', 'teaser', 'tumbler.studio', 'ultradox', 'viruseproject',
+		'vostfr', 'vo.stfr', 'wish666',
+	)
+
+def has_junk_release_name(file_name):
+	name_info = release_info_format(file_name or '')
+	if not name_info:
+		return False
+	return any(token in name_info for token in junk_name_tokens())
+
 def unwanted_tags():
 	return (
 'tamilrockers.com', 'www.tamilrockers.com', 'www.tamilrockers.ws', 'www.tamilrockers.pl', 'www-tamilrockers-cl', 'www.tamilrockers.cl', 'www.tamilrockers.li',

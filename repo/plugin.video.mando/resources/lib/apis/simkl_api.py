@@ -240,7 +240,7 @@ def simkl_poll_pin(pin):
 	while time.time() < expires:
 		if progress.iscanceled():
 			progress.close()
-			return None
+			return 'canceled'
 		_throttle()
 		try:
 			resp = requests.get(_pin_url(user_code, client_id=pin.get('_client_id')), headers=_pin_headers(), timeout=META_API_TIMEOUT).json()
@@ -251,15 +251,20 @@ def simkl_poll_pin(pin):
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
 		if kodi_utils.sleep_while_authorising(progress, interval):
 			progress.close()
-			return None
+			return 'canceled'
 	progress.close()
 	return None
 
 def simkl_authenticate(dummy=''):
 	pin = simkl_get_pin()
-	if not pin or not pin.get('user_code'): return kodi_utils.notification('Simkl Authorisation Failed', 3000)
+	if not pin or not pin.get('user_code'):
+		_ok, message = simkl_test_client_id()
+		return kodi_utils.ok_dialog(heading='Simkl', text=message)
 	token = simkl_poll_pin(pin)
-	if not token: return kodi_utils.notification('Simkl Authorisation Canceled', 3000)
+	if token == 'canceled':
+		return kodi_utils.notification('Simkl Authorisation Canceled', 3000)
+	if not token:
+		return kodi_utils.notification('Simkl Error Authorising', 3000)
 	pin_client = pin.get('_client_id')
 	if pin_client in shipped_simkl_ids():
 		current = _client_id()

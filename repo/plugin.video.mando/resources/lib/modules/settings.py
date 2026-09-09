@@ -992,6 +992,10 @@ def filter_by_name(scraper):
 	if get_property('fs_filterless_search') == 'true': return False
 	return get_setting('mando.%s.title_filter' % _title_filter_key(scraper), 'false') == 'true'
 
+def site_strict_filenames():
+	if get_property('fs_filterless_search') == 'true': return False
+	return get_setting('mando.site.strict_filenames', 'true') == 'true'
+
 def filter_by_episode_title(scraper):
 	return get_setting('mando.%s.title_filter_episode' % _title_filter_key(scraper), 'true') == 'true'
 
@@ -1203,6 +1207,10 @@ def calendar_date_format():
 
 def ignore_articles():
 	return get_setting('mando.ignore_articles', 'false') == 'true'
+
+def search_history_sort():
+	try: return int(get_setting('mando.search.history_sort', '0'))
+	except (TypeError, ValueError): return 0
 
 def jump_to_enabled():
 	return get_setting('mando.paginate.jump_to', 'true') == 'true'

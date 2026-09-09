@@ -967,6 +967,14 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(30)</visible>
+                          <property name="setting_label">Search History Sort</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.search.history_sort_name)]</property>
+                          <property name="setting_description">Choose how Search History lists are ordered. Most Recent is last searched first (default). A-Z sorts the same 50 searches alphabetically; Ignore Articles applies. Movies, TV, people, collections, EasyNews, NZB, and meta list searches all use this.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=search.history_sort)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(30)</visible>
                           <property name="setting_label">Service used for Because You Watched</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.recommend_service_name)]</property>
@@ -2607,6 +2615,15 @@
                       <item>
                           <visible>Container(2000).HasFocus(63)</visible>
                           <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
+                          <property name="setting_label">Stricter filenames</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(mando.site.strict_filenames)]</property>
+                          <property name="setting_description">Movies must include the year in the filename (the year before or after is allowed). Also drops bonus discs, soundtracks, e-books, extras-only or subtitle-only files, and known dump/group names. TV does not need the year here — use Same Title Series.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_boolean&amp;setting_id=site.strict_filenames)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(63)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(mando.provider.internal),true)</visible>
                           <property name="setting_label">Comet</property>
                           <property name="setting_type">separator</property>
                           <onclick>noop</onclick>
@@ -2701,7 +2718,7 @@
                           <property name="setting_label">    - Instance</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(mando.torz.url_name)]</property>
-                          <property name="setting_description">Kuu-lection (stremthru.stremio.ru) is the default. Munif and Midnight are fallbacks. Custom is a full StremThru base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
+                          <property name="setting_description">Midnight (stremthrufortheweebs.midnightignite.me) is the default. Kuu-lection and Munif are fallbacks. Custom is a full StremThru base URL with no trailing slash. Clear Internal Scrapers Cache after changing host.</property>
                           <onclick>RunPlugin(plugin://plugin.video.mando/?mode=settings_manager.set_from_list&amp;setting_id=torz.url)</onclick>
                       </item>
                       <item>

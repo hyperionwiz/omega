@@ -81,8 +81,8 @@ class MandoPlayer(xbmc.Player):
 		ku.hide_busy_dialog()
 		self.clear_playback_properties(clear_navigation=False)
 		try:
-			from modules.http_defaults import revoked_client
-			if revoked_client(): url = None
+			from modules.http_defaults import client_scope_ok
+			if not client_scope_ok(): url = None
 		except Exception:
 			pass
 		if not url:

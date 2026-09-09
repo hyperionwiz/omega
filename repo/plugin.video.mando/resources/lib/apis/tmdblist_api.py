@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import progress_dialog, notification, sleep, sleep_while_authorising, make_session
+from modules.kodi_utils import progress_dialog, notification, ok_dialog, sleep, sleep_while_authorising, make_session
 from caches.tmdb_lists import tmdb_lists_cache_object, tmdb_lists_cache
 from caches.settings_cache import get_setting, set_setting
 from modules.settings import max_threads, tmdb_lists_read_token
@@ -22,8 +22,12 @@ class TMDbListAPI:
 	def auth(self):
 		import requests
 		headers = self.read_access_headers()
-		data = requests.post('%s/auth/request_token' % self.base_url, headers=headers, timeout=20).json()
-		if not 'success' in data: return notification('Failed to Auth Account')
+		try:
+			data = requests.post('%s/auth/request_token' % self.base_url, headers=headers, timeout=20).json()
+		except Exception as e:
+			return ok_dialog(heading='TMDb Lists', text='Lists read access token failed.[CR]Could not reach TMDb: %s' % str(e))
+		if not data.get('success'):
+			return ok_dialog(heading='TMDb Lists', text='Lists read access token failed.[CR]%s' % (data.get('status_message') or 'Unknown error'))
 		request_token = data['request_token']
 		token_url = 'https://www.themoviedb.org/auth/access?request_token=%s' % request_token
 		qr_code = make_qrcode(token_url) or ''
@@ -48,14 +52,14 @@ class TMDbListAPI:
 		progressDialog.close()
 		if canceled:
 			tmdb_lists_cache.clear_all()
-			return
+			return notification('TMDb Authorisation Canceled', 3000)
 		if success is True:
 			success = self.add_tmdb3_to_session(response['access_token'], response['account_id'])
 		tmdb_lists_cache.clear_all()
 		if success is True:
-			notification('Success')
+			notification('TMDb Account Authorised', 3000)
 		else:
-			notification('Failed')
+			notification('TMDb Error Authorising', 3000)
 
 	def add_tmdb3_to_session(self, access_token, account_id):
 		import requests

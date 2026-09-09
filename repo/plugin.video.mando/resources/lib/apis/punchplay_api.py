@@ -445,7 +445,8 @@ def punchplay_authenticate(dummy=''):
 		kodi_utils.logger('PunchPlay', 'device/code: %s' % e)
 		code_data = None
 	if not code_data or not code_data.get('device_code'):
-		return kodi_utils.notification('PunchPlay Authorisation Failed', 3000, icon)
+		_ok, message = punchplay_test_client_id()
+		return kodi_utils.ok_dialog(heading='PunchPlay', text=message)
 	user_code = str(code_data.get('user_code') or '')
 	device_code = code_data.get('device_code')
 	auth_url = device_auth_complete_url(code_data, user_code, fallback='https://punchplay.tv/link', style='query')
@@ -460,10 +461,11 @@ def punchplay_authenticate(dummy=''):
 	progress.update(content, 0)
 	expires = time.time() + expires_in
 	token_payload = None
+	canceled = False
 	while time.time() < expires:
 		if progress.iscanceled():
-			progress.close()
-			return kodi_utils.notification('PunchPlay Authorisation Canceled', 3000, icon)
+			canceled = True
+			break
 		try:
 			poll = requests.post(
 				_url('/auth/device/token'),
@@ -483,16 +485,22 @@ def punchplay_authenticate(dummy=''):
 			error = body.get('error') or ''
 			if error in ('expired', 'access_denied', 'expired_token'): break
 			if poll.status_code == 429:
-				if kodi_utils.sleep_while_authorising(progress, 30): break
+				if kodi_utils.sleep_while_authorising(progress, 30):
+					canceled = True
+					break
 				continue
 		except Exception as e:
 			kodi_utils.logger('PunchPlay', 'poll: %s' % e)
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
-		if kodi_utils.sleep_while_authorising(progress, interval): break
+		if kodi_utils.sleep_while_authorising(progress, interval):
+			canceled = True
+			break
 	try: progress.close()
 	except: pass
+	if canceled:
+		return kodi_utils.notification('PunchPlay Authorisation Canceled', 3000, icon)
 	if not token_payload or not _save_tokens(token_payload):
-		return kodi_utils.notification('PunchPlay Authorisation Failed', 3000, icon)
+		return kodi_utils.notification('PunchPlay Error Authorising', 3000, icon)
 	username = 'PunchPlay User'
 	try:
 		me = call_punchplay('/me', method='get') or {}
