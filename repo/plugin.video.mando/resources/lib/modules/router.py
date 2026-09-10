@@ -25,6 +25,7 @@ def prepare_directory_listing(mode):
 		kodi_utils.logger('routing', 'prepare listing: %s' % e)
 
 def routing(sys):
+	kodi_utils.notify_unofficial_addon()
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	mode = params.get('mode', 'navigator.main')
 	try:

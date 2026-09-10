@@ -32,11 +32,11 @@ def _trakt_fetch_page_limit(base_params):
 	return TRAKT_PAGE_LIMIT
 
 def no_client_key():
-	kodi_utils.ok_dialog(heading='Trakt', text='Trakt Client ID Key is not set.')
+	kodi_utils.notification('Please set a valid Trakt Client ID Key')
 	return None
 
 def no_secret_key():
-	kodi_utils.ok_dialog(heading='Trakt', text='Trakt Client Secret Key is not set.')
+	kodi_utils.notification('Please set a valid Trakt Client Secret Key')
 	return None
 
 def get_trakt(params):
@@ -53,13 +53,15 @@ def get_trakt_all(params):
 	page_limit = _trakt_fetch_page_limit(base_params)
 	sort_by, sort_how = 'rank', 'asc'
 	all_items = []
-	page_no, max_pages = 1, 80
-	while page_no <= max_pages:
+	page_no, page_count = 1, 1
+	while page_no <= page_count:
 		query = dict(base_params)
 		query['limit'] = page_limit
 		page_method = method if page_no == 1 else (None if method == 'sort_by_headers' else method)
-		result, _header_pages = call_trakt(path, params=query, data=params.get('data'), is_delete=params.get('is_delete', False),
+		result, page_count = call_trakt(path, params=query, data=params.get('data'), is_delete=params.get('is_delete', False),
 						with_auth=params.get('with_auth', False), method=page_method, pagination=True, page_no=page_no)
+		try: page_count = max(int(page_count), page_no)
+		except: page_count = page_no
 		if result is None:
 			if page_no == 1: return None
 			break
@@ -70,7 +72,6 @@ def get_trakt_all(params):
 		else: break
 		if not chunk: break
 		all_items.extend(chunk)
-		if len(chunk) < page_limit: break
 		page_no += 1
 		if page_no > 1: kodi_utils.sleep(100)
 	if method == 'sort_by_headers':
@@ -132,13 +133,11 @@ def call_trakt(path, params={}, data=None, is_delete=False, with_auth=True, meth
 	else: return result
 
 def _trakt_using_custom_keys():
-	from modules.http_defaults import shipped_setting
+	from caches.settings_cache import default_setting_values
 	try:
-		default_client = shipped_setting('trakt.client')
-		default_secret = shipped_setting('trakt.secret')
+		default_client = default_setting_values('trakt.client')['setting_default']
+		default_secret = default_setting_values('trakt.secret')['setting_default']
 	except Exception:
-		return True
-	if not default_client or not default_secret:
 		return True
 	return settings.trakt_client() != default_client or settings.trakt_secret() != default_secret
 
@@ -162,7 +161,7 @@ def trakt_get_device_code():
 			kodi_utils.notification('Trakt default keys restored — try Authorise again', 4000)
 			return None
 	else:
-		kodi_utils.ok_dialog(heading='Trakt', text=message)
+		kodi_utils.ok_dialog(heading='Trakt Authorise', text=message)
 	return None
 
 def trakt_test_credentials():
@@ -255,7 +254,6 @@ def trakt_authenticate(dummy=''):
 		return False
 	token = trakt_get_device_token(code)
 	if token == 'canceled':
-		kodi_utils.notification('Trakt Authorisation Canceled', 3000)
 		return False
 	if token:
 		set_setting('trakt.token', token['access_token'])
@@ -546,8 +544,8 @@ def trakt_fetch_collection_watchlist(list_type, media_type):
 	if media_type in ('show', 'shows', 'tvshow'): media_type, url_type = ('show', 'shows')
 	key, r_key, string_insert = ('movie', 'released', 'movie') if media_type == 'movie' else ('show', 'first_aired', 'tvshow')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type == 'movie' else 'last_collected_at'
-	string = 'trakt_%s_%s_p250' % (list_type, string_insert)
-	path = 'sync/%s/%s'
+	string = 'trakt_%s_%s' % (list_type, string_insert)
+	path = 'sync/%s/%s?extended=full'
 	params = {'path': path, 'path_insert': (list_type, url_type), 'params': {'extended': 'full'}, 'with_auth': True, 'fetch_all': True}
 	return trakt_cache.cache_trakt_object(_process, string, params)
 

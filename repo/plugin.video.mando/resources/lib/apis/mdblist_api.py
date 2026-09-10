@@ -433,30 +433,6 @@ def mdblist_get_device_code():
 		return response.json()
 	except: return None
 
-def mdblist_test_client_id():
-	client_id = settings.mdblist_client()
-	if not client_id or client_id in ('empty_setting', ''):
-		return False, 'MDBList Client ID Key is not set.'
-	try:
-		response = session.post(_OAUTH_DEVICE_URL, data={'client_id': client_id, 'scope': 'write'}, timeout=META_API_TIMEOUT)
-		if response.ok:
-			body = {}
-			try: body = response.json() or {}
-			except: body = {}
-			if body.get('user_code'):
-				return True, 'MDBList Client ID Key is valid.'
-			return False, 'MDBList Client ID Key failed.[CR]MDBList returned an empty device code.'
-		detail = ''
-		try:
-			payload = response.json() or {}
-			if isinstance(payload, dict):
-				detail = payload.get('error_description') or payload.get('error') or payload.get('message') or ''
-		except: detail = ''
-		if not detail: detail = (response.text or '').strip() or 'No details returned.'
-		return False, 'MDBList Client ID Key failed.[CR]MDBList rejected the Client ID (HTTP %s).[CR]%s' % (response.status_code, detail)
-	except Exception as e:
-		return False, 'MDBList Client ID Key failed.[CR]Could not reach MDBList: %s' % str(e)
-
 def mdblist_poll_device(device_data):
 	device_code, user_code = device_data.get('device_code'), device_data.get('user_code')
 	if not device_code or not user_code: return None
@@ -473,10 +449,10 @@ def mdblist_poll_device(device_data):
 	while time.time() - start < expires_in:
 		if progress.iscanceled():
 			progress.close()
-			return 'canceled'
+			return None
 		if kodi_utils.sleep_while_authorising(progress, interval):
 			progress.close()
-			return 'canceled'
+			return None
 		try:
 			client_id = settings.mdblist_client()
 			response = session.post(_OAUTH_TOKEN_URL, data={
@@ -494,15 +470,11 @@ def mdblist_poll_device(device_data):
 
 def mdblist_authenticate(dummy=''):
 	device_data = mdblist_get_device_code()
-	if not device_data or not device_data.get('user_code'):
-		_ok, message = mdblist_test_client_id()
-		return kodi_utils.ok_dialog(heading='MDBList', text=message)
+	if not device_data or not device_data.get('user_code'): return kodi_utils.notification('MDBList Authorisation Failed', 3000)
 	token_result = mdblist_poll_device(device_data)
-	if token_result == 'canceled':
-		return kodi_utils.notification('MDBList Authorisation Canceled', 3000)
-	access_token = (token_result or {}).get('access_token')
-	if not access_token:
-		return kodi_utils.notification('MDBList Error Authorising', 3000)
+	if not token_result: return kodi_utils.notification('MDBList Authorisation Canceled', 3000)
+	access_token = token_result.get('access_token')
+	if not access_token: return kodi_utils.notification('MDBList Authorisation Failed', 3000)
 	set_setting('mdblist.token', access_token)
 	set_setting('mdblist.refresh', token_result.get('refresh_token') or '0')
 	from caches.settings_cache import settings_cache

@@ -10,12 +10,16 @@ from urllib.parse import urljoin, quote
 from caches import simkl_cache
 from caches.settings_cache import get_setting, set_setting
 from modules import kodi_utils, settings, list_sort
-from modules.http_defaults import META_API_TIMEOUT, shipped_simkl_alt, shipped_simkl_client, shipped_simkl_ids
+from modules.http_defaults import META_API_TIMEOUT
 from modules.utils import copy2clip, make_qrcode, make_tinyurl, device_auth_complete_url, device_auth_site_label, authorise_wait_text
 
 BASE_URL = 'https://api.simkl.com'
 OAUTH_PIN_URL = 'https://api.simkl.com/oauth/pin'
 SIMKL_APP_NAME = 'plugin.video.mando'
+SIMKL_CLIENT_ID = '6cacc8db22e67b2cd423ef73a9fd3a4f45146ba7fbf30fb2ae28f2fa9d0c2583'
+# 2.4.6 stand-in while Simkl had deleted the original app. Keep it only while that app still has a token.
+SIMKL_CLIENT_ID_ALT = '11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b'
+SIMKL_SHIPPED_CLIENT_IDS = (SIMKL_CLIENT_ID, SIMKL_CLIENT_ID_ALT)
 # Shared across plugin invokers + SimklMonitor (in-memory alone is not enough in Kodi).
 _SIMKL_MIN_REQUEST_GAP = 1.5
 _SIMKL_THROTTLE_PROP = 'mando.simkl_last_request_at'
@@ -73,17 +77,16 @@ def _throttle():
 
 def _client_id():
 	"""Prefer Meta Accounts Simkl Client ID; fall back to the shipped default."""
-	try: return settings.simkl_client() or shipped_simkl_client()
-	except Exception: return shipped_simkl_client()
+	try: return settings.simkl_client() or SIMKL_CLIENT_ID
+	except Exception: return SIMKL_CLIENT_ID
 
 def _client_ids_to_try():
 	"""Authorised: whatever they signed in with. Otherwise the real default, never the 2.4.6 alt."""
 	primary = _client_id()
-	fallback = shipped_simkl_client()
 	if _has_simkl_token():
-		return [primary] if primary else ([fallback] if fallback else [])
-	if (not primary) or primary == shipped_simkl_alt():
-		return [fallback] if fallback else []
+		return [primary] if primary else [SIMKL_CLIENT_ID]
+	if (not primary) or primary == SIMKL_CLIENT_ID_ALT:
+		return [SIMKL_CLIENT_ID]
 	return [primary]
 
 def _client_id_rejected(resp):
@@ -99,19 +102,18 @@ def _has_simkl_token():
 
 def _adopt_shipped_client_id(cid):
 	"""Remember which shipped app Simkl accepted. Never overwrite a custom Client ID."""
-	shipped = shipped_simkl_ids()
-	if not cid or cid not in shipped: return
-	if cid == shipped_simkl_alt() and not _has_simkl_token(): return
+	if not cid or cid not in SIMKL_SHIPPED_CLIENT_IDS: return
+	if cid == SIMKL_CLIENT_ID_ALT and not _has_simkl_token(): return
 	current = _client_id()
 	if current == cid: return
-	if current and current not in shipped: return
+	if current and current not in SIMKL_SHIPPED_CLIENT_IDS: return
 	try: set_setting('simkl.client', cid)
 	except Exception: pass
 
 def _clear_alt_client_id():
 	"""After Revoke, the 2.4.6 key must not remain as the stored default."""
-	if _client_id() != shipped_simkl_alt(): return
-	try: set_setting('simkl.client', shipped_simkl_client())
+	if _client_id() != SIMKL_CLIENT_ID_ALT: return
+	try: set_setting('simkl.client', SIMKL_CLIENT_ID)
 	except Exception: pass
 
 def _simkl_token():
@@ -240,7 +242,7 @@ def simkl_poll_pin(pin):
 	while time.time() < expires:
 		if progress.iscanceled():
 			progress.close()
-			return 'canceled'
+			return None
 		_throttle()
 		try:
 			resp = requests.get(_pin_url(user_code, client_id=pin.get('_client_id')), headers=_pin_headers(), timeout=META_API_TIMEOUT).json()
@@ -251,24 +253,19 @@ def simkl_poll_pin(pin):
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
 		if kodi_utils.sleep_while_authorising(progress, interval):
 			progress.close()
-			return 'canceled'
+			return None
 	progress.close()
 	return None
 
 def simkl_authenticate(dummy=''):
 	pin = simkl_get_pin()
-	if not pin or not pin.get('user_code'):
-		_ok, message = simkl_test_client_id()
-		return kodi_utils.ok_dialog(heading='Simkl', text=message)
+	if not pin or not pin.get('user_code'): return kodi_utils.notification('Simkl Authorisation Failed', 3000)
 	token = simkl_poll_pin(pin)
-	if token == 'canceled':
-		return kodi_utils.notification('Simkl Authorisation Canceled', 3000)
-	if not token:
-		return kodi_utils.notification('Simkl Error Authorising', 3000)
+	if not token: return kodi_utils.notification('Simkl Authorisation Canceled', 3000)
 	pin_client = pin.get('_client_id')
-	if pin_client in shipped_simkl_ids():
+	if pin_client in SIMKL_SHIPPED_CLIENT_IDS:
 		current = _client_id()
-		if (not current) or current in shipped_simkl_ids():
+		if (not current) or current in SIMKL_SHIPPED_CLIENT_IDS:
 			set_setting('simkl.client', pin_client)
 	set_setting('simkl.token', token)
 	from caches.settings_cache import settings_cache

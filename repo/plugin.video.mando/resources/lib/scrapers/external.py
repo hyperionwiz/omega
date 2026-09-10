@@ -22,13 +22,10 @@ _INTERNAL_PROGRESS_LABELS = {
 	'tb_cloud': 'TB Cloud',
 	'folders': 'Folders',
 	'comet': 'Comet',
-	'mediafusion': 'MediaFusion',
 	'torrentio': 'Torrentio',
 	'torz': 'StremThru Torz',
-	'zilean': 'Zilean',
 	'nyaa': 'Nyaa (Anime)',
 	'animetosho': 'AnimeTosho (Anime)',
-	'piratebay': 'PirateBay',
 }
 
 class source:

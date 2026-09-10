@@ -10,7 +10,7 @@ from modules.native_torrents import NATIVE_TORRENT_SCRAPERS
 from modules.source_utils import get_external_cache_status
 from modules.utils import chunks
 from modules.kodi_utils import show_busy_dialog, hide_busy_dialog, notification
-from modules.settings import enabled_debrids_check, prefer_internal_scrapers
+from modules.settings import enabled_debrids_check
 # from modules.kodi_utils import logger
 
 def debrid_enabled():
@@ -451,12 +451,10 @@ def _scraper_quality_counts(items):
 	return sd, p720, p1080, p4k
 
 
-def collapse_duplicate_torrent_hashes(results, prefer_internal=None):
-	'''Keep one Internal/External torrent row per (info hash, debrid). Cached wins; pack label unless Prefer Internal Scrapers.'''
+def collapse_duplicate_torrent_hashes(results):
+	'''Keep one Internal/External torrent row per (info hash, debrid). Cached wins; Internal label if tied.'''
 	if not results:
 		return results
-	if prefer_internal is None:
-		prefer_internal = prefer_internal_scrapers()
 	best = {}
 	for idx, item in enumerate(results):
 		if item.get('scrape_provider') not in _TORRENT_SCRAPE_PROVIDERS:
@@ -477,10 +475,7 @@ def collapse_duplicate_torrent_hashes(results, prefer_internal=None):
 		if rank == prev_rank:
 			prev_native = prev_item.get('scrape_provider') in NATIVE_TORRENT_SCRAPERS
 			new_native = item.get('scrape_provider') in NATIVE_TORRENT_SCRAPERS
-			if prefer_internal:
-				if new_native and not prev_native:
-					best[key] = (rank, idx, item)
-			elif prev_native and not new_native:
+			if prev_native and not new_native:
 				best[key] = (rank, idx, item)
 	keep_idx = {entry[1] for entry in best.values()}
 	collapsed = []
@@ -517,10 +512,7 @@ def stamp_torrent_cache(results, active_debrid, cache_check_override=None, data=
 			rest.append(item)
 	if not native:
 		return results
-	if prefer_internal_scrapers():
-		native.sort(key=lambda i: 0 if i.get('scrape_provider') in NATIVE_TORRENT_SCRAPERS else 1)
-	else:
-		native.sort(key=lambda i: 1 if i.get('scrape_provider') in NATIVE_TORRENT_SCRAPERS else 0)
+	native.sort(key=lambda i: 1 if i.get('scrape_provider') in NATIVE_TORRENT_SCRAPERS else 0)
 	active_debrid = list(active_debrid or [])
 	if not active_debrid:
 		return rest

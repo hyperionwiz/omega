@@ -10,16 +10,16 @@ from modules import kodi_utils as ku, settings as st
 
 BASE_URL = 'https://api.opensubtitles.com/api/v1'
 TIMEOUT = 20.0
+_DEFAULT_API_KEY = 'GpubxF50wjXZXtRlq83Heh9serfjCFyI'
 _OSUB_HASH_CHUNK = 65536
 _OSUB_LONGLONG = struct.calcsize('q')
 
 
 def effective_api_key():
-	from modules.http_defaults import shipped_setting
 	key = get_setting('mando.playback.opensubs_api_key', 'empty_setting')
 	if key not in (None, '', '0', 'empty_setting'):
 		return str(key).strip()
-	return shipped_setting('playback.opensubs_api_key')
+	return _DEFAULT_API_KEY
 
 
 def _api_key():

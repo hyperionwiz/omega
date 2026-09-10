@@ -80,11 +80,6 @@ class MandoPlayer(xbmc.Player):
 	def run(self, url=None, obj=None):
 		ku.hide_busy_dialog()
 		self.clear_playback_properties(clear_navigation=False)
-		try:
-			from modules.http_defaults import client_scope_ok
-			if not client_scope_ok(): url = None
-		except Exception:
-			pass
 		if not url:
 			self.is_generic = obj == 'video'
 			return self.run_error('No playable link was returned.')

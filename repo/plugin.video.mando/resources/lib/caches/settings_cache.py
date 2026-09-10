@@ -1,10 +1,8 @@
-
 # -*- coding: utf-8 -*-
 import json
 import re
 from threading import Lock
 from modules import kodi_utils
-from modules.http_defaults import scoped_token
 from caches.base_cache import connect_database
 # logger = kodi_utils.logger
 
@@ -107,6 +105,10 @@ def _new_setting_value(setting_id, setting_default, currentsettings, had_existin
 		# migration forever - the next healthy sync reads the sentinel, never runs it, and the obsolete
 		# purge then deletes the five legacy ids and with them the only copy of the user's orderings.
 		if setting_id == 'migration.unified_list_sort': return 'true' if fresh_install else setting_default
+		return setting_default
+	if setting_id == 'provider.internal':
+		if any(currentsettings.get('provider.%s' % scraper) == 'true' for scraper in ('comet', 'torrentio', 'torz', 'nyaa', 'animetosho')):
+			return 'true'
 		return setting_default
 	old_setting_id = _NEW_SETTING_VALUE_MIGRATIONS.get(setting_id)
 	if not old_setting_id:
@@ -448,20 +450,7 @@ class SettingsCache:
 
 	def set_memory_cache(self, setting_id, setting_value):
 		try:
-			display = property_safe_string(setting_value)
-			from modules.http_defaults import SHIPPED_SETTING_IDS, shipped_setting, shipped_simkl_alt, shipped_simkl_client
-			if setting_id in SHIPPED_SETTING_IDS:
-				cid = normalize_credential_string(setting_value)
-				primary = shipped_simkl_client() if setting_id == 'simkl.client' else shipped_setting(setting_id)
-				if not cid and primary:
-					display = primary
-				is_default = 'true' if primary and (not cid or cid == primary) else 'false'
-				kodi_utils.set_property('mando.%s_is_default' % setting_id, is_default)
-				if setting_id == 'simkl.client':
-					alt = shipped_simkl_alt()
-					is_alt = 'true' if alt and cid == alt else 'false'
-					kodi_utils.set_property('mando.simkl.client_is_alt', is_alt)
-			kodi_utils.set_property('mando.%s' % setting_id, display)
+			kodi_utils.set_property('mando.%s' % setting_id, property_safe_string(setting_value))
 		except: pass
 
 	def delete_memory_cache(self, setting_id):
@@ -486,10 +475,10 @@ def set_setting(setting_id, value, provider_sync=True):
 def get_setting(setting_id, fallback=''):
 	if _properties_loaded():
 		prop = kodi_utils.get_property(setting_id)
-		if prop not in ('', None): return scoped_token(prop)
+		if prop not in ('', None): return prop
 	value = settings_cache.read_db_value(setting_id)
-	if value not in ('', None): return scoped_token(value)
-	return scoped_token(fallback)
+	if value not in ('', None): return value
+	return fallback
 
 def _apply_settings_properties_from_db():
 	d_settings = default_settings()
@@ -818,8 +807,7 @@ def sync_settings(params={}):
 		if load_properties: settings_cache.set_memory_cache('migration.rd_cache_check_removed_v243', 'true')
 	if had_existing_settings and currentsettings.get('migration.internal_site_defaults_v245') != 'true':
 		untouched = currentsettings.get('provider.internal') != 'true' and not any(
-			currentsettings.get('provider.%s' % scraper) == 'true' for scraper in (
-				'comet', 'torrentio', 'torz', 'nyaa', 'animetosho', 'piratebay', 'mediafusion', 'zilean'))
+			currentsettings.get('provider.%s' % scraper) == 'true' for scraper in ('comet', 'torrentio', 'torz', 'nyaa', 'animetosho'))
 		if untouched:
 			for site_id in ('provider.comet', 'provider.torz', 'provider.torrentio'):
 				settings_cache.write_db(site_id, 'true', defaults_map.get(site_id))
@@ -837,12 +825,11 @@ def sync_settings(params={}):
 		if load_properties: settings_cache.set_memory_cache('migration.simkl_client_v246', 'true')
 	if had_existing_settings and currentsettings.get('migration.simkl_client_v250') != 'true':
 		# Original app is the default again. Keep the 2.4.6 key only while that app still has a token.
-		from modules.http_defaults import shipped_simkl_alt, shipped_simkl_client
-		_simkl_alt = shipped_simkl_alt()
-		if _simkl_alt and currentsettings.get('simkl.client') == _simkl_alt:
+		_simkl_alt = '11fcf77c08849b6ab5cabb2e1bef6b57a72edce7b08e65d4039d0cf70a7d198b'
+		if currentsettings.get('simkl.client') == _simkl_alt:
 			old_token = currentsettings.get('simkl.token')
 			if old_token in (None, '0', '', 'empty_setting'):
-				new_cid = shipped_simkl_client() or defaults_map.get('simkl.client')
+				new_cid = defaults_map.get('simkl.client')
 				settings_cache.write_db('simkl.client', new_cid, new_cid)
 				currentsettings['simkl.client'] = new_cid
 				if load_properties: settings_cache.set_memory_cache('simkl.client', new_cid)
@@ -1149,10 +1136,6 @@ def restore_setting_default(params):
 	try:
 		setting_id = params['setting_id']
 		setting_default = default_setting_values(setting_id)['setting_default']
-		from modules.http_defaults import shipped_setting
-		shipped = shipped_setting(setting_id)
-		if shipped:
-			setting_default = shipped
 		set_setting(setting_id, setting_default)
 	except:
 		if not silent: kodi_utils.ok_dialog(text='Error restoring default setting')
@@ -1487,7 +1470,7 @@ def reset_addon_data(params={}):
 		kodi_utils.ok_dialog(
 			heading=heading,
 			text='Mando addon data was wiped and rebuilt.[CR][CR]'
-				 'Re-authorise accounts under Meta Accounts / Debrid Accounts / Direct Sources.[CR][CR]'
+				 'Re-authorise accounts under Meta Accounts / Torrent Sources / Direct Sources.[CR][CR]'
 				 'A full Kodi restart is recommended.',
 			scroll=True)
 	except Exception as e:
@@ -1574,14 +1557,14 @@ def default_settings():
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'3': 'MDBList', '4': 'PunchPlay', '0': 'Mando', '2': 'Simkl', '1': 'Trakt'}},
 #======+============= MDBList Cache
 {'setting_id': 'mdblist.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'mdblist.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'mdblist.client', 'setting_type': 'string', 'setting_default': 'JFZCpEIYFtpvGk47pEEprjEkXzlPL8hJR45jqddJ'},
 {'setting_id': 'mdblist.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'mdblist.refresh', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'mdblist.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'mdblist.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
 #======+============= PunchPlay Cache
 {'setting_id': 'punchplay.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'punchplay.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'punchplay.client', 'setting_type': 'string', 'setting_default': 'ppc_20f43c36d33f17d01241ed83'},
 {'setting_id': 'punchplay.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'punchplay.refresh', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'punchplay.expires', 'setting_type': 'string', 'setting_default': '0'},
@@ -1590,7 +1573,7 @@ def default_settings():
 {'setting_id': 'punchplay.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
 #======+============= Simkl Cache
 {'setting_id': 'simkl.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'simkl.client', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'simkl.client', 'setting_type': 'string', 'setting_default': '6cacc8db22e67b2cd423ef73a9fd3a4f45146ba7fbf30fb2ae28f2fa9d0c2583'},
 {'setting_id': 'simkl.token', 'setting_type': 'string', 'setting_default': '0'},
 {'setting_id': 'simkl.sync_interval', 'setting_type': 'action', 'setting_default': '60', 'min_value': '5', 'max_value': '600'},
 {'setting_id': 'simkl.refresh_widgets', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1646,7 +1629,6 @@ def default_settings():
 {'setting_id': 'paginate.limit_widgets', 'setting_type': 'action', 'setting_default': '20'},
 {'setting_id': 'paginate.jump_to', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'ignore_articles', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'search.history_sort', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Most Recent', '1': 'A-Z'}},
 {'setting_id': 'recommend_service', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Recommended (TMDb)', '1': 'More Like This (IMDb)',
 '2': 'Similar (AI)', '3': 'Related (Trakt)'}},
 {'setting_id': 'recommend_seed', 'setting_type': 'action', 'setting_default': '5', 'settings_options': {'1': 'Last Watched Only', '2': 'Last 2 Watched',
@@ -1749,12 +1731,12 @@ def default_settings():
 #==================== Trakt
 #==================== Trakt
 {'setting_id': 'trakt.user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'trakt.client', 'setting_type': 'string', 'setting_default': 'daa63a302b6a8c9f9281683b921c363402408efaa8c0ab05c396129ad4dec9b9'},
-{'setting_id': 'trakt.secret', 'setting_type': 'string', 'setting_default': 'a81d60d7754f2b77fc44ade57e2259f4ca79e4f5a13734445cffcda67f3c5422'},
+{'setting_id': 'trakt.client', 'setting_type': 'string', 'setting_default': '30e6c73030cc41dbff996200ac3060cde689555ba207020e08a2175533b912c3'},
+{'setting_id': 'trakt.secret', 'setting_type': 'string', 'setting_default': '726f6b12a9f0079d5850a7bb0e15860725cd487cbfb54ce5471de217639465c5'},
 #==================== TMDb API
-{'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': 'db6aa4def186c3ca8fc9065bd3492e79'},
+{'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': 'a0bf207c5ff6c0caabac0327e39b1cd2'},
 #==================== TMDb Lists
-{'setting_id': 'tmdb.lists_read_token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'tmdb.lists_read_token', 'setting_type': 'string', 'setting_default': 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMGJmMjA3YzVmZjZjMGNhYWJhYzAzMjdlMzliMWNkMiIsIm5iZiI6MTUwMzk0ODAxMC43NTQsInN1YiI6IjU5YTQ2Y2U4YzNhMzY4MGIxMjAwMjgxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2pYaMVzWy-TNg2SBlkP_CrYWpaxcU7LZIZLPdgJp9jw'},
 {'setting_id': 'tmdb.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'tmdb.username', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== Fanart.tv
@@ -1762,7 +1744,7 @@ def default_settings():
 #==================== OMDb
 {'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': '52b7b0d6'},
 #==================== RPDb
-{'setting_id': 'rpdb_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
+{'setting_id': 'rpdb_api', 'setting_type': 'string', 'setting_default': 't0-free-rpdb'},
 #==================== Google API
 {'setting_id': 'google_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== GROQ API
@@ -1785,8 +1767,7 @@ def default_settings():
 {'setting_id': 'external_scraper.slot3.name', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'external_scraper.slot3.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'external_scraper.run_mode', 'setting_type': 'action', 'setting_default': '1', 'settings_options': {'1': 'Series (Fallback by Slot Order)', '2': 'Series (All Slots in Order)', '3': 'Primary Slot + Parallel Fallback', '0': 'Parallel (All Enabled Slots)'}},
-{'setting_id': 'provider.internal', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'provider.prefer_internal', 'setting_type': 'boolean', 'setting_default': 'false'},
+{'setting_id': 'provider.internal', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'provider.comet', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
 	'0': 'Goldy — https://comet.feels.legal',
@@ -1795,14 +1776,6 @@ def default_settings():
 	'3': 'Custom — set URL below',
 }},
 {'setting_id': 'comet.custom_url', 'setting_type': 'string', 'setting_default': ''},
-{'setting_id': 'internal.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'indexer.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'indexer.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'indexer.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'site.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'site.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'site.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'site.strict_filenames', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'comet.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.torrentio', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1814,10 +1787,10 @@ def default_settings():
 {'setting_id': 'torrentio.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'torrentio.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.torz', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'torz.url', 'setting_type': 'action', 'setting_default': '2', 'settings_options': {
-	'2': 'Midnight — https://stremthrufortheweebs.midnightignite.me',
+{'setting_id': 'torz.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
 	'0': 'Kuu-lection — https://stremthru.stremio.ru',
 	'1': 'Munif — https://stremthru.13377001.xyz',
+	'2': 'Midnight — https://stremthrufortheweebs.midnightignite.me',
 	'3': 'Custom — set URL below',
 }},
 {'setting_id': 'torz.custom_url', 'setting_type': 'string', 'setting_default': ''},
@@ -1834,26 +1807,6 @@ def default_settings():
 {'setting_id': 'provider.animetosho', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'animetosho.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'animetosho.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'provider.piratebay', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'piratebay.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
-	'0': 'https://apibay.org',
-	'1': 'Custom — set URL below',
-}},
-{'setting_id': 'piratebay.custom_url', 'setting_type': 'string', 'setting_default': ''},
-{'setting_id': 'provider.mediafusion', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'mediafusion.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
-	'0': 'Midnight — https://mediafusionfortheweebs.midnightignite.me',
-	'1': 'Elfhosted — https://mediafusion.elfhosted.com',
-	'2': 'Custom — set URL below',
-}},
-{'setting_id': 'mediafusion.custom_url', 'setting_type': 'string', 'setting_default': ''},
-{'setting_id': 'provider.zilean', 'setting_type': 'boolean', 'setting_default': 'false'},
-{'setting_id': 'zilean.url', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {
-	'0': 'Kuu-lection — https://zilean.stremio.ru',
-	'1': 'Midnight — https://zileanfortheweebs.midnightignite.me',
-	'2': 'Custom — set URL below',
-}},
-{'setting_id': 'zilean.custom_url', 'setting_type': 'string', 'setting_default': ''},
 {'setting_id': 'migration.external_scraper_slots_v160', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.cache_check_pm_oc_tb_v129e', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'migration.ad_cache_check_removed_v173', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -1871,7 +1824,6 @@ def default_settings():
 {'setting_id': 'store_resolved_to_cloud.real-debrid', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.rd_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'rd_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'rd_cloud.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.rd_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.rd_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_rdcloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1887,7 +1839,6 @@ def default_settings():
 {'setting_id': 'store_resolved_to_cloud.premiumize.me', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.pm_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'pm_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'pm_cloud.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.pm_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.pm_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_pmcloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1900,7 +1851,6 @@ def default_settings():
 {'setting_id': 'store_resolved_to_cloud.alldebrid', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'None', '1': 'All', '2': 'Show Packs Only'}},
 {'setting_id': 'provider.ad_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'ad_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'ad_cloud.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.ad_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.ad_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_adcloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1915,7 +1865,6 @@ def default_settings():
 {'setting_id': 'oc.notify_cloud_ready', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.oc_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'oc_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'oc_cloud.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.oc_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.oc_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_occloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1929,7 +1878,6 @@ def default_settings():
 {'setting_id': 'tb.notify_cloud_ready', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'provider.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'tb_cloud.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'tb_cloud.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.tb_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_tbcloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -1947,7 +1895,6 @@ def default_settings():
 {'setting_id': 'easynews_user', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'easynews_password', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'easynews.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'easynews.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'easynews.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'easynews.filter_lang', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'easynews.exclude_adult', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -1974,7 +1921,6 @@ def default_settings():
 {'setting_id': 'aiostreams.username', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'aiostreams.password', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'aiostreams.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'aiostreams.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'aiostreams.preserve_order', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'check.aiostreams', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.aiostreams', 'setting_type': 'boolean', 'setting_default': 'false'},
@@ -1983,7 +1929,6 @@ def default_settings():
 #=========+========== Folders
 {'setting_id': 'provider.folders', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'folders.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'folders.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'check.folders', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'autoplay.folders', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_folders_first', 'setting_type': 'boolean', 'setting_default': 'true'},
@@ -2004,7 +1949,6 @@ def default_settings():
 {'setting_id': 'nzb3.url', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'nzb3.key', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'nzb.title_filter', 'setting_type': 'boolean', 'setting_default': 'true'},
-{'setting_id': 'nzb.same_title_year', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'nzb.title_filter_episode', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'nzb.fallback_search', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'nzb.search_width', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Focused', '1': 'Balanced', '2': 'Broad'}},

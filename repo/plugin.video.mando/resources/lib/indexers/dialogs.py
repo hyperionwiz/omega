@@ -1395,12 +1395,12 @@ def set_language_filter_choice(params):
 
 def enable_scrapers_choice(params={}):
 	icon = params.get('icon', None) or kodi_utils.get_icon('mando')
-	scrapers = ['external', 'animetosho', 'nyaa', 'piratebay', 'comet', 'mediafusion', 'torz', 'torrentio', 'zilean',
+	scrapers = ['external', 'animetosho', 'nyaa', 'comet', 'torz', 'torrentio',
 				'aiostreams', 'easynews', 'nzb',
 				'ad_cloud', 'oc_cloud', 'pm_cloud', 'rd_cloud', 'tb_cloud', 'folders']
 	cloud_scrapers = {'ad_cloud': 'ad.enabled', 'oc_cloud': 'oc.enabled', 'pm_cloud': 'pm.enabled',
 					'rd_cloud': 'rd.enabled', 'tb_cloud': 'tb.enabled'}
-	scraper_names = ['EXTERNAL SCRAPERS', 'ANIMETOSHO (ANIME)', 'NYAA (ANIME)', 'PIRATEBAY', 'COMET', 'MEDIAFUSION', 'STREMTHRU TORZ', 'TORRENTIO', 'ZILEAN',
+	scraper_names = ['EXTERNAL SCRAPERS', 'ANIMETOSHO (ANIME)', 'NYAA (ANIME)', 'COMET', 'STREMTHRU TORZ', 'TORRENTIO',
 					'AIOSTREAMS', 'EASYNEWS', 'NZB INDEXERS',
 					'AD CLOUD', 'OC CLOUD', 'PM CLOUD', 'RD CLOUD', 'TB CLOUD', 'FOLDERS 1-5']
 	set_scrapers = settings.active_internal_scrapers()
@@ -1409,7 +1409,7 @@ def enable_scrapers_choice(params={}):
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
 	choice = kodi_utils.select_dialog(scrapers, **kwargs)
 	if choice is None: return
-	native_scrapers = ('animetosho', 'nyaa', 'piratebay', 'comet', 'mediafusion', 'torz', 'torrentio', 'zilean')
+	native_scrapers = ('animetosho', 'nyaa', 'comet', 'torz', 'torrentio')
 	for i in scrapers:
 		set_setting('provider.%s' % i, ('true' if i in choice else 'false'))
 		if i in cloud_scrapers and i in choice: set_setting(cloud_scrapers[i], 'true')

@@ -170,8 +170,7 @@ def wetrakr_authenticate(dummy=''):
 	icon = _wetrakr_icon()
 	code_data = request_device_code()
 	if not code_data or not code_data.get('device_code'):
-		return kodi_utils.ok_dialog(heading='WeTrakr',
-			text='WeTrakr authorisation failed.[CR]Could not start device authorisation. Try again, or check your connection.')
+		return kodi_utils.notification('WeTrakr Authorisation Failed', 3000, icon)
 	user_code = str(code_data.get('user_code') or '')
 	device_code = code_data.get('device_code')
 	expires_in = int(code_data.get('expires_in') or 600)
@@ -185,11 +184,11 @@ def wetrakr_authenticate(dummy=''):
 	progress = kodi_utils.progress_dialog('WeTrakr Authorise', qr_code)
 	progress.update(content, 0)
 	expires = time.time() + expires_in
-	token, username, canceled = None, None, False
+	token, username = None, None
 	while time.time() < expires:
 		if progress.iscanceled():
-			canceled = True
-			break
+			progress.close()
+			return kodi_utils.notification('WeTrakr Authorisation Canceled', 3000, icon)
 		data = _poll_device_token(device_code)
 		if data:
 			if data.get('access_token'):
@@ -201,15 +200,11 @@ def wetrakr_authenticate(dummy=''):
 			if error and error not in ('authorization_pending', 'slow_down'):
 				kodi_utils.logger('WeTrakr', 'poll: %s' % error)
 		progress.update(content, int(100 * (1 - (expires - time.time()) / float(expires_in))))
-		if kodi_utils.sleep_while_authorising(progress, interval):
-			canceled = True
-			break
+		if kodi_utils.sleep_while_authorising(progress, interval): break
 	try: progress.close()
 	except: pass
-	if canceled:
-		return kodi_utils.notification('WeTrakr Authorisation Canceled', 3000, icon)
 	if not token:
-		return kodi_utils.notification('WeTrakr Error Authorising', 3000, icon)
+		return kodi_utils.notification('WeTrakr Authorisation Failed', 3000, icon)
 	set_setting('wetrakr.token', token)
 	set_setting('wetrakr.user', str(username))
 	from caches.settings_cache import settings_cache
