@@ -429,7 +429,7 @@
 			<screenshot>resources/art/ss/3.png</screenshot>
 		</assets>
 	</extension>
-</addon><addon id="skin.aeon.nox.silvo" version="10.0.4" name="Aeon Nox: SiLVO" provider-name="SiLVO">
+</addon><addon id="skin.aeon.nox.silvo" version="10.0.4a" name="Aeon Nox: SiLVO" provider-name="SiLVO">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 		<import addon="xbmc.python" version="3.0.0" />

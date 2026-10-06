@@ -46,7 +46,7 @@ ADDON_ID = ADDON.getAddonInfo("id")
 
 # Remote source. manifest.txt is a plain text file, one intro filename
 # per line, living alongside the videos themselves.
-BASE_URL = "https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/random_intros/"
+BASE_URL = "https://filedn.com/l0jm1ttNAy54e9NylPPsPVk/Intros/random_intros/halloween_random/"
 MANIFEST_URL = BASE_URL + "manifest.txt"
 
 # Bundled fallback used when the remote manifest can't be reached.
