@@ -369,7 +369,7 @@
             <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="repository.omega" name="Omega Repo" version="1.2.5" provider-name="The Hood">
+</addon><addon id="repository.omega" name="Omega Repo" version="1.2.6" provider-name="The Hood">
     <extension point="xbmc.addon.repository" name="Omega Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/hyperionwiz/omega/main/repo/zips/addons.xml</info>
@@ -429,7 +429,7 @@
 			<screenshot>resources/art/ss/3.png</screenshot>
 		</assets>
 	</extension>
-</addon><addon id="skin.aeon.nox.silvo" version="10.0.4a" name="Aeon Nox: SiLVO" provider-name="SiLVO">
+</addon><addon id="skin.aeon.nox.silvo" version="10.0.4b" name="Aeon Nox: SiLVO" provider-name="SiLVO">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 		<import addon="xbmc.python" version="3.0.0" />
